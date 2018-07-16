@@ -49,15 +49,23 @@ class SegmentationChallengeData(Dataset):
         single_image_name = self.image_arr[index]
         img_as_img = Image.open(single_image_name)
         img_as_np = np.asarray(img_as_img)
+        print(img_as_np.dtype)
 
         # Augmentation
         # flip {0: vertical, 1: horizontal, 2: both, 3: none}
         flip_num = randint(0, 3)
         flip_img = flip(img_as_np, flip_num)
-        # Gaussian_noise
-        gaus_sd, gaus_mean = randint(-5, 5), randint(-5, 5)
-        gaus_img = Gaussian_noise(flip_img, gaus_mean, gaus_sd)
-        #
+
+        # Noise Determine {0: Gaussian_noise, 1: uniform_noise}
+        noise_det = randint(0, 1)
+        if noise_det == 0:
+            # Gaussian_noise
+            gaus_sd, gaus_mean = randint(0, 10), 0
+            noise_img = gaussian_noise(flip_img, gaus_mean, gaus_sd)
+        else:
+            # uniform_noise
+            l_bound, u_bound = randint(-25, 0), randint(0, 25)
+            noise_img = uniform_noise(flip_img, l_bound, u_bound)
 
         img_as_np = np.expand_dims(img_as_np, axis=0)
         # Augmentation
@@ -84,10 +92,10 @@ class SegmentationChallengeData(Dataset):
 
 if __name__ == "__main__":
 
-    custom_mnist_from_file_train = \
-        SegmentationChallengeData('../data/train/images', '../data/train/masks')
-    custom_mnist_from_file_test = \
-        SegmentationChallengeData('../data/test/images', '../data/test/masks')
+    custom_mnist_from_file_train = SegmentationChallengeData(
+        '../data/train/images', '../data/train/masks')
+    custom_mnist_from_file_test = SegmentationChallengeData(
+        '../data/test/images', '../data/test/masks')
 
     imag_1 = custom_mnist_from_file_train.__getitem__(2)
     imag_2 = custom_mnist_from_file_test.__getitem__(2)
