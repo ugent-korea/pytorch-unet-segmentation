@@ -50,12 +50,12 @@ class SegmentationChallengeData(Dataset):
         # Get image
         single_image_name = self.image_arr[index]
         img_as_img = Image.open(single_image_name)
+        img_as_img.show()
         img_as_np = np.asarray(img_as_img)
 
         # Augmentation
         # flip {0: vertical, 1: horizontal, 2: both, 3: none}
-
-        flip_num = randint(0, 3)
+        flip_num = 3  # randint(0, 3)
         flip_img = flip(img_as_np, flip_num)
 
         # Noise Determine {0: Gaussian_noise, 1: uniform_noise}
@@ -76,15 +76,13 @@ class SegmentationChallengeData(Dataset):
         # Elastic distort {0: no distort, 1: distort}
         distort_det = randint(0, 1)
         if distort_det == 0:
-            aug_img = elastic_transform(bright_img)  # sigma = 4, alpha = 34
+            aug_img, seed = elastic_transform(bright_img)  # sigma = 4, alpha = 34
         else:
             aug_img = bright_img
 
-        '''
         img = Image.fromarray(aug_img)
         img.show()
         print(flip_num, noise_det, distort_det, pix_add)
-        '''
 
         # add additional dimension
         img_as_np = np.expand_dims(aug_img, axis=0)
@@ -94,11 +92,20 @@ class SegmentationChallengeData(Dataset):
         # Get mask
         single_mask_name = self.mask_arr[index]
         msk_as_img = Image.open(single_mask_name)
+        msk_as_img.show()
         msk_as_np = np.asarray(msk_as_img)
         # flip the mask with respect to image
         flip_msk = flip(msk_as_np, flip_num)
+        if distort_det == 0:
+            aug_msk = elastic_transform(flip_msk, seed)  # sigma = 4, alpha = 34
+        else:
+            aug_msk = flip_msk
+
+        img2 = Image.fromarray(aug_msk)
+        img2.show()
+
         # add additional dimension
-        msk_as_np = np.expand_dims(msk_as_np, axis=0)
+        msk_as_np = np.expand_dims(aug_msk, axis=0)
         msk_as_tensor = torch.from_numpy(msk_as_np).float()
 
         return (img_as_tensor, msk_as_tensor)
@@ -142,5 +149,6 @@ if __name__ == "__main__":
     custom_mnist_from_file_test = SegmentationChallengeData(
         '../data/test/images', '../data/test/masks')
 
-    imag_1 = custom_mnist_from_file_train.__getitem__(2)
+    imag_1 = custom_mnist_from_file_train.__getitem__(2)[1]
+    print(imag_1)
     #imag_2 = custom_mnist_from_file_test.__getitem__(2)
