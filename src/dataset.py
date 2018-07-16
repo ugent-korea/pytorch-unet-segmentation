@@ -9,6 +9,8 @@ from random import randint
 from torch.utils.data.dataset import Dataset
 from augmentation import *
 
+Training_MEAN = 0.4911
+Training_STDEV = 0.0402
 
 class SegmentationChallengeData(Dataset):
     def __init__(self, image_path, mask_path):
@@ -116,6 +118,30 @@ class SegmentationChallengeData(Dataset):
         """
         return self.data_len
 
+class ImagesFromTest(TestSet):
+
+    def __init__(self, image_path):
+        '''
+        Args:
+            image_path = path where images are located
+        '''
+
+        self.totensor = transforms.ToTensor()
+        self.img_path = glob.glob(image_path)
+        # paths to all images
+            self.length = len(self.img_path)
+            # number of images
+
+    def __getitem__(self, index):
+
+        single_image = self.pathways[index]
+        img_as_img = Image.open(im_loc)
+        img_as_tensor = self.totensor(img_as_img)
+        return img_as_tensor
+
+    def __len__(self):
+
+        return self.data_len
 
 if __name__ == "__main__":
 
