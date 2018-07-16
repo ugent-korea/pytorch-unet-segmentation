@@ -1,4 +1,3 @@
-import pandas as pd
 import numpy as np
 from PIL import Image
 import glob
@@ -6,7 +5,9 @@ import torch
 import torch.nn as nn
 from torch.autograd import Variable
 from torchvision import transforms
-from torch.utils.data.dataset import Dataset  # For custom datasets
+from random import randint
+from torch.utils.data.dataset import Dataset
+from augmentation import *
 
 
 class SegmentationChallengeData(Dataset):
@@ -48,8 +49,17 @@ class SegmentationChallengeData(Dataset):
         single_image_name = self.image_arr[index]
         img_as_img = Image.open(single_image_name)
         img_as_np = np.asarray(img_as_img)
-        img_as_np = np.expand_dims(img_as_np, axis=0)
 
+        # Augmentation
+        # flip {0: vertical, 1: horizontal, 2: both, 3: none}
+        flip_num = randint(0, 3)
+        flip_img = flip(img_as_np, flip_num)
+        # Gaussian_noise
+        gaus_sd, gaus_mean = randint(-5, 5), randint(-5, 5)
+        gaus_img = Gaussian_noise(flip_img, gaus_mean, gaus_sd)
+        #
+
+        img_as_np = np.expand_dims(img_as_np, axis=0)
         # Augmentation
         img_as_tensor = torch.from_numpy(img_as_np).float()
 
