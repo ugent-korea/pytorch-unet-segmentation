@@ -3,13 +3,14 @@ from scipy.ndimage.interpolation import map_coordinates
 from scipy.ndimage.filters import gaussian_filter
 
 
-def add_elastic_transform(image,alpha,sigma random_state=None):
+def add_elastic_transform(image,alpha,sigma, random_state=None):
     """
     Args:
         image : numpy array of image
         alpha : α is a scaling factor
         sigma :  σ is an elasticity coefficient
-    Return :
+        random_state = random integer
+        Return :
         image : elastically transformed numpy array of image
     """
 
@@ -24,7 +25,7 @@ def add_elastic_transform(image,alpha,sigma random_state=None):
 
     x, y = np.meshgrid(np.arange(shape[1]), np.arange(shape[0]))
     indices = np.reshape(y+dy, (-1, 1)), np.reshape(x+dx, (-1, 1))
-    return map_coordinates(image, indices, order=1).reshape(shape)
+    return map_coordinates(image, indices, order=1).reshape(shape), random_state
 
 
 def flip(image, option_value):
