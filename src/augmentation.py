@@ -13,7 +13,7 @@ def elastic_transform(image,random_state=None):
     sigma = 4 # σ is an elasticity coefficient
 
     if random_state is None:
-        random_state = numpy.random.RandomState(None)
+        random_state = np.random.RandomState(None)
 
     shape = image.shape
     dx = gaussian_filter((random_state.rand(*shape) * 2 - 1),
@@ -21,8 +21,8 @@ def elastic_transform(image,random_state=None):
     dy = gaussian_filter((random_state.rand(*shape) * 2 - 1),
                          sigma, mode="constant", cval=0) * alpha
 
-    x, y = numpy.meshgrid(numpy.arange(shape[1]), numpy.arange(shape[0]))
-    indices = numpy.reshape(y+dy, (-1, 1)), numpy.reshape(x+dx, (-1, 1))
+    x, y = np.meshgrid(np.arange(shape[1]), np.arange(shape[0]))
+    indices = np.reshape(y+dy, (-1, 1)), np.reshape(x+dx, (-1, 1))
     return map_coordinates(image, indices, order=1).reshape(shape)
 
 
