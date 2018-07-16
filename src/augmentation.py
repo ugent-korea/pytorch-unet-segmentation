@@ -23,7 +23,7 @@ def elastic_transform(image, alpha, sigma, random_state=None):
     dy = gaussian_filter((random_state.rand(*shape) * 2 - 1),
                          sigma, mode="constant", cval=0) * alpha
 
-    x, y = numpy.meshgrid(numpy.arange(shape[0]), numpy.arange(shape[1]))
+    x, y = numpy.meshgrid(numpy.arange(shape[1]), numpy.arange(shape[0]))
     indices = numpy.reshape(y+dy, (-1, 1)), numpy.reshape(x+dx, (-1, 1))
     return map_coordinates(image, indices, order=1).reshape(shape)
 # σ is  the  elasticity  coefficient.
@@ -34,6 +34,7 @@ def flip(image, horizontal=False, vertical=False):
 
 
 def Gaussian_noise(image, mean, standard_deviation):
+    print('aa')
     pass
 
 
