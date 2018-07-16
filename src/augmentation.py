@@ -110,17 +110,16 @@ def ceil_floor_image(image):
     return image
 
 
-def normalize(image):
+def normalize(image, mean, std):
     """
     Args :
         image : numpy array of image
+        mean :
     Return :
         image : numpy array of image with values turned into standard scores
     """
-    # Recall mean and standard deviation of the input array.
-    mean_value = Mean(image)
-    stdev_value = StandardDeviation(image)
 
     image = image / 255  # values will lie between 0 and 1.
-    image = (image - mean_value) / stdev_value
+    image = (image - mean) / std
+
     return image
