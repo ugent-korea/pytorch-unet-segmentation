@@ -3,7 +3,7 @@ from scipy.ndimage.interpolation import map_coordinates
 from scipy.ndimage.filters import gaussian_filter
 
 
-def elastic_transform(image, random_state=None):
+def add_elastic_transform(image, random_state=None):
     """
     Args:
         image : numpy array of image
@@ -51,7 +51,7 @@ def flip(image, option_value):
     return image
 
 
-def gaussian_noise(image, mean=0, std=1):
+def add_gaussian_noise(image, mean=0, std=1):
     """
     Args:
         image : numpy array of image
@@ -67,7 +67,7 @@ def gaussian_noise(image, mean=0, std=1):
     return noise_img
 
 
-def uniform_noise(image, low=-10, high=10):
+def add_uniform_noise(image, low=-10, high=10):
     """
     Args:
         image : numpy array of image
@@ -83,7 +83,7 @@ def uniform_noise(image, low=-10, high=10):
     return noise_img
 
 
-def brightness(image, value):
+def change_brightness(image, value):
     """
     Args:
         image : numpy array of image
