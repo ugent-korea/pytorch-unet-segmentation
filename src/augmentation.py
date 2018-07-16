@@ -46,7 +46,7 @@ def flip(image, option_value):
         image = np.flip(image, 0)
         image = np.flip(image, 1)
     else:
-        pass
+        image = image
         # no effect
     return image
 
