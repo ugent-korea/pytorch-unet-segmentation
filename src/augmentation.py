@@ -108,3 +108,19 @@ def ceil_floor_image(image):
     image[image < 0] = 0
     image = image.astype("uint8")
     return image
+
+
+def normalize(image):
+    """
+    Args :
+        image : numpy array of image
+    Return :
+        image : numpy array of image with values turned into standard scores
+    """
+    # Recall mean and standard deviation of the input array.
+    mean_value = Mean(image)
+    stdev_value = StandardDeviation(image)
+
+    image = image / 255  # values will lie between 0 and 1.
+    image = (image - mean_value) / stdev_value
+    return image
