@@ -2,15 +2,16 @@ import numpy as np
 from scipy.ndimage.interpolation import map_coordinates
 from scipy.ndimage.filters import gaussian_filter
 
-def elastic_transform(image,random_state=None):
+
+def elastic_transform(image, random_state=None):
     """
     Args:
         image : numpy array of image
     Return :
         image : elastically transformed numpy array of image
     """
-    alpha = 34  #alpha : α is a scaling factor
-    sigma = 4 # σ is an elasticity coefficient
+    alpha = 34  # alpha : α is a scaling factor
+    sigma = 4  # σ is an elasticity coefficient
 
     if random_state is None:
         random_state = np.random.RandomState(None)
