@@ -9,32 +9,17 @@ from torchvision import transforms
 from torch.utils.data.dataset import Dataset  # For custom datasets
 
 
-
-class CustomDatasetFromFile(Dataset):
-    def __init__(self, file_path):
+class SegmentationChallengeData(Dataset):
+    def __init__(self, image_path, mask_path):
         """
         Args:
-            file_path (str): the path where the data are located
-            trans (Bool): decide whether or not to do transformation to images
+            image_path (str): the path where the image is located
+            mask_path (str): the path where the mask is located
             option (str): decide which dataset to import
         """
 
-        # Read the files in the path
-        self.data_info = glob.glob(str(file_path) + str("/*"))
-        # the index is according to Alphabetical order folder masks comes before folder images
-        # thus, masks is assigned to index 0 and images is assigned to index 1
-        # depending on your file name, the index has to be changed
-        assert str("masks") in str(
-            self.data_info[0]), "Check your file name it has to be 'masks' for masks file and 'images' for images"
-        assert str("images") in str(
-            self.data_info[1]), "Check your file name it has to be 'masks' for masks file and 'images' for images"
-
-        self.msk_arr = glob.glob(str(self.data_info[0]) + str("/*"))
-        self.img_arr = glob.glob(str(self.data_info[1]) + str("/*"))
-
-        # converting lists of images and masks into numpy array
-        self.image_arr = np.asarray(self.img_arr)
-        self.mask_arr = np.asarray(self.msk_arr)
+        self.mask_arr = glob.glob(str(mask_path) + str("/*"))
+        self.image_arr = glob.glob(str(image_path) + str("/*"))
 
         # Calculate len
         self.data_len = len(self.mask_arr)
@@ -62,7 +47,7 @@ class CustomDatasetFromFile(Dataset):
         # Get image
         single_image_name = self.image_arr[index]
         img_as_img = Image.open(single_image_name)
-        img_as_np = np.array(img_as_img)
+        img_as_np = np.asarray(img_as_img)
         img_as_np = np.expand_dims(img_as_np, axis=0)
 
         # Augmentation
@@ -90,9 +75,9 @@ class CustomDatasetFromFile(Dataset):
 if __name__ == "__main__":
 
     custom_mnist_from_file_train = \
-        CustomDatasetFromFile('../data/train/', trans=False, option="train")
+        SegmentationChallengeData('../data/train/images', '../data/train/masks')
     custom_mnist_from_file_test = \
-        CustomDatasetFromFile('../data/test/', trans=False, option="train")
+        SegmentationChallengeData('../data/test/images', '../data/test/masks')
 
     imag_1 = custom_mnist_from_file_train.__getitem__(2)
     imag_2 = custom_mnist_from_file_test.__getitem__(2)
