@@ -121,6 +121,6 @@ def normalize(image):
     mean_value = Mean(image)
     stdev_value = StandardDeviation(image)
 
-    image = image / 255
+    image = image / 255  # values will lie between 0 and 1.
     image = (image - mean_value) / stdev_value
     return image
