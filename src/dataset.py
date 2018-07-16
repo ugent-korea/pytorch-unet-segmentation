@@ -48,8 +48,8 @@ class SegmentationChallengeData(Dataset):
         # Get image
         single_image_name = self.image_arr[index]
         img_as_img = Image.open(single_image_name)
+        img_as_img.show()
         img_as_np = np.asarray(img_as_img)
-        print(img_as_np.dtype)
 
         # Augmentation
         # flip {0: vertical, 1: horizontal, 2: both, 3: none}
@@ -67,8 +67,19 @@ class SegmentationChallengeData(Dataset):
             l_bound, u_bound = randint(-25, 0), randint(0, 25)
             noise_img = uniform_noise(flip_img, l_bound, u_bound)
 
-        img_as_np = np.expand_dims(img_as_np, axis=0)
-        # Augmentation
+        # Elastic distort {0: no distort, 1: distort}
+        distort_det = randint(0, 1)
+        if distort_det == 0:
+            aug_img = elastic_transform(noise_img)  # sigma = 4, alpha = 34
+        else:
+            aug_img = noise_img
+
+        img = Image.fromarray(aug_img)
+        img.show()
+        print(flip_num, noise_det, distort_det)
+        # add additional dimension
+        img_as_np = np.expand_dims(aug_img, axis=0)
+        # Convert numpy array to tensor
         img_as_tensor = torch.from_numpy(img_as_np).float()
 
         # Get mask
@@ -98,5 +109,4 @@ if __name__ == "__main__":
         '../data/test/images', '../data/test/masks')
 
     imag_1 = custom_mnist_from_file_train.__getitem__(2)
-    imag_2 = custom_mnist_from_file_test.__getitem__(2)
-    print(imag_1)
+    #imag_2 = custom_mnist_from_file_test.__getitem__(2)
