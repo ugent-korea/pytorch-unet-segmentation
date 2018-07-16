@@ -48,7 +48,7 @@ class SegmentationChallengeData(Dataset):
         # Get image
         single_image_name = self.image_arr[index]
         img_as_img = Image.open(single_image_name)
-        img_as_img.show()
+        # img_as_img.show()
         img_as_np = np.asarray(img_as_img)
 
         # Augmentation
@@ -61,27 +61,27 @@ class SegmentationChallengeData(Dataset):
         if noise_det == 0:
             # Gaussian_noise
             gaus_sd, gaus_mean = randint(0, 20), 0
-            noise_img = gaussian_noise(flip_img, gaus_mean, gaus_sd)
+            noise_img = add_gaussian_noise(flip_img, gaus_mean, gaus_sd)
         else:
             # uniform_noise
             l_bound, u_bound = randint(-20, 0), randint(0, 20)
-            noise_img = uniform_noise(flip_img, l_bound, u_bound)
+            noise_img = add_uniform_noise(flip_img, l_bound, u_bound)
 
         # Brightness
         pix_add = randint(-20, 20)
-        bright_img = brightness(noise_img, pix_add)
+        bright_img = change_brightness(noise_img, pix_add)
 
         # Elastic distort {0: no distort, 1: distort}
         distort_det = randint(0, 1)
         if distort_det == 0:
-            aug_img, seed = elastic_transform(bright_img)  # sigma = 4, alpha = 34
+            aug_img, seed = add_elastic_transform(bright_img)  # sigma = 4, alpha = 34
         else:
             aug_img = bright_img
-
+        """
         img = Image.fromarray(aug_img)
         img.show()
         print(flip_num, noise_det, distort_det, pix_add)
-
+        """
         # add additional dimension
         img_as_np = np.expand_dims(aug_img, axis=0)
         # Convert numpy array to tensor
@@ -90,20 +90,21 @@ class SegmentationChallengeData(Dataset):
         # Get mask
         single_mask_name = self.mask_arr[index]
         msk_as_img = Image.open(single_mask_name)
-        msk_as_img.show()
+        # msk_as_img.show()
         msk_as_np = np.asarray(msk_as_img)
         # flip the mask with respect to image
         flip_msk = flip(msk_as_np, flip_num)
         if distort_det == 0:
-            aug_msk = elastic_transform(flip_msk, seed)  # sigma = 4, alpha = 34
+            # sigma = 4, alpha = 34
+            aug_msk = add_elastic_transform(flip_msk, alpha=34, sigma=4, random_state=seed)
         else:
             aug_msk = flip_msk
-
+        """
         img2 = Image.fromarray(aug_msk)
         img2.show()
-
+        """
         # add additional dimension
-        msk_as_np = np.expand_dims(aug_msk, axis=0)
+        msk_as_np = np.expand_dims(aug_msk, axis=0)/255
         msk_as_tensor = torch.from_numpy(msk_as_np).float()
 
         return (img_as_tensor, msk_as_tensor)
