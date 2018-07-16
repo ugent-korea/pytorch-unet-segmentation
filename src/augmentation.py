@@ -45,13 +45,16 @@ def flip(image, option_value):
         pass
 
 
-def Gaussian_noise(image, mean, standard_deviation):
-    print('aa')
-    pass
+def Gaussian_noise(image, mean=0, std=1):
+    gaus_noise = np.random.normal(mean, std, image.shape)
+    noise_img = image + gaus_noise
+    return noise_img
 
 
-def uniform_noise(image, start, end):
-    pass
+def uniform_noise(image, low=-1, high=1):
+    uni_noise = np.random.unifrom(low, high, image.shape)
+    noise_img = image + uni_noise
+    return noise_img
 
 
 def brightness(image, value):
