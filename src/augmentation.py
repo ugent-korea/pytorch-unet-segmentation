@@ -3,15 +3,16 @@ from scipy.ndimage.interpolation import map_coordinates
 from scipy.ndimage.filters import gaussian_filter
 
 
-def elastic_transform(image, random_state=None):
+def add_elastic_transform(image,alpha,sigma, random_state=None):
     """
     Args:
         image : numpy array of image
-    Return :
+        alpha : α is a scaling factor
+        sigma :  σ is an elasticity coefficient
+        random_state = random integer
+        Return :
         image : elastically transformed numpy array of image
     """
-    alpha = 34  # alpha : α is a scaling factor
-    sigma = 4  # σ is an elasticity coefficient
 
     if random_state is None:
         random_state = np.random.RandomState(None)
@@ -24,7 +25,7 @@ def elastic_transform(image, random_state=None):
 
     x, y = np.meshgrid(np.arange(shape[1]), np.arange(shape[0]))
     indices = np.reshape(y+dy, (-1, 1)), np.reshape(x+dx, (-1, 1))
-    return map_coordinates(image, indices, order=1).reshape(shape)
+    return map_coordinates(image, indices, order=1).reshape(shape), random_state
 
 
 def flip(image, option_value):
@@ -51,7 +52,7 @@ def flip(image, option_value):
     return image
 
 
-def gaussian_noise(image, mean=0, std=1):
+def add_gaussian_noise(image, mean=0, std=1):
     """
     Args:
         image : numpy array of image
@@ -67,7 +68,7 @@ def gaussian_noise(image, mean=0, std=1):
     return noise_img
 
 
-def uniform_noise(image, low=-10, high=10):
+def add_uniform_noise(image, low=-10, high=10):
     """
     Args:
         image : numpy array of image
@@ -83,7 +84,7 @@ def uniform_noise(image, low=-10, high=10):
     return noise_img
 
 
-def brightness(image, value):
+def change_brightness(image, value):
     """
     Args:
         image : numpy array of image
