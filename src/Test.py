@@ -26,5 +26,4 @@ class ImagesFromTest(TestSet):
 
     def __len__(self):
 
-		print(self.data_len)
         return self.data_len
