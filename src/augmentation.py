@@ -36,14 +36,14 @@ def flip(image, option_value):
     """
     if option_value == 0:
         # vertical
-        image == np.flip(image, option_value)
+        image = np.flip(image, option_value)
     elif option_value == 1:
         # horizontal
-        image == np.flip(image, option_value)
+        image = np.flip(image, option_value)
     elif option_value == 2:
         # horizontally and vertically flip
-        image == np.flip(image, 0)
-        image == np.flip(image, 1)
+        image = np.flip(image, 0)
+        image = np.flip(image, 1)
     else:
         # no effect
     return image
