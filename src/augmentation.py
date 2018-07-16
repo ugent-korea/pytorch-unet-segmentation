@@ -63,7 +63,7 @@ def gaussian_noise(image, mean=0, std=1):
     gaus_noise = np.random.normal(mean, std, image.shape)
     image = image.astype("int16")
     noise_img = image + gaus_noise
-    image = ceiling_flooring(image)
+    image = ceil_floor_image(image)
     return noise_img
 
 
@@ -79,7 +79,7 @@ def uniform_noise(image, low=-10, high=10):
     uni_noise = np.random.uniform(low, high, image.shape)
     image = image.astype("int16")
     noise_img = image + uni_noise
-    image = ceiling_flooring(image)
+    image = ceil_floor_image(image)
     return noise_img
 
 
@@ -93,11 +93,11 @@ def brightness(image, value):
     """
     image = image.astype("int16")
     image = image + value
-    image = ceiling_flooring(image)
+    image = ceil_floor_image(image)
     return image
 
 
-def ceiling_flooring(image):
+def ceil_floor_image(image):
     """
     Args:
         image : numpy array of image in datatype int16
