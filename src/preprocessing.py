@@ -2,6 +2,7 @@ import numpy as np
 from PIL import Image
 import glob
 
+
 def Mean(image):
     """
     Args:
@@ -20,6 +21,7 @@ def Mean(image):
     mean = image / total_pixels
 
     return mean
+
 
 def StandardDeviation(image):
     """

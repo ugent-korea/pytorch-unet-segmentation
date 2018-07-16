@@ -1,10 +1,9 @@
 import numpy as np
 from scipy.ndimage.interpolation import map_coordinates
 from scipy.ndimage.filters import gaussian_filter
-from preprocessing.py import Mean, StandardDeviation
 
 
-def elastic_transform(image, random_state=None):
+def add_elastic_transform(image, random_state=None):
     """
     Args:
         image : numpy array of image
@@ -47,12 +46,12 @@ def flip(image, option_value):
         image = np.flip(image, 0)
         image = np.flip(image, 1)
     else:
-        pass
+        image = image
         # no effect
     return image
 
 
-def gaussian_noise(image, mean=0, std=1):
+def add_gaussian_noise(image, mean=0, std=1):
     """
     Args:
         image : numpy array of image
@@ -64,11 +63,11 @@ def gaussian_noise(image, mean=0, std=1):
     gaus_noise = np.random.normal(mean, std, image.shape)
     image = image.astype("int16")
     noise_img = image + gaus_noise
-    image = ceiling_flooring(image)
+    image = ceil_floor_image(image)
     return noise_img
 
 
-def uniform_noise(image, low=-10, high=10):
+def add_uniform_noise(image, low=-10, high=10):
     """
     Args:
         image : numpy array of image
@@ -80,11 +79,11 @@ def uniform_noise(image, low=-10, high=10):
     uni_noise = np.random.uniform(low, high, image.shape)
     image = image.astype("int16")
     noise_img = image + uni_noise
-    image = ceiling_flooring(image)
+    image = ceil_floor_image(image)
     return noise_img
 
 
-def brightness(image, value):
+def change_brightness(image, value):
     """
     Args:
         image : numpy array of image
@@ -94,11 +93,11 @@ def brightness(image, value):
     """
     image = image.astype("int16")
     image = image + value
-    image = ceiling_flooring(image)
+    image = ceil_floor_image(image)
     return image
 
 
-def ceiling_flooring(image):
+def ceil_floor_image(image):
     """
     Args:
         image : numpy array of image in datatype int16
@@ -109,6 +108,7 @@ def ceiling_flooring(image):
     image[image < 0] = 0
     image = image.astype("uint8")
     return image
+
 
 def normalize(image):
     """
