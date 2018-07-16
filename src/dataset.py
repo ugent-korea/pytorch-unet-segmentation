@@ -125,18 +125,17 @@ class ImagesFromTest(TestSet):
         Args:
             image_path = path where images are located
         '''
-
-        self.totensor = transforms.ToTensor()
         self.img_path = glob.glob(image_path)
         # paths to all images
-            self.length = len(self.img_path)
-            # number of images
+        self.length = len(self.img_path)
+        # number of images
 
     def __getitem__(self, index):
 
         single_image = self.pathways[index]
         img_as_img = Image.open(im_loc)
-        img_as_tensor = self.totensor(img_as_img)
+        img_as_numpy = np.expand_dims(img_as_img, axis=0)/255
+        img_as_tensor = torch.from_numpy(img_as_numpy).float()
         return img_as_tensor
 
     def __len__(self):
