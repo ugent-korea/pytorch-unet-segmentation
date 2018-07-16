@@ -12,6 +12,7 @@ from augmentation import *
 Training_MEAN = 0.4911
 Training_STDEV = 0.0402
 
+
 class SegmentationChallengeData(Dataset):
     def __init__(self, image_path, mask_path):
         """
@@ -76,7 +77,8 @@ class SegmentationChallengeData(Dataset):
         # Elastic distort {0: no distort, 1: distort}
         distort_det = randint(0, 1)
         if distort_det == 0:
-            aug_img, seed = add_elastic_transform(bright_img)  # sigma = 4, alpha = 34
+            # sigma = 4, alpha = 34
+            aug_img, seed = add_elastic_transform(bright_img, alpha=34, sigma=4)
         else:
             aug_img = bright_img
         """
@@ -84,8 +86,11 @@ class SegmentationChallengeData(Dataset):
         img.show()
         print(flip_num, noise_det, distort_det, pix_add)
         """
+        # Normalize the image
+        norm_img = normalize(aug_img, mean=Training_MEAN, std=Training_STDEV)
+
         # add additional dimension
-        img_as_np = np.expand_dims(aug_img, axis=0)
+        img_as_np = np.expand_dims(norm_img, axis=0)
         # Convert numpy array to tensor
         img_as_tensor = torch.from_numpy(img_as_np).float()
 
@@ -118,7 +123,8 @@ class SegmentationChallengeData(Dataset):
         """
         return self.data_len
 
-class ImagesFromTest(TestSet):
+
+class ImagesFromTest(Dataset):
 
     def __init__(self, image_path):
         '''
@@ -129,8 +135,8 @@ class ImagesFromTest(TestSet):
         self.totensor = transforms.ToTensor()
         self.img_path = glob.glob(image_path)
         # paths to all images
-            self.length = len(self.img_path)
-            # number of images
+        self.length = len(self.img_path)
+        # number of images
 
     def __getitem__(self, index):
 
@@ -143,6 +149,7 @@ class ImagesFromTest(TestSet):
 
         return self.data_len
 
+
 if __name__ == "__main__":
 
     custom_mnist_from_file_train = SegmentationChallengeData(
@@ -150,6 +157,6 @@ if __name__ == "__main__":
     custom_mnist_from_file_test = SegmentationChallengeData(
         '../data/test/images', '../data/test/masks')
 
-    imag_1 = custom_mnist_from_file_train.__getitem__(2)[1]
+    imag_1 = custom_mnist_from_file_train.__getitem__(2)[0]
     print(imag_1)
     #imag_2 = custom_mnist_from_file_test.__getitem__(2)
