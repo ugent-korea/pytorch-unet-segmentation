@@ -229,8 +229,6 @@ if __name__ == "__main__":
     custom_mnist_from_file_test = SEMDataTest(
         '../data/test/images/', '../data/test/masks')
 
-    #imag_1 = custom_mnist_from_file_test.__getitem__(0)
-    #unique, counts = np.unique(imag_1, return_counts=True)
-    #print(dict(zip(unique, counts)))
+    imag_1 = custom_mnist_from_file_train.__getitem__(0)
     imag_2 = custom_mnist_from_file_test.__getitem__(0)
     print(imag_2)
