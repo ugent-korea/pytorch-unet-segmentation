@@ -21,7 +21,7 @@ class SEMDataTrain(Dataset):
             mask_path (str): the path where the mask is located
             option (str): decide which dataset to import
         """
-
+        # all file names
         self.mask_arr = glob.glob(str(mask_path) + str("/*"))
         self.image_arr = glob.glob(str(image_path) + str("/*"))
         self.in_size = in_size
@@ -52,7 +52,7 @@ class SEMDataTrain(Dataset):
         # Get image
         single_image_name = self.image_arr[index]
         img_as_img = Image.open(single_image_name)
-        img_as_img.show()
+        # img_as_img.show()
         img_as_np = np.asarray(img_as_img)
 
         # Augmentation
@@ -83,27 +83,30 @@ class SEMDataTrain(Dataset):
         else:
             aug_img = bright_img
 
+        # Crop and pad the image
         cropped_img, y_loc, x_loc = crop_pad_train(
             aug_img, in_size=self.in_size, out_size=self.out_size)
 
+        # Sanity Check for Cropped image
         img = Image.fromarray(cropped_img)
         img.show()
         print(flip_num, noise_det, distort_det, pix_add, y_loc, x_loc)
 
         # Normalize the image
         norm_img = normalize(cropped_img, mean=Training_MEAN, std=Training_STDEV)
-        # add additional dimension
-        img_as_np = np.expand_dims(norm_img, axis=0)
-        # Convert numpy array to tensor
-        img_as_tensor = torch.from_numpy(img_as_np).float()
+        img_as_np = np.expand_dims(norm_img, axis=0)  # add additional dimension
+        img_as_tensor = torch.from_numpy(img_as_np).float()  # Convert numpy array to tensor
 
         # Get mask
         single_mask_name = self.mask_arr[index]
         msk_as_img = Image.open(single_mask_name)
         # msk_as_img.show()
         msk_as_np = np.asarray(msk_as_img)
+
         # flip the mask with respect to image
         flip_msk = flip(msk_as_np, flip_num)
+
+        # elastic_transform of mask with respect to image
         if distort_det == 0:
             # sigma = 4, alpha = 34
             aug_msk, _ = add_elastic_transform(flip_msk, alpha=34, sigma=4, seed=s)
@@ -111,15 +114,17 @@ class SEMDataTrain(Dataset):
         else:
             aug_msk = flip_msk
 
+        # Crop the mask
         cropped_msk = aug_msk[y_loc:y_loc+self.out_size, x_loc:x_loc+self.out_size]
 
+        # Sanity Check for mask
         img2 = Image.fromarray(cropped_msk)
         img2.show()
 
-        # add additional dimension
-        msk_as_np = np.expand_dims(cropped_msk/255, axis=0)
-        # Convert numpy array to tensor
-        msk_as_tensor = torch.from_numpy(msk_as_np).float()
+        # Normalize mask to only 0 and 1
+        cropped_msk = cropped_msk/255
+        msk_as_np = np.expand_dims(cropped_msk/255, axis=0)  # add additional dimension
+        msk_as_tensor = torch.from_numpy(msk_as_np).float()  # Convert numpy array to tensor
 
         return (img_as_tensor, msk_as_tensor)
 
@@ -172,9 +177,11 @@ class SEMDataTest(Dataset):
 
         # Make 4 cropped image (in numpy array form) using values calculated above
         # Cropped images will also have paddings to fit the model.
+
         cropped_padded = crop_pad_test(img_as_numpy,
                                        in_size = self.in_size,
                                        out_size = self.out_size)
+
         top_left = cropped_padded[0]
         top_right = cropped_padded[1]
         bottom_left = cropped_padded[2]
