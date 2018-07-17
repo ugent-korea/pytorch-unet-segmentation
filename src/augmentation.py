@@ -168,6 +168,16 @@ def crop_pad_test(image, in_size=572, out_size=388):
 
 
 def crop_pad_train(image, in_size=572, out_size=388):
+    """crop the image and pad it to in_size
+    Args :
+        images : numpy array of images
+        in_size(int) : the input_size of model
+        out_size(int) : the output_size of model
+    Return :
+        padded_img : numpy array of cropped and padded image
+        y_loc(int) : vertical location of crop
+        x_loc(int) : horizontal location of crop
+    """
     img_height, img_width = image.shape[0], image.shape[1]
     y_loc, x_loc = randint(0, img_height-out_size), randint(0, img_width-out_size)
     cropped_img = image[y_loc:y_loc+out_size, x_loc:x_loc+out_size]
