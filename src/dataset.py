@@ -164,13 +164,6 @@ class SEMDataTest(Dataset):
         single_image = self.image_arr[index]
         img_as_img = Image.open(single_image)
 
-
-        # Calculate dim1 and dim2 to be overlapped.
-        img_dim1 = img_as_img.size[0]
-        img_dim2 = img_as_img.size[1]
-        overlap_dim1 = img_dim1 - 388
-        overlap_dim2 = img_dim2 - 388
-
         # Convert the image into numpy array
         img_as_numpy = np.asarray(img_as_img)
 
