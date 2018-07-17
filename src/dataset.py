@@ -133,23 +133,65 @@ class SEMDataTrain(Dataset):
 
 class SEMDataTest(Dataset):
 
-    def __init__(self, image_path):
+    def __init__(self, image_path, mask_path):
         '''
         Args:
-            image_path = path where images are located
+            image_path = path where test images are located
+            mask_path = path where test masks are located
         '''
-        self.img_path = glob.glob(image_path)
+        self.mask_arr = glob.glob(str(mask_path) + str("/*"))
+        self.image_arr = glob.glob(str(image_path) + str("/*"))
         # paths to all images
         self.length = len(self.img_path)
         # number of images
 
     def __getitem__(self, index):
+        """Get specific data corresponding to the index
+        Args:
+            index : an integer variable that calls (indext)th image in the
+                    path
 
-        single_image = self.pathways[index]
-        img_as_img = Image.open(im_loc)
-        img_as_numpy = np.expand_dims(img_as_img, axis=0)
-        img_as_tensor = torch.from_numpy(img_as_numpy).float()
-        return img_as_tensor
+        Returns:
+            Tensor: 4 cropped data on index which is converted to Tensor
+        """
+        single_image = self.img_path[index]
+        img_as_img = Image.open(single_image)
+
+        # Calculate dim1 and dim2 to be overlapped.
+        img_dim1 = img_as_img.size[0]
+        img_dim2 = img_as_img.size[1]
+        overlap_dim1 = img_dim1 - 388
+        overlap_dim2 = img_dim2 - 388
+
+        # Convert the image into numpy array
+        img_as_numpy = np.asarray(img_as_img)
+
+        # Make 4 cropped image (in numpy array form) using values calculated above
+        # Cropped images will also have paddings to fit the model.
+        cropped_padded = crop_pad_test(img_as_numpy, in_size = 572, out_size = 388)
+        top_left = cropped_padded[0]
+        top_right = cropped_padded[1]
+        bottom_left = cropped_padded[2]
+        bottom_right = cropped_padded[3]
+
+        # Optional code: see the cropped and padded images
+        topleft_img = Image.fromarray(top_left)
+        topright_img = Image.fromarray(top_right)
+        bottomleft_img = Image.fromarray(bottom_left)
+        bottomright_img = Image.fromarray(bottom_right)
+        topleft_img.show()
+        topright_img.show()
+        bottomleft_img.show()
+        bottomright_img.show()
+
+        # Convert 4 cropped numpy arrays into tensor
+        #img_as_numpy = np.expand_dims(img_as_img, axis=0)
+        top_left_tensor = torch.from_numpy(top_left).float()
+        top_right_tensor = torch.from_numpy(top_right).float()
+        bottom_left_tensor = torch.from_numpy(bottom_left).float()
+        bottom_right_tensor = torch.from_numpy(bottom_right).float()
+
+        return (top_left_tensor, top_right_tensor, bottom_left_tensor, bottom_right_tensor)
 
     def __len__(self):
 
@@ -160,10 +202,11 @@ if __name__ == "__main__":
 
     custom_mnist_from_file_train = SEMDataTrain(
         '../data/train/images', '../data/train/masks')
-    custom_mnist_from_file_test = SEMDataTrain(
-        '../data/test/images', '../data/test/masks')
+    custom_mnist_from_file_test = SEMDataTest(
+        '../data/test/images/*.png')
 
-    imag_1 = custom_mnist_from_file_train.__getitem__(2)[1]*255
-    unique, counts = np.unique(imag_1, return_counts=True)
-    print(dict(zip(unique, counts)))
-    # imag_2 = custom_mnist_from_file_test.__getitem__(2)
+    #imag_1 = custom_mnist_from_file_test.__getitem__(0)
+    #unique, counts = np.unique(imag_1, return_counts=True)
+    #print(dict(zip(unique, counts)))
+    imag_2 = custom_mnist_from_file_test.__getitem__(0)
+    print(imag_2)
