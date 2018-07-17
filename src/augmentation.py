@@ -141,16 +141,41 @@ def normalize(image, mean, std):
     return image
 
 
+def crop_pad_test(image, in_size=572, out_size=388):
+    assert out_size*2 >= in_size, "Whole image cannot be expressed with 4 crops"
+    img_height, img_width = image.shape[0], image.shape[1]
+    l_top = image[:out_size, :out_size]
+    r_top = image[:out_size, img_width-out_size:]
+    l_bot = image[img_height-out_size:, :out_size]
+    r_bot = image[img_height-out_size:, img_width-out_size:]
+    print(l_top.shape)
+    print(r_top.shape)
+    l_top_padded = np.pad(l_top, 92, mode='symmetric')
+    r_top_padded = np.pad(r_top, 92, mode='symmetric')
+    l_bot_padded = np.pad(l_bot, 92, mode='symmetric')
+    r_bot_padded = np.pad(r_bot, 92, mode='symmetric')
+    stacked_img = np.stack((l_top_padded, r_top_padded, l_bot_padded, r_bot_padded))
+    return stacked_img
+
+
+def padding():
+    pass
+
+
 if __name__ == "__main__":
     from PIL import Image
-    a = Image.open("dog.jpg")
-    a = np.array(a).transpose(2, 0, 1)[0]
+    a = Image.open("0.png")
+    a.show()
+    a = np.array(a)
+    croped = crop_pad_test(a)
     a_1, s = add_elastic_transform(a, alpha=34, sigma=4)
     a_2, s = add_elastic_transform(a, alpha=34, sigma=4, seed=s)
     a_3, s = add_elastic_transform(a, alpha=34, sigma=4, seed=s)
-    a_11 = Image.fromarray(a_1)
-    a_22 = Image.fromarray(a_2)
-    a_33 = Image.fromarray(a_3)
+    a_11 = Image.fromarray(croped[0])
+    a_22 = Image.fromarray(croped[1])
+    a_33 = Image.fromarray(croped[2])
+    a_44 = Image.fromarray(croped[3])
     a_11.show()
     a_22.show()
     a_33.show()
+    a_44.show()
