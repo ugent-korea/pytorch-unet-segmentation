@@ -13,7 +13,7 @@ Training_MEAN = 0.4911
 Training_STDEV = 0.0402
 
 
-class SegmentationChallengeData(Dataset):
+class SEMDataTrain(Dataset):
     def __init__(self, image_path, mask_path):
         """
         Args:
@@ -126,7 +126,7 @@ class SegmentationChallengeData(Dataset):
         return self.data_len
 
 
-class ImagesFromTest(Dataset):
+class SEMDataTest(Dataset):
 
     def __init__(self, image_path):
         '''
@@ -153,9 +153,9 @@ class ImagesFromTest(Dataset):
 
 if __name__ == "__main__":
 
-    custom_mnist_from_file_train = SegmentationChallengeData(
+    custom_mnist_from_file_train = SEMDataTrain(
         '../data/train/images', '../data/train/masks')
-    custom_mnist_from_file_test = SegmentationChallengeData(
+    custom_mnist_from_file_test = SEMDataTrain(
         '../data/test/images', '../data/test/masks')
 
     imag_1 = custom_mnist_from_file_train.__getitem__(2)[1]*255
