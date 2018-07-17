@@ -2,6 +2,19 @@ import numpy as np
 from PIL import Image
 import glob
 
+def preprocess_image(image):
+    """
+    Args:
+        image : a string of name of image file
+    Return:
+        image_asarray : numpy array of the image that went through custom process
+    """
+
+    img_opened = Image.open(image)
+    img_asarray = np.asarray(img_opened)
+    img_asarray = img_asarray / 255
+
+    return img_asarray
 
 def find_mean(image_path):
     """
@@ -15,14 +28,9 @@ def find_mean(image_path):
     mean_sum = 0
 
     for image in all_images:
-        img_opened = Image.open(image)
-        # get the total number of pixels
-        total_pixels = img_opened.size[0] * img_opened.size[1]
-        img_asarray = np.asarray(img_opened)
-        img_asarray = img_asarray / 255
-        img_asarray = img_asarray.sum()
-        img_asarray = img_asarray / total_pixels
-        mean_sum += img_asarray
+        img_asarray = preprocess_image(image)
+        individual_mean = np.mean(img_asarray)
+        mean_sum += individual_mean
 
     # Divide the sum of all values by the number of images present
     mean = mean_sum / num_images
@@ -43,22 +51,16 @@ def find_stdev(image_path):
 
     # Recall mean value from function above: def Mean(path)
     mean_value = find_mean(image_path)
-    sq_sum = 0
+    std_sum = 0
 
     for image in all_images:
-        img_opened = Image.open(image)
-        total_pixels = img_opened.size[0] * img_opened.size[1]
-        img_asarray = np.asarray(img_opened)
-        img_asarray = img_asarray / 255
-        img_asarray = img_asarray.sum()
-        img_asarray = img_asarray / total_pixels
+        img_asarray = preprocess_image(image)
+        individual_stdev = np.std(img_asarray)
+        std_sum += individual_stdev
 
-        square_diff = (img_asarray - mean_value) ** 2
-        sq_sum += square_diff
+    std = std_sum / num_images
 
-    stdev = (sq_sum / num_images) ** (1/2)
-
-    return stdev
+    return std
 
 
 # Experimenting
