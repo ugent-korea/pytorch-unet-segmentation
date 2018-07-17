@@ -15,6 +15,7 @@ Training_STDEV = 0.0402
 
 
 class SEMDataTrain(Dataset):
+
     def __init__(self, image_path, mask_path, in_size=572, out_size=388):
         """
         Args:
@@ -51,7 +52,10 @@ class SEMDataTrain(Dataset):
         elif self.trans != True:
             img_as_tensor = self.to_tensor(img_as_np)
         """
-        # Get image
+
+        """
+        # GET IMAGE
+        """
         single_image_name = self.image_arr[index]
         img_as_img = Image.open(single_image_name)
         # img_as_img.show()
@@ -81,25 +85,31 @@ class SEMDataTrain(Dataset):
         distort_det = randint(0, 1)
         if distort_det == 0:
             # sigma = 4, alpha = 34
-            aug_img, s = add_elastic_transform(bright_img, alpha=34, sigma=4)
+            aug_img, seed = add_elastic_transform(bright_img, alpha=34, sigma=4)
         else:
             aug_img = bright_img
 
         # Crop and pad the image
-        cropped_img, y_loc, x_loc = crop_pad_train(
-            aug_img, in_size=self.in_size, out_size=self.out_size)
-
+        cropped_img, y_loc, x_loc = crop_pad_train(aug_img,
+                                                   in_size=self.in_size,
+                                                   out_size=self.out_size)
+        """
         # Sanity Check for Cropped image
         img = Image.fromarray(cropped_img)
         img.show()
         print(flip_num, noise_det, distort_det, pix_add, y_loc, x_loc)
+        """
 
         # Normalize the image
-        norm_img = normalize(cropped_img, mean=self.img_mean, std=self.img_std)
+        norm_img = normalize(cropped_img,
+                             mean=self.img_mean,
+                             std=self.img_std)
         img_as_np = np.expand_dims(norm_img, axis=0)  # add additional dimension
         img_as_tensor = torch.from_numpy(img_as_np).float()  # Convert numpy array to tensor
 
-        # Get mask
+        """
+        # GET MASK
+        """
         single_mask_name = self.mask_arr[index]
         msk_as_img = Image.open(single_mask_name)
         # msk_as_img.show()
@@ -110,8 +120,8 @@ class SEMDataTrain(Dataset):
 
         # elastic_transform of mask with respect to image
         if distort_det == 0:
-            # sigma = 4, alpha = 34
-            aug_msk, _ = add_elastic_transform(flip_msk, alpha=34, sigma=4, seed=s)
+            # sigma = 4, alpha = 34, seed = from image transformation
+            aug_msk, _ = add_elastic_transform(flip_msk, alpha=34, sigma=4, seed=seed)
             aug_msk = zero_255_image(aug_msk)  # images only with 0 and 255
         else:
             aug_msk = flip_msk
@@ -119,9 +129,11 @@ class SEMDataTrain(Dataset):
         # Crop the mask
         cropped_msk = aug_msk[y_loc:y_loc+self.out_size, x_loc:x_loc+self.out_size]
 
+        """
         # Sanity Check for mask
         img2 = Image.fromarray(cropped_msk)
         img2.show()
+        """
 
         # Normalize mask to only 0 and 1
         cropped_msk = cropped_msk/255
