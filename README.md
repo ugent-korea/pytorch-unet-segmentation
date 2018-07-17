@@ -1,11 +1,11 @@
 # pytorch-unet-segmentation
 
-# Description
+## Description
 The project involves implementing biomedical image segmentation based on U-Net. 
 
-Members : PyeongEun Kim, JuHyung Lee, MiJeong Lee
+##### Members : PyeongEun Kim, JuHyung Lee, MiJeong Lee
 
-Supervisors : Utku Ozbulak
+##### Supervisors : Utku Ozbulak
 
 
 * [Pipeline](#pipeline)
