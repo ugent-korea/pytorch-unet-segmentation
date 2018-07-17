@@ -21,7 +21,7 @@ class SEMDataTrain(Dataset):
             mask_path (str): the path where the mask is located
             option (str): decide which dataset to import
         """
-
+        # all file names
         self.mask_arr = glob.glob(str(mask_path) + str("/*"))
         self.image_arr = glob.glob(str(image_path) + str("/*"))
         self.in_size = in_size
