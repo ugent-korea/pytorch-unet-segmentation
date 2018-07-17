@@ -147,8 +147,8 @@ class SEMDataTest(Dataset):
         # paths to all images and masks
         self.mask_arr = glob.glob(str(mask_path) + str("/*"))
         self.image_arr = glob.glob(str(image_path) + str("/*"))
-        self.mean = find_mean(image_path)
-        self.stdev = find_stdev(image_path)
+        self.in_size = in_size
+        self.out_size = out_size
 
     def __getitem__(self, index):
         """Get specific data corresponding to the index
@@ -159,12 +159,9 @@ class SEMDataTest(Dataset):
         Returns:
             Tensor: 4 cropped data on index which is converted to Tensor
         """
-        single_image = self.img_arr[index]
+        single_image = self.image_arr[index]
         img_as_img = Image.open(single_image)
-        self.in_size = in_size
-        self.out_size = out_size
-        self.mean = mean
-        self.stdev = stdev
+
 
         # Calculate dim1 and dim2 to be overlapped.
         img_dim1 = img_as_img.size[0]
@@ -201,17 +198,17 @@ class SEMDataTest(Dataset):
         '''
 
         # Normalize the cropped arrays
-        topleft_normalized = normalize(top_left, mean=self.mean, stdev=self.stdev)
-        topright_normalized = normalize(top_left, mean=self.mean, stdev=self.stdev)
-        bottomleft_normalized = normalize(top_left, mean=self.mean, stdev=self.stdev)
-        bottomright_normalized = normalize(top_left, mean=self.mean, stdev=self.stdev)
+        topleft_normalized = normalize(top_left, mean=Training_MEAN, std=Training_STDEV)
+        topright_normalized = normalize(top_left, mean=Training_MEAN, std=Training_STDEV)
+        bottomleft_normalized = normalize(top_left, mean=Training_MEAN, std=Training_STDEV)
+        bottomright_normalized = normalize(top_left, mean=Training_MEAN, std=Training_STDEV)
 
         # Convert 4 cropped numpy arrays into tensor
         #img_as_numpy = np.expand_dims(img_as_img, axis=0)
-        top_left_tensor = torch.from_numpy(top_left_normalized).float()
-        top_right_tensor = torch.from_numpy(top_right_normalized).float()
-        bottom_left_tensor = torch.from_numpy(bottom_left_normalized).float()
-        bottom_right_tensor = torch.from_numpy(bottom_right_normalized).float()
+        top_left_tensor = torch.from_numpy(topleft_normalized).float()
+        top_right_tensor = torch.from_numpy(topright_normalized).float()
+        bottom_left_tensor = torch.from_numpy(bottomleft_normalized).float()
+        bottom_right_tensor = torch.from_numpy(bottomright_normalized).float()
 
         return (top_left_tensor, top_right_tensor, bottom_left_tensor, bottom_right_tensor)
 
