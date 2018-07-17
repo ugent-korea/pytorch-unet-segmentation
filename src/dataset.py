@@ -140,11 +140,41 @@ class SEMDataTest(Dataset):
 
     def __getitem__(self, index):
 
-        single_image = self.pathways[index]
-        img_as_img = Image.open(im_loc)
-        img_as_numpy = np.expand_dims(img_as_img, axis=0)
-        img_as_tensor = torch.from_numpy(img_as_numpy).float()
-        return img_as_tensor
+        single_image = self.img_path[index]
+        img_as_img = Image.open(single_image)
+
+        # Calculate dim1 and dim2 to be overlapped.
+        img_dim1 = img_as_img.size[0]
+        img_dim2 = img_as_img.size[1]
+        overlap_dim1 = img_x - 388
+        overlap_dim2 = img_y - 388
+
+        # Convert the image into numpy array
+        img_as_numpy = np.asarray(img_as_img)
+
+        # Make 4 cropped image (in numpy array form) using values calculated above
+        top_left = img_as_numpy[0:388, 0:388]
+        top_right = img_as_numpy[overlap_dim1:, 0:388]
+        bottom_left = img_as_numpy[0:388, overlap_dim2:]
+        bottom_right = img_as_numpy[overlap_dim1:, overlap_dim2:]
+
+        topleft_img = Image.fromarray(top_left)
+        topright_img = Image.fromarray(top_right)
+        bottomleft_img = Image.fromarray(bottom_left)
+        bottomright_img = Image.fromarray(bottom_right)
+        topleft_img.show()
+        topright_img.show()
+        bottomleft_img.show()
+        bottomright_img.show()
+
+        # Convert 4 cropped numpy arrays into tensor
+        #img_as_numpy = np.expand_dims(img_as_img, axis=0)
+        top_left_tensor = torch.from_numpy(top_left).float()
+        top_right_tensor = torch.from_numpy(top_right).float()
+        bottom_left_tensor = torch.from_numpy(bottom_left).float()
+        bottom_right_tensor = torch.from_numpy(bottom_right).float()
+
+        return (top_left_tensor, top_right_tensor, bottom_left_tensor, bottom_right_tensor)
 
     def __len__(self):
 
