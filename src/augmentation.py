@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.ndimage.interpolation import map_coordinates
 from scipy.ndimage.filters import gaussian_filter
+from random import randint
 
 
 def add_elastic_transform(image, alpha, sigma, seed=None):
@@ -13,7 +14,7 @@ def add_elastic_transform(image, alpha, sigma, seed=None):
         Return :
         image : elastically transformed numpy array of image
     """
-    from random import randint
+
     if seed is None:
         seed = randint(1, 100)
         random_state = np.random.RandomState(seed)
@@ -142,22 +143,37 @@ def normalize(image, mean, std):
 
 
 def crop_pad_test(image, in_size=572, out_size=388):
+    """crop the image and pad it to in_size
+    Args :
+        images : numpy array of images
+        in_size(int) : the input_size of model
+        out_size(int) : the output_size of model
+    Return :
+        stacked_img : numpy array of stacked images
+    """
     assert out_size*2 >= in_size, "Whole image cannot be expressed with 4 crops"
     img_height, img_width = image.shape[0], image.shape[1]
     l_top = image[:out_size, :out_size]
     r_top = image[:out_size, img_width-out_size:]
     l_bot = image[img_height-out_size:, :out_size]
     r_bot = image[img_height-out_size:, img_width-out_size:]
-    l_top_padded = np.pad(l_top, 92, mode='symmetric')
-    r_top_padded = np.pad(r_top, 92, mode='symmetric')
-    l_bot_padded = np.pad(l_bot, 92, mode='symmetric')
-    r_bot_padded = np.pad(r_bot, 92, mode='symmetric')
+    pad_size = int((in_size - out_size)/2)
+    l_top_padded = np.pad(l_top, pad_size, mode='symmetric')
+    r_top_padded = np.pad(r_top, pad_size, mode='symmetric')
+    l_bot_padded = np.pad(l_bot, pad_size, mode='symmetric')
+    r_bot_padded = np.pad(r_bot, pad_size, mode='symmetric')
+    # print(r_bot_padded.shape, r_top_padded.shape)
     stacked_img = np.stack((l_top_padded, r_top_padded, l_bot_padded, r_bot_padded))
     return stacked_img
 
 
-def padding():
-    pass
+def crop_pad_train(image, in_size=572, out_size=388):
+    img_height, img_width = image.shape[0], image.shape[1]
+    y_loc, x_loc = randint(0, img_height-out_size), randint(0, img_width-out_size)
+    cropped_img = image[y_loc:y_loc+out_size, x_loc:x_loc+out_size]
+    pad_size = int((in_size - out_size)/2)
+    padded_img = np.pad(cropped_img, pad_size, mode="symmetric")
+    return padded_img, y_loc, x_loc
 
 
 if __name__ == "__main__":

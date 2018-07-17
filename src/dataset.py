@@ -104,7 +104,7 @@ class SEMDataTrain(Dataset):
         if distort_det == 0:
             # sigma = 4, alpha = 34
             aug_msk, _ = add_elastic_transform(flip_msk, alpha=34, sigma=4, seed=s)
-            aug_msk = zero_255_image(aug_msk)
+            aug_msk = zero_255_image(aug_msk)  # images only with 0 and 255
         else:
             aug_msk = flip_msk
 
