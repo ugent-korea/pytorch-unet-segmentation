@@ -8,10 +8,10 @@ from torchvision import transforms
 from random import randint
 from torch.utils.data.dataset import Dataset
 from augmentation import *
+from mean_std import *
 
 Training_MEAN = 0.4911
 Training_STDEV = 0.0402
-
 
 class SEMDataTrain(Dataset):
     def __init__(self, image_path, mask_path, in_size=572, out_size=388):
@@ -142,6 +142,8 @@ class SEMDataTest(Dataset):
         # paths to all images and masks
         self.mask_arr = glob.glob(str(mask_path) + str("/*"))
         self.image_arr = glob.glob(str(image_path) + str("/*"))
+        self.mean = Mean(image_path)
+        self.stdev = StandardDeviation(image_path)
 
     def __getitem__(self, index):
         """Get specific data corresponding to the index
@@ -154,6 +156,10 @@ class SEMDataTest(Dataset):
         """
         single_image = self.img_arr[index]
         img_as_img = Image.open(single_image)
+        self.in_size = in_size
+        self.out_size = out_size
+        self.mean = mean
+        self.stdev = stdev
 
         # Calculate dim1 and dim2 to be overlapped.
         img_dim1 = img_as_img.size[0]
@@ -166,7 +172,9 @@ class SEMDataTest(Dataset):
 
         # Make 4 cropped image (in numpy array form) using values calculated above
         # Cropped images will also have paddings to fit the model.
-        cropped_padded = crop_pad_test(img_as_numpy, in_size = 572, out_size = 388)
+        cropped_padded = crop_pad_test(img_as_numpy,
+                                       in_size = self.in_size,
+                                       out_size = self.out_size)
         top_left = cropped_padded[0]
         top_right = cropped_padded[1]
         bottom_left = cropped_padded[2]
@@ -186,17 +194,17 @@ class SEMDataTest(Dataset):
         '''
 
         # Normalize the cropped arrays
-        topleft_normalized =
-        topright_normalized =
-        bottomleft_normalized =
-        bottomright_normalized =
+        topleft_normalized = normalize(top_left, mean=self.mean, stdev=self.stdev)
+        topright_normalized = normalize(top_left, mean=self.mean, stdev=self.stdev)
+        bottomleft_normalized = normalize(top_left, mean=self.mean, stdev=self.stdev)
+        bottomright_normalized = normalize(top_left, mean=self.mean, stdev=self.stdev)
 
         # Convert 4 cropped numpy arrays into tensor
         #img_as_numpy = np.expand_dims(img_as_img, axis=0)
-        top_left_tensor = torch.from_numpy(top_left).float()
-        top_right_tensor = torch.from_numpy(top_right).float()
-        bottom_left_tensor = torch.from_numpy(bottom_left).float()
-        bottom_right_tensor = torch.from_numpy(bottom_right).float()
+        top_left_tensor = torch.from_numpy(top_left_normalized).float()
+        top_right_tensor = torch.from_numpy(top_right_normalized).float()
+        bottom_left_tensor = torch.from_numpy(bottom_left_normalized).float()
+        bottom_right_tensor = torch.from_numpy(bottom_right_normalized).float()
 
         return (top_left_tensor, top_right_tensor, bottom_left_tensor, bottom_right_tensor)
 
