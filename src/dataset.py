@@ -163,7 +163,7 @@ class SEMDataTest(Dataset):
 
         # Make 4 cropped image (in numpy array form) using values calculated above
         # Cropped images will also have paddings to fit the model.
-        cropped_padded = crop_pad_test(img_as_numpy)
+        cropped_padded = crop_pad_test(img_as_numpy, in_size = 572, out_size = 388)
         top_left = cropped_padded[0]
         top_right = cropped_padded[1]
         bottom_left = cropped_padded[2]
