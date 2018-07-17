@@ -186,38 +186,25 @@ class SEMDataTest(Dataset):
                                        in_size=self.in_size,
                                        out_size=self.out_size)
 
-        top_left = cropped_padded[0]
-        top_right = cropped_padded[1]
-        bottom_left = cropped_padded[2]
-        bottom_right = cropped_padded[3]
+        # Empty list that will be filled in with arrays converted to tensor
+        processed_list = list()
 
-        '''
-        # SANITY CHECK: SEE THE CROPPED IMAGES
+        for array in cropped_padded:
+            '''
+            # SANITY CHECK: SEE THE CROPPED & PADDED IMAGES
+            array_image = Image.fromarray(array)
+            array_image.show()
+            '''
+            # Normalize the cropped arrays
+            array_normalized = normalize(array, mean=Training_MEAN, std=Training_STDEV)
+            # Convert normalized array into tensor
+            array_to_tensor = torch.from_numpy(array_normalized).float()
+            processed_list.append(array_to_tensor)
 
-        topleft_img = Image.fromarray(top_left)
-        topright_img = Image.fromarray(top_right)
-        bottomleft_img = Image.fromarray(bottom_left)
-        bottomright_img = Image.fromarray(bottom_right)
-        topleft_img.show()
-        topright_img.show()
-        bottomleft_img.show()
-        bottomright_img.show()
-        '''
 
-        # Normalize the cropped arrays
-        topleft_normalized = normalize(top_left, mean=Training_MEAN, std=Training_STDEV)
-        topright_normalized = normalize(top_left, mean=Training_MEAN, std=Training_STDEV)
-        bottomleft_normalized = normalize(top_left, mean=Training_MEAN, std=Training_STDEV)
-        bottomright_normalized = normalize(top_left, mean=Training_MEAN, std=Training_STDEV)
-
-        # Convert 4 cropped numpy arrays into tensor
-        #img_as_numpy = np.expand_dims(img_as_img, axis=0)
-        top_left_tensor = torch.from_numpy(topleft_normalized).float()
-        top_right_tensor = torch.from_numpy(topright_normalized).float()
-        bottom_left_tensor = torch.from_numpy(bottomleft_normalized).float()
-        bottom_right_tensor = torch.from_numpy(bottomright_normalized).float()
-
-        return (top_left_tensor, top_right_tensor, bottom_left_tensor, bottom_right_tensor)
+        #  return tensor of 4 cropped images
+        #  top left, top right, bottom left, bottom right respectively.
+        return (processed_list[0], processed_list[1], processed_list[2], processed_list[3])
 
     def __len__(self):
 
