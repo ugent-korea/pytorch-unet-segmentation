@@ -2,14 +2,14 @@ import numpy as np
 from PIL import Image
 import glob
 
-def Mean(image_path):
+def find_mean(image_path):
     """
     Args:
         image_path : pathway of all images
     Return :
         mean : mean value of all the images
     """
-    all_images = glob.glob(image_path)
+    all_images = glob.glob(str(image_path) + str("/*"))
     num_images = len(all_images)
     mean_sum = 0
 
@@ -29,7 +29,7 @@ def Mean(image_path):
     return mean
 
 
-def StandardDeviation(image_path):
+def find_stdev(image_path):
     """
     Args:
         image_path : pathway of all images
@@ -37,11 +37,11 @@ def StandardDeviation(image_path):
         stdev : standard deviation of all pixels
     """
     # Initiation
-    all_images = glob.glob(image_path)
+    all_images = glob.glob(str(image_path) + str("/*"))
     num_images = len(all_images)
 
     # Recall mean value from function above: def Mean(path)
-    mean_value = Mean(image_path)
+    mean_value = find_mean(image_path)
     sq_sum = 0
 
     for image in all_images:

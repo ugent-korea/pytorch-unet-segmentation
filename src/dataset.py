@@ -149,8 +149,8 @@ class SEMDataTest(Dataset):
         # paths to all images and masks
         self.mask_arr = glob.glob(str(mask_path) + str("/*"))
         self.image_arr = glob.glob(str(image_path) + str("/*"))
-        self.mean = Mean(image_path)
-        self.stdev = StandardDeviation(image_path)
+        self.mean = find_mean(image_path)
+        self.stdev = find_stdev(image_path)
 
     def __getitem__(self, index):
         """Get specific data corresponding to the index
