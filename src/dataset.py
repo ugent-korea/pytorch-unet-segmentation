@@ -13,6 +13,7 @@ from mean_std import *
 Training_MEAN = 0.4911
 Training_STDEV = 0.0402
 
+
 class SEMDataTrain(Dataset):
     def __init__(self, image_path, mask_path, in_size=572, out_size=388):
         """
@@ -24,10 +25,11 @@ class SEMDataTrain(Dataset):
         # all file names
         self.mask_arr = glob.glob(str(mask_path) + str("/*"))
         self.image_arr = glob.glob(str(image_path) + str("/*"))
-        self.in_size = in_size
-        self.out_size = out_size
+        self.in_size, self.out_size = in_size, out_size
         # Calculate len
         self.data_len = len(self.mask_arr)
+        # calculate mean and stdev
+        self.img_mean, self.img_std = find_mean(image_path), find_stdev(image_path)
 
     def __getitem__(self, index):
         """Get specific data corresponding to the index
@@ -93,7 +95,7 @@ class SEMDataTrain(Dataset):
         print(flip_num, noise_det, distort_det, pix_add, y_loc, x_loc)
 
         # Normalize the image
-        norm_img = normalize(cropped_img, mean=Training_MEAN, std=Training_STDEV)
+        norm_img = normalize(cropped_img, mean=self.img_mean, std=self.img_std)
         img_as_np = np.expand_dims(norm_img, axis=0)  # add additional dimension
         img_as_tensor = torch.from_numpy(img_as_np).float()  # Convert numpy array to tensor
 
@@ -138,7 +140,7 @@ class SEMDataTrain(Dataset):
 
 class SEMDataTest(Dataset):
 
-    def __init__(self, image_path, mask_path, in_size = 572, out_size = 388):
+    def __init__(self, image_path, mask_path, in_size=572, out_size=388):
         '''
         Args:
             image_path = path where test images are located
@@ -179,8 +181,8 @@ class SEMDataTest(Dataset):
         # Cropped images will also have paddings to fit the model.
 
         cropped_padded = crop_pad_test(img_as_numpy,
-                                       in_size = self.in_size,
-                                       out_size = self.out_size)
+                                       in_size=self.in_size,
+                                       out_size=self.out_size)
 
         top_left = cropped_padded[0]
         top_right = cropped_padded[1]
