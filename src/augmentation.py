@@ -118,7 +118,7 @@ def zero_255_image(image):
     Args:
         image : numpy array of image in datatype int16
     Return :
-        image : numpy array of image in datatype uint8 with ceilling(maximum 255) and flooring(minimum 0)
+        image : numpy array of image in datatype uint8 only with 255 and 0
     """
     image[image > 127.5] = 255
     image[image < 127.5] = 0
