@@ -148,8 +148,6 @@ def crop_pad_test(image, in_size=572, out_size=388):
     r_top = image[:out_size, img_width-out_size:]
     l_bot = image[img_height-out_size:, :out_size]
     r_bot = image[img_height-out_size:, img_width-out_size:]
-    print(l_top.shape)
-    print(r_top.shape)
     l_top_padded = np.pad(l_top, 92, mode='symmetric')
     r_top_padded = np.pad(r_top, 92, mode='symmetric')
     l_bot_padded = np.pad(l_bot, 92, mode='symmetric')
