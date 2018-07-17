@@ -2,6 +2,7 @@ import numpy as np
 from PIL import Image
 import glob
 
+
 def find_mean(image_path):
     """
     Args:
@@ -59,9 +60,10 @@ def find_stdev(image_path):
 
     return stdev
 
+
 # Experimenting
 if __name__ == '__main__':
-    image_path = '../data/train/images/*.png'
+    image_path = '../data/train/images'
 
     print('for training images,')
     print('mean:', Mean(image_path))
