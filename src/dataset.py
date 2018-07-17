@@ -51,7 +51,7 @@ class SegmentationChallengeData(Dataset):
         # Get image
         single_image_name = self.image_arr[index]
         img_as_img = Image.open(single_image_name)
-        # img_as_img.show()
+        img_as_img.show()
         img_as_np = np.asarray(img_as_img)
 
         # Augmentation
@@ -74,21 +74,21 @@ class SegmentationChallengeData(Dataset):
         pix_add = randint(-20, 20)
         bright_img = change_brightness(noise_img, pix_add)
 
-        # Elastic distort {0: no distort, 1: distort}
+        # Elastic distort {0: distort, 1:no distort}
         distort_det = randint(0, 1)
         if distort_det == 0:
             # sigma = 4, alpha = 34
-            aug_img, seed = add_elastic_transform(bright_img, alpha=34, sigma=4)
+            aug_img, s = add_elastic_transform(bright_img, alpha=34, sigma=4)
         else:
             aug_img = bright_img
-        """
+
         img = Image.fromarray(aug_img)
         img.show()
+
         print(flip_num, noise_det, distort_det, pix_add)
-        """
+
         # Normalize the image
         norm_img = normalize(aug_img, mean=Training_MEAN, std=Training_STDEV)
-
         # add additional dimension
         img_as_np = np.expand_dims(norm_img, axis=0)
         # Convert numpy array to tensor
@@ -97,21 +97,23 @@ class SegmentationChallengeData(Dataset):
         # Get mask
         single_mask_name = self.mask_arr[index]
         msk_as_img = Image.open(single_mask_name)
-        # msk_as_img.show()
+        msk_as_img.show()
         msk_as_np = np.asarray(msk_as_img)
         # flip the mask with respect to image
         flip_msk = flip(msk_as_np, flip_num)
         if distort_det == 0:
             # sigma = 4, alpha = 34
-            aug_msk = add_elastic_transform(flip_msk, alpha=34, sigma=4, random_state=seed)
+            aug_msk, _ = add_elastic_transform(flip_msk, alpha=34, sigma=4, seed=s)
+            aug_msk = zero_255_image(aug_msk)
         else:
             aug_msk = flip_msk
-        """
+
         img2 = Image.fromarray(aug_msk)
         img2.show()
-        """
+
         # add additional dimension
-        msk_as_np = np.expand_dims(aug_msk, axis=0)/255
+        msk_as_np = np.expand_dims(aug_msk/255, axis=0)
+        # Convert numpy array to tensor
         msk_as_tensor = torch.from_numpy(msk_as_np).float()
 
         return (img_as_tensor, msk_as_tensor)
@@ -140,7 +142,7 @@ class ImagesFromTest(Dataset):
 
         single_image = self.pathways[index]
         img_as_img = Image.open(im_loc)
-        img_as_numpy = np.expand_dims(img_as_img, axis=0)/255
+        img_as_numpy = np.expand_dims(img_as_img, axis=0)
         img_as_tensor = torch.from_numpy(img_as_numpy).float()
         return img_as_tensor
 
@@ -156,6 +158,7 @@ if __name__ == "__main__":
     custom_mnist_from_file_test = SegmentationChallengeData(
         '../data/test/images', '../data/test/masks')
 
-    imag_1 = custom_mnist_from_file_train.__getitem__(2)[0]
-    print(imag_1)
-    #imag_2 = custom_mnist_from_file_test.__getitem__(2)
+    imag_1 = custom_mnist_from_file_train.__getitem__(2)[1]*255
+    unique, counts = np.unique(imag_1, return_counts=True)
+    print(dict(zip(unique, counts)))
+    # imag_2 = custom_mnist_from_file_test.__getitem__(2)

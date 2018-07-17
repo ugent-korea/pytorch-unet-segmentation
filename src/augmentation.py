@@ -3,7 +3,7 @@ from scipy.ndimage.interpolation import map_coordinates
 from scipy.ndimage.filters import gaussian_filter
 
 
-def add_elastic_transform(image,alpha,sigma, random_state=None):
+def add_elastic_transform(image, alpha, sigma, seed=None):
     """
     Args:
         image : numpy array of image
@@ -13,10 +13,12 @@ def add_elastic_transform(image,alpha,sigma, random_state=None):
         Return :
         image : elastically transformed numpy array of image
     """
-
-    if random_state is None:
-        random_state = np.random.RandomState(None)
-
+    from random import randint
+    if seed is None:
+        seed = randint(1, 100)
+        random_state = np.random.RandomState(seed)
+    else:
+        random_state = np.random.RandomState(seed)
     shape = image.shape
     dx = gaussian_filter((random_state.rand(*shape) * 2 - 1),
                          sigma, mode="constant", cval=0) * alpha
@@ -25,7 +27,7 @@ def add_elastic_transform(image,alpha,sigma, random_state=None):
 
     x, y = np.meshgrid(np.arange(shape[1]), np.arange(shape[0]))
     indices = np.reshape(y+dy, (-1, 1)), np.reshape(x+dx, (-1, 1))
-    return map_coordinates(image, indices, order=1).reshape(shape), random_state
+    return map_coordinates(image, indices, order=1).reshape(shape), seed
 
 
 def flip(image, option_value):
@@ -111,6 +113,19 @@ def ceil_floor_image(image):
     return image
 
 
+def zero_255_image(image):
+    """
+    Args:
+        image : numpy array of image in datatype int16
+    Return :
+        image : numpy array of image in datatype uint8 with ceilling(maximum 255) and flooring(minimum 0)
+    """
+    image[image > 127.5] = 255
+    image[image < 127.5] = 0
+    image = image.astype("uint8")
+    return image
+
+
 def normalize(image, mean, std):
     """
     Args :
@@ -124,3 +139,18 @@ def normalize(image, mean, std):
     image = (image - mean) / std
 
     return image
+
+
+if __name__ == "__main__":
+    from PIL import Image
+    a = Image.open("dog.jpg")
+    a = np.array(a).transpose(2, 0, 1)[0]
+    a_1, s = add_elastic_transform(a, alpha=34, sigma=4)
+    a_2, s = add_elastic_transform(a, alpha=34, sigma=4, seed=s)
+    a_3, s = add_elastic_transform(a, alpha=34, sigma=4, seed=s)
+    a_11 = Image.fromarray(a_1)
+    a_22 = Image.fromarray(a_2)
+    a_33 = Image.fromarray(a_3)
+    a_11.show()
+    a_22.show()
+    a_33.show()
