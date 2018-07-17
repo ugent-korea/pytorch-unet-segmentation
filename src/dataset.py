@@ -128,17 +128,15 @@ class SEMDataTrain(Dataset):
 
 class SEMDataTest(Dataset):
 
-    def __init__(self, image_path, mask_path):
+    def __init__(self, image_path, mask_path, in_size = 572, out_size = 388):
         '''
         Args:
             image_path = path where test images are located
             mask_path = path where test masks are located
         '''
+        # paths to all images and masks
         self.mask_arr = glob.glob(str(mask_path) + str("/*"))
         self.image_arr = glob.glob(str(image_path) + str("/*"))
-        # paths to all images
-        self.length = len(self.img_path)
-        # number of images
 
     def __getitem__(self, index):
         """Get specific data corresponding to the index
@@ -149,7 +147,7 @@ class SEMDataTest(Dataset):
         Returns:
             Tensor: 4 cropped data on index which is converted to Tensor
         """
-        single_image = self.img_path[index]
+        single_image = self.img_arr[index]
         img_as_img = Image.open(single_image)
 
         # Calculate dim1 and dim2 to be overlapped.
@@ -169,7 +167,9 @@ class SEMDataTest(Dataset):
         bottom_left = cropped_padded[2]
         bottom_right = cropped_padded[3]
 
-        # Optional code: see the cropped and padded images
+        '''
+        # SANITY CHECK: SEE THE CROPPED IMAGES
+
         topleft_img = Image.fromarray(top_left)
         topright_img = Image.fromarray(top_right)
         bottomleft_img = Image.fromarray(bottom_left)
@@ -178,6 +178,13 @@ class SEMDataTest(Dataset):
         topright_img.show()
         bottomleft_img.show()
         bottomright_img.show()
+        '''
+
+        # Normalize the cropped arrays
+        topleft_normalized =
+        topright_normalized =
+        bottomleft_normalized =
+        bottomright_normalized =
 
         # Convert 4 cropped numpy arrays into tensor
         #img_as_numpy = np.expand_dims(img_as_img, axis=0)
@@ -198,7 +205,7 @@ if __name__ == "__main__":
     custom_mnist_from_file_train = SEMDataTrain(
         '../data/train/images', '../data/train/masks')
     custom_mnist_from_file_test = SEMDataTest(
-        '../data/test/images/*.png')
+        '../data/test/images/', '../data/test/masks')
 
     #imag_1 = custom_mnist_from_file_test.__getitem__(0)
     #unique, counts = np.unique(imag_1, return_counts=True)
