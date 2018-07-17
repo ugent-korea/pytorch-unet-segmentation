@@ -66,5 +66,5 @@ if __name__ == '__main__':
     image_path = '../data/train/images'
 
     print('for training images,')
-    print('mean:', Mean(image_path))
-    print('stdev:', StandardDeviation(image_path))
+    print('mean:', find_mean(image_path))
+    print('stdev:', find_stdev(image_path))
