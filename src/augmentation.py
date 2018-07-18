@@ -314,7 +314,7 @@ if __name__ == "__main__":
     c_rt.show()
     c_lb.show()
     c_rb.show()
-    padded = multi_padding(cropped, 512, 388, "symmetric")
+    padded = multi_padding(cropped, 572, 388, "symmetric")
     p_lt = Image.fromarray(padded[0])
     p_rt = Image.fromarray(padded[1])
     p_lb = Image.fromarray(padded[2])
