@@ -284,6 +284,7 @@ if __name__ == "__main__":
 
     original = np.array(b)
     b.show()
+    """
     original1 = flip(original, 0)
     original1 = Image.fromarray(original1)
     original1.show()
@@ -302,10 +303,26 @@ if __name__ == "__main__":
 
     original2 = np.array(b)
     original3 = np.array(c)
-
     """
     cropped = multi_cropping(original, 388, 2, 2)
+    c_lt = Image.fromarray(cropped[0])
+    c_rt = Image.fromarray(cropped[1])
+    c_lb = Image.fromarray(cropped[2])
+    c_rb = Image.fromarray(cropped[3])
+
+    c_lt.show()
+    c_rt.show()
+    c_lb.show()
+    c_rb.show()
     padded = multi_padding(cropped, 512, 388, "symmetric")
+    p_lt = Image.fromarray(padded[0])
+    p_rt = Image.fromarray(padded[1])
+    p_lb = Image.fromarray(padded[2])
+    p_rb = Image.fromarray(padded[3])
+    p_lt.show()
+    p_rt.show()
+    p_lb.show()
+    p_rb.show()
     div_arr = division_array(388, 2, 2, 512, 512)
     cont_arr = image_concatenate(cropped, 2, 2, 512, 512)
     a_11 = Image.fromarray(div_arr*60)
@@ -313,4 +330,3 @@ if __name__ == "__main__":
 
     a_11.show()
     a_22.show()
-    """

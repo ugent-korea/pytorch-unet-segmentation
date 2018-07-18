@@ -167,7 +167,7 @@ class SEMDataTest(Dataset):
 
         img_as_numpy = multi_cropping(img_as_numpy,
                                       crop_size=self.out_size,
-                                      dim1_num=2, dim2_num=2)
+                                      crop_num1=2, crop_num2=2)
         img_as_numpy = multi_padding(img_as_numpy, in_size=self.in_size,
                                      out_size=self.out_size, mode="symmetric")
 
