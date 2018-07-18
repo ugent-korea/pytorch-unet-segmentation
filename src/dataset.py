@@ -120,7 +120,7 @@ class SEMDataTrain(Dataset):
 
         # Normalize mask to only 0 and 1
         msk_as_np = msk_as_np/255
-        msk_as_np = np.expand_dims(msk_as_np/255, axis=0)  # add additional dimension
+        msk_as_np = np.expand_dims(msk_as_np, axis=0)  # add additional dimension
         msk_as_tensor = torch.from_numpy(msk_as_np).float()  # Convert numpy array to tensor
 
         return (img_as_tensor, msk_as_tensor)
@@ -167,7 +167,7 @@ class SEMDataTest(Dataset):
 
         img_as_numpy = multi_cropping(img_as_numpy,
                                       crop_size=self.out_size,
-                                      dim1_num=2, dim2_num=2)
+                                      crop_num1=2, crop_num2=2)
         img_as_numpy = multi_padding(img_as_numpy, in_size=self.in_size,
                                      out_size=self.out_size, mode="symmetric")
 

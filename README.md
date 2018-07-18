@@ -7,8 +7,6 @@ The project involves implementing biomedical image segmentation based on U-Net.
 
 ##### Supervisors : Utku Ozbulak
 
-* [Prerequisite](#prerequisite)
-
 * [Pipeline](#pipeline)
 
 * [Preprocessing](#preprocessing)
@@ -21,15 +19,7 @@ The project involves implementing biomedical image segmentation based on U-Net.
 
 * [Dependency](#dependency)
 
-## Prerequisite <a name="prerequisite"></a>
 
-    * python 3.6
-    * numpy 1.14.5
-    * torch 0.4.0
-    * PIL
-    * glob
-    
-    
 ## Pipeline <a name="pipeline"></a>
 
 
@@ -38,7 +28,7 @@ The project involves implementing biomedical image segmentation based on U-Net.
 ```ruby
 from torch.utils.data.dataset import Dataset
 class SEMDataTrain(Dataset):
-    def __init__(self, image_path, mask_path, in_size=572, out_size=388):
+    def __init__(self):
         """
         Args:
             image_path (str): the path where the image is located
@@ -56,26 +46,9 @@ class SEMDataTrain(Dataset):
         """
         return (img_as_tensor, msk_as_tensor)
 
-    def __len__(self):
-        """
-        Returns:
-            length (int): length of the data
-        """
-        return self.data_len
-        
-if __name__ == "__main__":
-
-    custom_mnist_from_file_train = SEMDataTrain(
-        '../data/train/images', '../data/train/masks')
-    custom_mnist_from_file_test = SEMDataTest(
-        '../data/test/images/', '../data/test/masks')
-
-    imag_1 = custom_mnist_from_file_train.__getitem__(0)
-    imag_2 = custom_mnist_from_file_test.__getitem__(0)
-    print(imag_2.size())
 ```
 This is a dataset class we used. In the dataset, it contains three functions.
-  * \__intit\__ : Intialization happens and determines which datasets to import and read. 
+  * \__intit\__ : Intialization 
   * \__getitem\__ : Reads the images and preprocess on the images are accompolished. 
   * \__len\__ : Counts the number of images. 
 
@@ -98,9 +71,7 @@ class SEMDataTrain(Dataset):
             option (str): decide which dataset to import
         """
         # all file names
-        self.mask_arr = glob.glob(str(mask_path) + "/*")
-        self.image_arr = glob.glob(str(image_path) + str("/*"))
-        self.in_size, self.out_size = in_size, out_size
+	# lists of image path and list of labels
         # Calculate len
         self.data_len = len(self.mask_arr)
         # calculate mean and stdev
@@ -116,12 +87,7 @@ class SEMDataTrain(Dataset):
         """
         # GET IMAGE
         """
-        single_image_name = self.image_arr[index]
-        img_as_img = Image.open(single_image_name)
-        # img_as_img.show()
-        img_as_np = np.asarray(img_as_img)
-        """
-        Augmentation
+        Augmentation on image
           # flip 
           # Gaussian_noise
           # uniform_noise
@@ -132,6 +98,20 @@ class SEMDataTrain(Dataset):
           # Sanity Check for Cropped image
           # Normalize the image
         """
+          # add additional dimension
+          # Convert numpy array to tensor
+        
+        """
+        Augmentation on mask
+          # flip same way with image
+          # Elastic distort same way with image
+          # Crop the same part that was cropped on image
+          # Sanity Check
+          # Normalize the mask to 0 and 1
+        """
+        # add additional dimension
+        # Convert numpy array to tensor
+
         return (img_as_tensor, msk_as_tensor)
 
     def __len__(self):
@@ -140,16 +120,6 @@ class SEMDataTrain(Dataset):
             length (int): length of the data
         """
         return self.data_len
-if __name__ == "__main__":
-
-    custom_mnist_from_file_train = SEMDataTrain(
-        '../data/train/images', '../data/train/masks')
-    custom_mnist_from_file_test = SEMDataTest(
-        '../data/test/images/', '../data/test/masks')
-
-    imag_1 = custom_mnist_from_file_train.__getitem__(0)
-    imag_2 = custom_mnist_from_file_test.__getitem__(0)
-    print(imag_2.size())
 ```
 
 ### Preprocessing <a name="preprocessing"></a>
@@ -160,124 +130,107 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
    * Uniform noise
    * Brightness
    * Elastic deformation
-   
-```ruby
-import numpy as np
-from scipy.ndimage.interpolation import map_coordinates
-from scipy.ndimage.filters import gaussian_filter
-from random import randint
+   * Crop
+   * Pad
+
+<table border=0 width="99%" >
+	<tbody> 
+    <tr>		<td width="99%" align="center" colspan="4"><strong>Image</td>
+		</tr>
+		<tr>
+			<td width="19%" align="center"> Original Image </td>
+			<td width="27%" align="center" colspan= "1" >
+			<td width="27%" align="center" colspan= "1" > <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/original_image"> </td> 
+			<td width="27%" align="center" colspan= "1" ></td> 
+		</tr>
+      		</tr>
+		<tr>
+			<td width="19%" align="center"> Flip  </td> 
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/flip_vert"> <br />Vertical  </td> 
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/flip_hori">  <br />Horizontal</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/flip_both"> <br />Both</td>
+		</tr>
+      		</tr>
+		<tr>
+			<td width="19%" align="center"> Gaussian noise </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/gaus_10"> <br />standard deviation 10</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/gaus_20"> <br />standard deviation 20</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/gaus_30"> <br />standard deviation 30</td>
+   		</tr>
+		<tr>
+			<td width="19%" align="center"> Uniform noise </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/uniform_10"> <br />Intensity 10 </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/uniform_20"> <br />Intensity 20</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/uniform_30"> <br />Intensity 30</td>
+		</tr>
+      		</tr>
+		<tr>
+			<td width="19%" align="center"> Brightness </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/bright_10"> <br />Intensity 10</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/bright_20"> <br />Intensity 20</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/bright_30"> <br />Intensity 30</td>
+		</tr>
+      		</tr>
+		<tr>
+			<td width="19%" align="center"> Elastic deformation </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/elastic_1"> <br />random deformation 1</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/elastic_2"> <br />random deformation 2</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/elastic_3"> <br />random deformation 3</td>
+		</tr>
+		</tr>
+	</tbody>
+</table>       
 
 
-def add_elastic_transform(image, alpha, sigma, seed=None):
-    """
-    Args:
-        image : numpy array of image
-        alpha : α is a scaling factor
-        sigma :  σ is an elasticity coefficient
-        random_state = random integer
-        Return :
-        image : elastically transformed numpy array of image
-    """
-
-    if seed is None:
-        seed = randint(1, 100)
-        random_state = np.random.RandomState(seed)
-    else:
-        random_state = np.random.RandomState(seed)
-    shape = image.shape
-    dx = gaussian_filter((random_state.rand(*shape) * 2 - 1),
-                         sigma, mode="constant", cval=0) * alpha
-    dy = gaussian_filter((random_state.rand(*shape) * 2 - 1),
-                         sigma, mode="constant", cval=0) * alpha
-
-    x, y = np.meshgrid(np.arange(shape[1]), np.arange(shape[0]))
-    indices = np.reshape(y+dy, (-1, 1)), np.reshape(x+dx, (-1, 1))
-    return map_coordinates(image, indices, order=1).reshape(shape), seed
-
-
-def flip(image, option_value):
-    """
-    Args:
-        image : numpy array of image
-        option_value = random integer between 0 to 3
-    Return :
-        image : numpy array of flipped image
-    """
-    if option_value == 0:
-        # vertical
-        image = np.flip(image, option_value)
-    elif option_value == 1:
-        # horizontal
-        image = np.flip(image, option_value)
-    elif option_value == 2:
-        # horizontally and vertically flip
-        image = np.flip(image, 0)
-        image = np.flip(image, 1)
-    else:
-        image = image
-        # no effect
-    return image
+<table border=0 width="99%" >
+	<tbody> 
+    <tr>		<td width="99%" align="center" colspan="5"><strong>Image</td>
+		</tr>
+		<tr>
+			<td width="10%" align="center"> Original Image </td>
+			<td width="22.5%" align="center" colspan= "1" >
+			<td width="22.5%" align="center" colspan= "1" > <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/original"> </td> 
+			<td width="22.5%" align="center" colspan= "1" ></td> 
+		</tr>
+      		</tr>
+		<tr>
+			<td width="19%" align="center"> Flip  </td> 
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/flip_vert"> <br />Vertical  </td> 
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/flip_hori">  <br />Horizontal</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/flip_both"> <br />Both</td>
+		</tr>
+      		</tr>
+		<tr>
+			<td width="19%" align="center"> Gaussian noise </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/gaus_10"> <br />standard deviation 10</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/gaus_20"> <br />standard deviation 20</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/gaus_30"> <br />standard deviation 30</td>
+   		</tr>
+		<tr>
+			<td width="19%" align="center"> Uniform noise </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/uniform_10"> <br />Intensity 10 </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/uniform_20"> <br />Intensity 20</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/uniform_30"> <br />Intensity 30</td>
+		</tr>
+      		</tr>
+		<tr>
+			<td width="19%" align="center"> Brightness </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/bright_10"> <br />Intensity 10</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/bright_20"> <br />Intensity 20</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/bright_30"> <br />Intensity 30</td>
+		</tr>
+      		</tr>
+		<tr>
+			<td width="19%" align="center"> Elastic deformation </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/elastic_1"> <br />random deformation 1</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/elastic_2"> <br />random deformation 2</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/elastic_3"> <br />random deformation 3</td>
+		</tr>
+		</tr>
+	</tbody>
+</table>         
 
 
-def add_gaussian_noise(image, mean=0, std=1):
-    """
-    Args:
-        image : numpy array of image
-        mean : pixel mean of image
-        standard deviation : pixel standard deviation of image
-    Return :
-        image : numpy array of image with gaussian noise added
-    """
-    gaus_noise = np.random.normal(mean, std, image.shape)
-    image = image.astype("int16")
-    noise_img = image + gaus_noise
-    image = ceil_floor_image(image)
-    return noise_img
-
-
-def add_uniform_noise(image, low=-10, high=10):
-    """
-    Args:
-        image : numpy array of image
-        low : lower boundary of output interval
-        high : upper boundary of output interval
-    Return :
-        image : numpy array of image with uniform noise added
-    """
-    uni_noise = np.random.uniform(low, high, image.shape)
-    image = image.astype("int16")
-    noise_img = image + uni_noise
-    image = ceil_floor_image(image)
-    return noise_img
-
-
-def change_brightness(image, value):
-    """
-    Args:
-        image : numpy array of image
-        value : brightness
-    Return :
-        image : numpy array of image with brightness added
-    """
-    image = image.astype("int16")
-    image = image + value
-    image = ceil_floor_image(image)
-    return image
-
-
-def ceil_floor_image(image):
-    """
-    Args:
-        image : numpy array of image in datatype int16
-    Return :
-        image : numpy array of image in datatype uint8 with ceilling(maximum 255) and flooring(minimum 0)
-    """
-    image[image > 255] = 255
-    image[image < 0] = 0
-    image = image.astype("uint8")
-    return image
-
-```
 
 ### Model <a name="model"></a>
 To be added
@@ -292,9 +245,16 @@ To be added
 
 
 ### Dependency <a name="dependency"></a>
-
+    * python >= 3.6
+    * numpy >= 1.14.5
+    * torch >= 0.4.0
+    * PIL >=
+    * glob >= 
+    * scipy >=
+    
 
 # References :
 
-O. Ronneberger, P. Fischer, and T. Brox. U-Net: Convolutional Networks for Biomedical Image Segmentation, http://arxiv.org/pdf/1505.04597.pdf
-P.Y. Simard, D. Steinkraus, J.C. Platt. Best Practices for Convolutional Neural Networks Applied to Visual Document Analysis, http://cognitivemedium.com/assets/rmnist/Simard.pdf
+[1] O. Ronneberger, P. Fischer, and T. Brox. U-Net: Convolutional Networks for Biomedical Image Segmentation, http://arxiv.org/pdf/1505.04597.pdf
+
+[2] P.Y. Simard, D. Steinkraus, J.C. Platt. Best Practices for Convolutional Neural Networks Applied to Visual Document Analysis, http://cognitivemedium.com/assets/rmnist/Simard.pdf
