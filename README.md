@@ -7,6 +7,7 @@ The project involves implementing biomedical image segmentation based on U-Net.
 
 ##### Supervisors : Utku Ozbulak
 
+* [Prerequisite](#prerequisite)
 
 * [Pipeline](#pipeline)
 
@@ -20,9 +21,17 @@ The project involves implementing biomedical image segmentation based on U-Net.
 
 * [Dependency](#dependency)
 
+## Prerequisite <a name="prerequisite"></a>
 
-
+    * python 3.6
+    * numpy 1.14.5
+    * torch 0.4.0
+    * PIL
+    * glob
+    
+    
 ## Pipeline <a name="pipeline"></a>
+
 
 ### Dataset
 
@@ -53,14 +62,26 @@ class SEMDataTrain(Dataset):
             length (int): length of the data
         """
         return self.data_len
+        
+if __name__ == "__main__":
 
+    custom_mnist_from_file_train = SEMDataTrain(
+        '../data/train/images', '../data/train/masks')
+    custom_mnist_from_file_test = SEMDataTest(
+        '../data/test/images/', '../data/test/masks')
+
+    imag_1 = custom_mnist_from_file_train.__getitem__(0)
+    imag_2 = custom_mnist_from_file_test.__getitem__(0)
+    print(imag_2.size())
 ```
 This is a dataset class we used. In the dataset, it contains three functions.
   * \__intit\__ : Intialization happens and determines which datasets to import and read. 
   * \__getitem\__ : Reads the images and preprocess on the images are accompolished. 
   * \__len\__ : Counts the number of images. 
 
+
 ### Reading images
+Before reading the images, in \__init\__ function with the parameter, image_path, list of image names and image labels are collected with the module called **glob**. Then in \__getitem\__ function, with the module **PIL**, the images in the list of image names are read and converted into numpy array. 
 
 ```ruby
 import numpy as np
@@ -102,7 +123,6 @@ class SEMDataTrain(Dataset):
         """
         Augmentation
           # flip 
-          # Noise Determine 
           # Gaussian_noise
           # uniform_noise
           # Brightness
@@ -120,25 +140,161 @@ class SEMDataTrain(Dataset):
             length (int): length of the data
         """
         return self.data_len
+if __name__ == "__main__":
 
+    custom_mnist_from_file_train = SEMDataTrain(
+        '../data/train/images', '../data/train/masks')
+    custom_mnist_from_file_test = SEMDataTest(
+        '../data/test/images/', '../data/test/masks')
+
+    imag_1 = custom_mnist_from_file_train.__getitem__(0)
+    imag_2 = custom_mnist_from_file_test.__getitem__(0)
+    print(imag_2.size())
 ```
 
-
-
-
 ### Preprocessing <a name="preprocessing"></a>
+
+Preprocessing is done on the images for data augmentation. Following preprocessing are accomplished.
+   * Flip
+   * Gaussian noise
+   * Uniform noise
+   * Brightness
+   * Elastic deformation
+   
+```ruby
+import numpy as np
+from scipy.ndimage.interpolation import map_coordinates
+from scipy.ndimage.filters import gaussian_filter
+from random import randint
+
+
+def add_elastic_transform(image, alpha, sigma, seed=None):
+    """
+    Args:
+        image : numpy array of image
+        alpha : α is a scaling factor
+        sigma :  σ is an elasticity coefficient
+        random_state = random integer
+        Return :
+        image : elastically transformed numpy array of image
+    """
+
+    if seed is None:
+        seed = randint(1, 100)
+        random_state = np.random.RandomState(seed)
+    else:
+        random_state = np.random.RandomState(seed)
+    shape = image.shape
+    dx = gaussian_filter((random_state.rand(*shape) * 2 - 1),
+                         sigma, mode="constant", cval=0) * alpha
+    dy = gaussian_filter((random_state.rand(*shape) * 2 - 1),
+                         sigma, mode="constant", cval=0) * alpha
+
+    x, y = np.meshgrid(np.arange(shape[1]), np.arange(shape[0]))
+    indices = np.reshape(y+dy, (-1, 1)), np.reshape(x+dx, (-1, 1))
+    return map_coordinates(image, indices, order=1).reshape(shape), seed
+
+
+def flip(image, option_value):
+    """
+    Args:
+        image : numpy array of image
+        option_value = random integer between 0 to 3
+    Return :
+        image : numpy array of flipped image
+    """
+    if option_value == 0:
+        # vertical
+        image = np.flip(image, option_value)
+    elif option_value == 1:
+        # horizontal
+        image = np.flip(image, option_value)
+    elif option_value == 2:
+        # horizontally and vertically flip
+        image = np.flip(image, 0)
+        image = np.flip(image, 1)
+    else:
+        image = image
+        # no effect
+    return image
+
+
+def add_gaussian_noise(image, mean=0, std=1):
+    """
+    Args:
+        image : numpy array of image
+        mean : pixel mean of image
+        standard deviation : pixel standard deviation of image
+    Return :
+        image : numpy array of image with gaussian noise added
+    """
+    gaus_noise = np.random.normal(mean, std, image.shape)
+    image = image.astype("int16")
+    noise_img = image + gaus_noise
+    image = ceil_floor_image(image)
+    return noise_img
+
+
+def add_uniform_noise(image, low=-10, high=10):
+    """
+    Args:
+        image : numpy array of image
+        low : lower boundary of output interval
+        high : upper boundary of output interval
+    Return :
+        image : numpy array of image with uniform noise added
+    """
+    uni_noise = np.random.uniform(low, high, image.shape)
+    image = image.astype("int16")
+    noise_img = image + uni_noise
+    image = ceil_floor_image(image)
+    return noise_img
+
+
+def change_brightness(image, value):
+    """
+    Args:
+        image : numpy array of image
+        value : brightness
+    Return :
+        image : numpy array of image with brightness added
+    """
+    image = image.astype("int16")
+    image = image + value
+    image = ceil_floor_image(image)
+    return image
+
+
+def ceil_floor_image(image):
+    """
+    Args:
+        image : numpy array of image in datatype int16
+    Return :
+        image : numpy array of image in datatype uint8 with ceilling(maximum 255) and flooring(minimum 0)
+    """
+    image[image > 255] = 255
+    image[image < 0] = 0
+    image = image.astype("uint8")
+    return image
+
+```
 
 ### Model <a name="model"></a>
 To be added
 
+
 ### Loss function <a name="lossfunction"></a>
 To be added
+
 
 ### Results <a name="results"></a>
 To be added
 
+
 ### Dependency <a name="dependency"></a>
+
 
 # References :
 
 O. Ronneberger, P. Fischer, and T. Brox. U-Net: Convolutional Networks for Biomedical Image Segmentation, http://arxiv.org/pdf/1505.04597.pdf
+P.Y. Simard, D. Steinkraus, J.C. Platt. Best Practices for Convolutional Neural Networks Applied to Visual Document Analysis, http://cognitivemedium.com/assets/rmnist/Simard.pdf
