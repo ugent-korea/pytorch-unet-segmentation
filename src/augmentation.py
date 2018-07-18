@@ -187,8 +187,8 @@ def multi_padding(images, in_size, out_size, mode):
     """Pad the images to in_size
     Args :
         images : numpy array of images
-        in_size(int) : the input_size of model
-        out_size(int) : the output_size of model
+        in_size(int) : the input_size of model (512)
+        out_size(int) : the output_size of model (388)
         mode(str) : mode of padding
     Return :
         padded_imgs: numpy arrays of padded images
@@ -279,14 +279,38 @@ def image_concatenate(image, crop_num1, crop_num2, dim1, dim2):
 
 if __name__ == "__main__":
     from PIL import Image
-    a = Image.open("../data/train/images/0.png")
-    a.show()
-    a = np.array(a)
-    croped = multi_cropping(a, 388, 2, 2)
+
+    b = Image.open("../data/train/images/14.png")
+
+    original = np.array(b)
+    b.show()
+    original1 = flip(original, 0)
+    original1 = Image.fromarray(original1)
+    original1.show()
+    original1 = add_gaussian_noise(original, 0, 10)
+    original1 = Image.fromarray(original1)
+    original1.show()
+    original1 = add_uniform_noise(original, -10, 10)
+    original1 = Image.fromarray(original1)
+    original1.show()
+    original1 = change_brightness(original, 10)
+    original1 = Image.fromarray(original1)
+    original1.show()
+    original1 = add_elastic_transform(original, 34, 4, 1)[0]
+    original1 = Image.fromarray(original1)
+    original1.show()
+
+    original2 = np.array(b)
+    original3 = np.array(c)
+
+    """
+    cropped = multi_cropping(original, 388, 2, 2)
+    padded = multi_padding(cropped, 512, 388, "symmetric")
     div_arr = division_array(388, 2, 2, 512, 512)
-    cont_arr = image_concatenate(croped, 2, 2, 512, 512)
+    cont_arr = image_concatenate(cropped, 2, 2, 512, 512)
     a_11 = Image.fromarray(div_arr*60)
     a_22 = Image.fromarray(cont_arr/div_arr)
 
     a_11.show()
     a_22.show()
+    """
