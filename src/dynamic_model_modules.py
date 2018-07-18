@@ -72,6 +72,11 @@ class Conv_up(nn.Module):
 
 
 def extract_img(size, in_tensor):
+    """
+    Args:
+        size(int) : size of cut
+        in_tensor(tensor) : tensor to be cut
+    """
     dim1, dim2 = in_tensor.size()[2:]
     in_tensor = in_tensor[:, :, int((dim1-size)/2):int((dim1+size)/2),
                           int((dim2-size)/2):int((dim2+size)/2)]

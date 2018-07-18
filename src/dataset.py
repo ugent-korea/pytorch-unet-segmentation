@@ -183,10 +183,12 @@ class SEMDataTest(Dataset):
 
             # Normalize the cropped arrays
             img_as_numpy = normalize(array, mean=Training_MEAN, std=Training_STDEV)
+            #img_as_numpy = np.expand_dims(img_as_numpy, axis=0)
+            img_as_tensor = torch.from_numpy(img_as_numpy).float()
             # Convert normalized array into tensor
             processed_list.append(img_as_numpy)
 
-        array_to_tensor = torch.Tensor(processed_list).float()
+        array_to_tensor = torch.Tensor(processed_list)
         #  return tensor of 4 cropped images
         #  top left, top right, bottom left, bottom right respectively.
         return array_to_tensor

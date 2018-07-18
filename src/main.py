@@ -14,28 +14,36 @@ if __name__ == "__main__":
     SEM_test = SEMDataTest(
         '../data/test/images/', '../data/test/masks')
 
-    SEM_test = \
+    SEM_test_load = \
         torch.utils.data.DataLoader(dataset=SEM_test,
                                     num_workers=8, batch_size=1, shuffle=True)
-    SEM_train = \
+    SEM_train_load = \
         torch.utils.data.DataLoader(dataset=SEM_train,
-                                    num_workers=8, batch_size=1, shuffle=True)
+                                    num_workers=8, batch_size=2, shuffle=True)
 
-    model = CleanU_Net(1)
+    model = CleanU_Net(in_channels=1)
 
-    for i, (images, labels) in enumerate(SEM_train):
+    print("TRAIN DATA")
+    for i, (images, labels) in enumerate(SEM_train_load):
         images = Variable(images)
         labels = Variable(labels)
-        print("input size", images.size())
-        print(labels.size())
+        print("input size|", images.size())
         output = model(images)
-        print(output.shape)
+        print("output size|", output.shape)
         break
 
-    for i, (images, labels) in enumerate(SEM_test):
-        images = Variable(images)
-        labels = Variable(labels)
-        print("input size", images.size())
-        output = model(images)
-        print(output.shape)
+    print("\n")
+
+    print("TEST DATA")
+    for i, (images) in enumerate(SEM_test_load):
+        for j in range(images.size()[1]):
+            print(images.size())
+            image = Variable(images[:, j, :, :].unsqueeze(0))
+            print("input size|", image.size())
+            output = model(image)
+            print("output size|", output.shape)
+            break
         break
+
+    del model
+    del output
