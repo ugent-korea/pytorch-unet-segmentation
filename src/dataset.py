@@ -11,7 +11,7 @@ from augmentation import *
 from mean_std import *
 
 Training_MEAN = 0.4911
-Training_STDEV = 0.0402
+Training_STDEV = 0.1658
 
 
 class SEMDataTrain(Dataset):
