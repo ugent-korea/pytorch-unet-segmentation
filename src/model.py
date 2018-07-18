@@ -124,6 +124,7 @@ class CleanU_Net(nn.Module):
 
     def forward(self, x):
         print('input', x.shape)
+
         # Down 1
         x = self.conv1_block(x)
         print('after conv1', x.shape)
@@ -131,6 +132,7 @@ class CleanU_Net(nn.Module):
         conv1_dim = x.shape[2]
         x = self.max1(x)
         print('before conv2', x.shape)
+
         # Down 2
         x = self.conv2_block(x)
         print('after conv2', x.shape)
@@ -138,6 +140,7 @@ class CleanU_Net(nn.Module):
         conv2_dim = x.shape[2]
         x = self.max2(x)
         print('before conv3', x.shape)
+
         # Down 3
         x = self.conv3_block(x)
         print('after conv3', x.shape)
@@ -145,6 +148,7 @@ class CleanU_Net(nn.Module):
         conv3_dim = x.shape[2]
         x = self.max3(x)
         print('before conv4', x.shape)
+        
         # Down 4
         x = self.conv4_block(x)
         print('after conv5', x.shape)
@@ -188,6 +192,7 @@ class CleanU_Net(nn.Module):
         print('after cat_3', x.shape)
         x = self.conv_up_3(x)
         print('after conv_3', x.shape)
+
         # Up 4
         x = self.up_4(x)
         print('up_4', x.shape)
