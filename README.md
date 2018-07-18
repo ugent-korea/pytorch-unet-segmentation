@@ -32,6 +32,7 @@ The project involves implementing biomedical image segmentation based on U-Net.
     
 ## Pipeline <a name="pipeline"></a>
 
+
 ### Dataset
 
 ```ruby
@@ -77,6 +78,7 @@ This is a dataset class we used. In the dataset, it contains three functions.
   * \__intit\__ : Intialization happens and determines which datasets to import and read. 
   * \__getitem\__ : Reads the images and preprocess on the images are accompolished. 
   * \__len\__ : Counts the number of images. 
+
 
 ### Reading images
 Before reading the images, in \__init\__ function with the parameter, image_path, list of image names and image labels are collected with the module called **glob**. Then in \__getitem\__ function, with the module **PIL**, the images in the list of image names are read and converted into numpy array. 
@@ -153,56 +155,14 @@ if __name__ == "__main__":
 ### Preprocessing <a name="preprocessing"></a>
 
 ```ruby
-from torch.utils.data.dataset import Dataset
-class SEMDataTrain(Dataset):
-    def __init__(self, image_path, mask_path, in_size=572, out_size=388):
-        """
-        Args:
-            image_path (str): the path where the image is located
-            mask_path (str): the path where the mask is located
-            option (str): decide which dataset to import
-        """
-
-    def __getitem__(self, index):
-        """Get specific data corresponding to the index
-        Args:
-            index (int): index of the data
-
-        Returns:
-            Tensor: specific data on index which is converted to Tensor
-        """
-        return (img_as_tensor, msk_as_tensor)
-
-    def __len__(self):
-        """
-        Returns:
-            length (int): length of the data
-        """
-        return self.data_len
-        
-if __name__ == "__main__":
-
-    custom_mnist_from_file_train = SEMDataTrain(
-        '../data/train/images', '../data/train/masks')
-    custom_mnist_from_file_test = SEMDataTest(
-        '../data/test/images/', '../data/test/masks')
-
-    imag_1 = custom_mnist_from_file_train.__getitem__(0)
-    imag_2 = custom_mnist_from_file_test.__getitem__(0)
-    print(imag_2.size())
-```
-This is a dataset class we used. In the dataset, it contains three functions.
-  * \__intit\__ : Intialization happens and determines which datasets to import and read. 
-  * \__getitem\__ : Reads the images and preprocess on the images are accompolished. 
-  * \__len\__ : Counts the number of images. 
-
-### Reading images
-Before reading the images, in \__init\__ function with the parameter, image_path, list of image names and image labels are collected with the module called **glob**. Then in \__getitem\__ function, with the module **PIL**, the images in the list of image names are read and converted into numpy array. 
-
-```ruby
 import numpy as np
 from PIL import Image
 import glob
+import torch
+import torch.nn as nn
+from torch.autograd import Variable
+from torchvision import transforms
+from random import randint
 from torch.utils.data.dataset import Dataset
 class SEMDataTrain(Dataset):
 
@@ -274,16 +234,21 @@ if __name__ == "__main__":
     imag_2 = custom_mnist_from_file_test.__getitem__(0)
     print(imag_2.size())
 ```
+
 ### Model <a name="model"></a>
 To be added
+
 
 ### Loss function <a name="lossfunction"></a>
 To be added
 
+
 ### Results <a name="results"></a>
 To be added
 
+
 ### Dependency <a name="dependency"></a>
+
 
 # References :
 
