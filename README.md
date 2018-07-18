@@ -161,14 +161,14 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
 		</tr>
 		<tr>
 			<td width="19%" align="center"> Original Image </td>
-			<td width="99%" align="center" colspan= "3" > <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/original_image"> </td> 
+			<td width="27%" align="center" colspan= "3" > <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/original_image"> </td> 
 		</tr>
       		</tr>
 		<tr>
 			<td width="19%" align="center"> Flip </td>
 			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/flip_vert"> </td>
 			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/flip_hori"> </td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/flip_bothf"> </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/flip_both"> </td>
 		</tr>
       		</tr>
 		<tr>
