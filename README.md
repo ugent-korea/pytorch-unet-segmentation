@@ -163,83 +163,120 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
    
 ```ruby
 import numpy as np
-from PIL import Image
-import glob
-import torch
-import torch.nn as nn
-from torch.autograd import Variable
-from torchvision import transforms
+from scipy.ndimage.interpolation import map_coordinates
+from scipy.ndimage.filters import gaussian_filter
 from random import randint
-from torch.utils.data.dataset import Dataset
-class SEMDataTrain(Dataset):
 
-    def __init__(self, image_path, mask_path, in_size=572, out_size=388):
-        """
-        Args:
-            image_path (str): the path where the image is located
-            mask_path (str): the path where the mask is located
-            option (str): decide which dataset to import
-        """
-         #codes
 
-    def __getitem__(self, index):
-        """Get specific data corresponding to the index
-        Args:
-            index (int): index of the data
+def add_elastic_transform(image, alpha, sigma, seed=None):
+    """
+    Args:
+        image : numpy array of image
+        alpha : α is a scaling factor
+        sigma :  σ is an elasticity coefficient
+        random_state = random integer
+        Return :
+        image : elastically transformed numpy array of image
+    """
 
-        Returns:
-            Tensor: specific data on index which is converted to Tensor
-        """
-        """
-        # GET IMAGE
-        """
-        #codes
-         
-        # Augmentation
-        # flip {0: vertical, 1: horizontal, 2: both, 3: none}
-        flip_num = 3  # randint(0, 3)
-        img_as_np = flip(img_as_np, flip_num)
+    if seed is None:
+        seed = randint(1, 100)
+        random_state = np.random.RandomState(seed)
+    else:
+        random_state = np.random.RandomState(seed)
+    shape = image.shape
+    dx = gaussian_filter((random_state.rand(*shape) * 2 - 1),
+                         sigma, mode="constant", cval=0) * alpha
+    dy = gaussian_filter((random_state.rand(*shape) * 2 - 1),
+                         sigma, mode="constant", cval=0) * alpha
 
-        # Noise Determine {0: Gaussian_noise, 1: uniform_noise
-        if randint(0, 1):
-            # Gaussian_noise
-            gaus_sd, gaus_mean = randint(0, 20), 0
-            img_as_np = add_gaussian_noise(img_as_np, gaus_mean, gaus_sd)
-        else:
-            # uniform_noise
-            l_bound, u_bound = randint(-20, 0), randint(0, 20)
-            img_as_np = add_uniform_noise(img_as_np, l_bound, u_bound)
+    x, y = np.meshgrid(np.arange(shape[1]), np.arange(shape[0]))
+    indices = np.reshape(y+dy, (-1, 1)), np.reshape(x+dx, (-1, 1))
+    return map_coordinates(image, indices, order=1).reshape(shape), seed
 
-        # Brightness
-        pix_add = randint(-20, 20)
-        img_as_np = change_brightness(img_as_np, pix_add)
 
-        # Elastic distort {0: distort, 1:no distort}
-        distort_det = randint(0, 1)
-        if distort_det == 0:
-            # sigma = 4, alpha = 34
-            img_as_np, seed = add_elastic_transform(img_as_np, alpha=34, sigma=4)
+def flip(image, option_value):
+    """
+    Args:
+        image : numpy array of image
+        option_value = random integer between 0 to 3
+    Return :
+        image : numpy array of flipped image
+    """
+    if option_value == 0:
+        # vertical
+        image = np.flip(image, option_value)
+    elif option_value == 1:
+        # horizontal
+        image = np.flip(image, option_value)
+    elif option_value == 2:
+        # horizontally and vertically flip
+        image = np.flip(image, 0)
+        image = np.flip(image, 1)
+    else:
+        image = image
+        # no effect
+    return image
 
-        #codes 
-        return (img_as_tensor, msk_as_tensor)
 
-    def __len__(self):
-        """
-        Returns:
-            length (int): length of the data
-        """
-        return self.data_len
-        
-if __name__ == "__main__":
+def add_gaussian_noise(image, mean=0, std=1):
+    """
+    Args:
+        image : numpy array of image
+        mean : pixel mean of image
+        standard deviation : pixel standard deviation of image
+    Return :
+        image : numpy array of image with gaussian noise added
+    """
+    gaus_noise = np.random.normal(mean, std, image.shape)
+    image = image.astype("int16")
+    noise_img = image + gaus_noise
+    image = ceil_floor_image(image)
+    return noise_img
 
-    custom_mnist_from_file_train = SEMDataTrain(
-        '../data/train/images', '../data/train/masks')
-    custom_mnist_from_file_test = SEMDataTest(
-        '../data/test/images/', '../data/test/masks')
 
-    imag_1 = custom_mnist_from_file_train.__getitem__(0)
-    imag_2 = custom_mnist_from_file_test.__getitem__(0)
-    print(imag_2.size())
+def add_uniform_noise(image, low=-10, high=10):
+    """
+    Args:
+        image : numpy array of image
+        low : lower boundary of output interval
+        high : upper boundary of output interval
+    Return :
+        image : numpy array of image with uniform noise added
+    """
+    uni_noise = np.random.uniform(low, high, image.shape)
+    image = image.astype("int16")
+    noise_img = image + uni_noise
+    image = ceil_floor_image(image)
+    return noise_img
+
+
+def change_brightness(image, value):
+    """
+    Args:
+        image : numpy array of image
+        value : brightness
+    Return :
+        image : numpy array of image with brightness added
+    """
+    image = image.astype("int16")
+    image = image + value
+    image = ceil_floor_image(image)
+    return image
+
+
+def ceil_floor_image(image):
+    """
+    Args:
+        image : numpy array of image in datatype int16
+    Return :
+        image : numpy array of image in datatype uint8 with ceilling(maximum 255) and flooring(minimum 0)
+    """
+    image[image > 255] = 255
+    image[image < 0] = 0
+    image = image.astype("uint8")
+    return image
+
 ```
 
 ### Model <a name="model"></a>
