@@ -24,6 +24,7 @@ pytorch-unet-segmentation
        - mean_std.py
 ```
 
+Purposes of the python files listed in the folder structure will be explained throughout this readme.
 
 
 ##### Members : PyeongEun Kim, JuHyung Lee, MiJeong Lee
