@@ -9,7 +9,7 @@ The dataset contains 30 images of size 512x512 for each train, train-labels and 
 
 The folder structure of this project is:
 
-'''
+```
 pytorch-unet-segmentation
    - data
        - train
@@ -22,7 +22,7 @@ pytorch-unet-segmentation
        - main.py
        - augmentation.py
        - mean_std.py
-'''
+```
 
 
 
