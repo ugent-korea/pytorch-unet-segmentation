@@ -7,6 +7,7 @@ The project involves implementing biomedical image segmentation based on U-Net.
 
 ##### Supervisors : Utku Ozbulak
 
+* [Prerequisite](#prerequisite)
 
 * [Pipeline](#pipeline)
 
@@ -20,8 +21,14 @@ The project involves implementing biomedical image segmentation based on U-Net.
 
 * [Dependency](#dependency)
 
-
-
+## Prerequisite
+    * python 3.6
+    * numpy 1.14.5
+    * torch 0.4.0
+    * PIL
+    * glob
+    
+    
 ## Pipeline <a name="pipeline"></a>
 
 ### Dataset
@@ -103,7 +110,6 @@ class SEMDataTrain(Dataset):
         """
         Augmentation
           # flip 
-          # Noise Determine 
           # Gaussian_noise
           # uniform_noise
           # Brightness
