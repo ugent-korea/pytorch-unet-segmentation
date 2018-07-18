@@ -56,9 +56,9 @@ class SEMDataTrain(Dataset):
 
 ```
 This is a dataset class we used. In the dataset, it contains three functions.
-  * __intit__ : Intialization happens and determines which datasets to import and read. 
-  * __getitem__ : Reading the images and preprocessing on the images are accompolished. 
-  * __len__ : Counts the number of images. 
+  * \__intit\__ : Intialization happens and determines which datasets to import and read. 
+  * \__getitem\__ : Reading the images and preprocessing on the images are accompolished. 
+  * \__len\__ : Counts the number of images. 
 
 #### Reading images
 
