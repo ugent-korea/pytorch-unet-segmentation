@@ -130,7 +130,8 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
    * Uniform noise
    * Brightness
    * Elastic deformation
-
+   * Crop
+   * Pad
 
 <table border=0 width="99%" >
 	<tbody> 
@@ -180,6 +181,9 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
 	</tbody>
 </table>       
 
+#### Original Image of Crop and Pad
+
+<img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/original" width="230" height="230">
 
 
 <table border=0 width="99%" >
