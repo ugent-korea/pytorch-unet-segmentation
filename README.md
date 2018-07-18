@@ -152,6 +152,128 @@ if __name__ == "__main__":
 
 ### Preprocessing <a name="preprocessing"></a>
 
+```ruby
+from torch.utils.data.dataset import Dataset
+class SEMDataTrain(Dataset):
+    def __init__(self, image_path, mask_path, in_size=572, out_size=388):
+        """
+        Args:
+            image_path (str): the path where the image is located
+            mask_path (str): the path where the mask is located
+            option (str): decide which dataset to import
+        """
+
+    def __getitem__(self, index):
+        """Get specific data corresponding to the index
+        Args:
+            index (int): index of the data
+
+        Returns:
+            Tensor: specific data on index which is converted to Tensor
+        """
+        return (img_as_tensor, msk_as_tensor)
+
+    def __len__(self):
+        """
+        Returns:
+            length (int): length of the data
+        """
+        return self.data_len
+        
+if __name__ == "__main__":
+
+    custom_mnist_from_file_train = SEMDataTrain(
+        '../data/train/images', '../data/train/masks')
+    custom_mnist_from_file_test = SEMDataTest(
+        '../data/test/images/', '../data/test/masks')
+
+    imag_1 = custom_mnist_from_file_train.__getitem__(0)
+    imag_2 = custom_mnist_from_file_test.__getitem__(0)
+    print(imag_2.size())
+```
+This is a dataset class we used. In the dataset, it contains three functions.
+  * \__intit\__ : Intialization happens and determines which datasets to import and read. 
+  * \__getitem\__ : Reads the images and preprocess on the images are accompolished. 
+  * \__len\__ : Counts the number of images. 
+
+### Reading images
+Before reading the images, in \__init\__ function with the parameter, image_path, list of image names and image labels are collected with the module called **glob**. Then in \__getitem\__ function, with the module **PIL**, the images in the list of image names are read and converted into numpy array. 
+
+```ruby
+import numpy as np
+from PIL import Image
+import glob
+from torch.utils.data.dataset import Dataset
+class SEMDataTrain(Dataset):
+
+    def __init__(self, image_path, mask_path, in_size=572, out_size=388):
+        """
+        Args:
+            image_path (str): the path where the image is located
+            mask_path (str): the path where the mask is located
+            option (str): decide which dataset to import
+        """
+         #codes
+
+    def __getitem__(self, index):
+        """Get specific data corresponding to the index
+        Args:
+            index (int): index of the data
+
+        Returns:
+            Tensor: specific data on index which is converted to Tensor
+        """
+        """
+        # GET IMAGE
+        """
+        #codes
+         
+        # Augmentation
+        # flip {0: vertical, 1: horizontal, 2: both, 3: none}
+        flip_num = 3  # randint(0, 3)
+        img_as_np = flip(img_as_np, flip_num)
+
+        # Noise Determine {0: Gaussian_noise, 1: uniform_noise
+        if randint(0, 1):
+            # Gaussian_noise
+            gaus_sd, gaus_mean = randint(0, 20), 0
+            img_as_np = add_gaussian_noise(img_as_np, gaus_mean, gaus_sd)
+        else:
+            # uniform_noise
+            l_bound, u_bound = randint(-20, 0), randint(0, 20)
+            img_as_np = add_uniform_noise(img_as_np, l_bound, u_bound)
+
+        # Brightness
+        pix_add = randint(-20, 20)
+        img_as_np = change_brightness(img_as_np, pix_add)
+
+        # Elastic distort {0: distort, 1:no distort}
+        distort_det = randint(0, 1)
+        if distort_det == 0:
+            # sigma = 4, alpha = 34
+            img_as_np, seed = add_elastic_transform(img_as_np, alpha=34, sigma=4)
+
+        #codes 
+        return (img_as_tensor, msk_as_tensor)
+
+    def __len__(self):
+        """
+        Returns:
+            length (int): length of the data
+        """
+        return self.data_len
+        
+if __name__ == "__main__":
+
+    custom_mnist_from_file_train = SEMDataTrain(
+        '../data/train/images', '../data/train/masks')
+    custom_mnist_from_file_test = SEMDataTest(
+        '../data/test/images/', '../data/test/masks')
+
+    imag_1 = custom_mnist_from_file_train.__getitem__(0)
+    imag_2 = custom_mnist_from_file_test.__getitem__(0)
+    print(imag_2.size())
+```
 ### Model <a name="model"></a>
 To be added
 
