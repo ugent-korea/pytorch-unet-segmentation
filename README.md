@@ -1,31 +1,7 @@
 # pytorch-unet-segmentation
 
 ## Description
-This project involves implementing biomedical image segmentation based on U-Net. 
-
-The dataset we used is Transmission Electron Microscopy (ssTEM) data set of the Drosophila first instar larva ventral nerve cord (VNC), which is dowloaded from "ISBI Challenge: Segmentation of of neural structures in EM stacks". 
-
-The dataset contains 30 images (.png) of size 512x512 for each train, train-labels and test.
-
-The folder structure of this project is:
-
-```
-pytorch-unet-segmentation
-   - data
-       - train
-           - images
-           - masks
-       - test
-           - images
-   - src
-       - dataset.py
-       - main.py
-       - augmentation.py
-       - mean_std.py
-```
-
-Purposes of the python files listed in the folder structure will be explained throughout this readme.
-
+The project involves implementing biomedical image segmentation based on U-Net. 
 
 ##### Members : PyeongEun Kim, JuHyung Lee, MiJeong Lee
 
@@ -134,7 +110,7 @@ class SEMDataTrain(Dataset):
         # img_as_img.show()
         img_as_np = np.asarray(img_as_img)
         """
-        Augmentation
+        Augmentation on image
           # flip 
           # Gaussian_noise
           # uniform_noise
@@ -145,6 +121,20 @@ class SEMDataTrain(Dataset):
           # Sanity Check for Cropped image
           # Normalize the image
         """
+        img_as_np = np.expand_dims(img_as_np, axis=0)  # add additional dimension
+        img_as_tensor = torch.from_numpy(img_as_np).float()  # Convert numpy array to tensor
+        
+        """
+        Augmentation on mask
+          # flip same way with image
+          # Elastic distort same way with image
+          # Crop the same part that was cropped on image
+          # Sanity Check
+          # Normalize the mask to 0 and 1
+        """
+        msk_as_np = np.expand_dims(msk_as_np, axis=0)  # add additional dimension
+        msk_as_tensor = torch.from_numpy(msk_as_np).float()  # Convert numpy array to tensor
+
         return (img_as_tensor, msk_as_tensor)
 
     def __len__(self):
@@ -164,6 +154,54 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
    * Brightness
    * Elastic deformation
    
+
+<table border=0 width="99%" >
+	<tbody> 
+    <tr>		<td width="99%" align="center" colspan="4"><strong>Image</td>
+		</tr>
+		<tr>
+			<td width="19%" align="center"> Original Image </td>
+			<td width="99%" align="center" colspan= "3" > <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/original_image"> </td> 
+		</tr>
+      		</tr>
+		<tr>
+			<td width="19%" align="center"> Flip </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/flip_vert"> </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/flip_hori"> </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/flip_bothf"> </td>
+		</tr>
+      		</tr>
+		<tr>
+			<td width="19%" align="center"> Gaussian noise </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/gaus_10"> </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/gaus_20"> </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/gaus_30"> </td>
+   		</tr>
+		<tr>
+			<td width="19%" align="center"> Uniform noise </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/uniform_10"> </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/uniform_20"> </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/uniform_30"> </td>
+		</tr>
+      		</tr>
+		<tr>
+			<td width="19%" align="center"> Brightness </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/bright_10"> </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/bright_20"> </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/bright_30"> </td>
+		</tr>
+      		</tr>
+		<tr>
+			<td width="19%" align="center"> Elastic deformation </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/elastic_1"> </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/elastic_2"> </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/elastic_3"> </td>
+		</tr>
+		</tr>
+	</tbody>
+</table>         
+
+
    
 ```ruby
 import numpy as np
@@ -300,5 +338,6 @@ To be added
 
 # References :
 
-O. Ronneberger, P. Fischer, and T. Brox. U-Net: Convolutional Networks for Biomedical Image Segmentation, http://arxiv.org/pdf/1505.04597.pdf
-P.Y. Simard, D. Steinkraus, J.C. Platt. Best Practices for Convolutional Neural Networks Applied to Visual Document Analysis, http://cognitivemedium.com/assets/rmnist/Simard.pdf
+[1] O. Ronneberger, P. Fischer, and T. Brox. U-Net: Convolutional Networks for Biomedical Image Segmentation, http://arxiv.org/pdf/1505.04597.pdf
+
+[2] P.Y. Simard, D. Steinkraus, J.C. Platt. Best Practices for Convolutional Neural Networks Applied to Visual Document Analysis, http://cognitivemedium.com/assets/rmnist/Simard.pdf
