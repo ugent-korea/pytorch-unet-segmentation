@@ -61,6 +61,7 @@ This is a dataset class we used. In the dataset, it contains three functions.
   * \__len\__ : Counts the number of images. 
 
 ### Reading images
+Before reading the images, in \__init\__ function with the parameter, image_path, lists of image and label are determined with the module called **glob**. Then in \__getitem\__ function, with the module **PIL**, the lists of image are read. 
 
 ```ruby
 import numpy as np
