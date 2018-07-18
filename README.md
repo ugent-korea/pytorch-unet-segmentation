@@ -139,7 +139,16 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
    * Uniform noise
    * Brightness
    * Elastic deformation
-   
+
+First Header | Image 1 | Image 2 | Image 3
+------------ | ------------- |
+Original Images | Content from cell 2
+Flip | Content in the second column
+Gaussian noise | Content from cell 2
+Uniform noise | Content in the second column
+Brightness | Content from cell 2
+Elastic deformation | Content in the second column
+
    
 ```ruby
 import numpy as np
