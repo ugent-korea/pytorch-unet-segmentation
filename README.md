@@ -22,9 +22,9 @@ The project involves implementing biomedical image segmentation based on U-Net.
 
 
 
-### Pipeline <a name="pipeline"></a>
+## Pipeline <a name="pipeline"></a>
 
-#### Dataset 
+### Dataset
 
 ```ruby
 from torch.utils.data.dataset import Dataset
@@ -57,10 +57,10 @@ class SEMDataTrain(Dataset):
 ```
 This is a dataset class we used. In the dataset, it contains three functions.
   * \__intit\__ : Intialization happens and determines which datasets to import and read. 
-  * \__getitem\__ : Reading the images and preprocessing on the images are accompolished. 
+  * \__getitem\__ : Reads the images and preprocess on the images are accompolished. 
   * \__len\__ : Counts the number of images. 
 
-#### Reading images
+### Reading images
 
 ```ruby
 import numpy as np
