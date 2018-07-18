@@ -110,7 +110,7 @@ class SEMDataTrain(Dataset):
         # img_as_img.show()
         img_as_np = np.asarray(img_as_img)
         """
-        Augmentation
+        Augmentation on image
           # flip 
           # Gaussian_noise
           # uniform_noise
@@ -121,6 +121,20 @@ class SEMDataTrain(Dataset):
           # Sanity Check for Cropped image
           # Normalize the image
         """
+        img_as_np = np.expand_dims(img_as_np, axis=0)  # add additional dimension
+        img_as_tensor = torch.from_numpy(img_as_np).float()  # Convert numpy array to tensor
+        
+        """
+        Augmentation on mask
+          # flip same way with image
+          # Elastic distort same way with image
+          # Crop the same part that was cropped on image
+          # Sanity Check
+          # Normalize the mask to 0 and 1
+        """
+        msk_as_np = np.expand_dims(msk_as_np, axis=0)  # add additional dimension
+        msk_as_tensor = torch.from_numpy(msk_as_np).float()  # Convert numpy array to tensor
+
         return (img_as_tensor, msk_as_tensor)
 
     def __len__(self):
@@ -285,5 +299,6 @@ To be added
 
 # References :
 
-O. Ronneberger, P. Fischer, and T. Brox. U-Net: Convolutional Networks for Biomedical Image Segmentation, http://arxiv.org/pdf/1505.04597.pdf
-P.Y. Simard, D. Steinkraus, J.C. Platt. Best Practices for Convolutional Neural Networks Applied to Visual Document Analysis, http://cognitivemedium.com/assets/rmnist/Simard.pdf
+[1] O. Ronneberger, P. Fischer, and T. Brox. U-Net: Convolutional Networks for Biomedical Image Segmentation, http://arxiv.org/pdf/1505.04597.pdf
+
+[2] P.Y. Simard, D. Steinkraus, J.C. Platt. Best Practices for Convolutional Neural Networks Applied to Visual Document Analysis, http://cognitivemedium.com/assets/rmnist/Simard.pdf
