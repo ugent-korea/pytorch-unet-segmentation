@@ -21,7 +21,8 @@ The project involves implementing biomedical image segmentation based on U-Net.
 
 * [Dependency](#dependency)
 
-## Prerequisite
+## Prerequisite <a name="prerequisite"></a>
+
     * python 3.6
     * numpy 1.14.5
     * torch 0.4.0
@@ -68,7 +69,7 @@ This is a dataset class we used. In the dataset, it contains three functions.
   * \__len\__ : Counts the number of images. 
 
 ### Reading images
-Before reading the images, in \__init\__ function with the parameter, image_path, lists of image and label are determined with the module called **glob**. Then in \__getitem\__ function, with the module **PIL**, the lists of image are read. 
+Before reading the images, in \__init\__ function with the parameter, image_path, list of image names and image labels are collected with the module called **glob**. Then in \__getitem\__ function, with the module **PIL**, the images in the list of image names are read and converted into numpy array. 
 
 ```ruby
 import numpy as np
