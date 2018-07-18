@@ -28,7 +28,7 @@ The project involves implementing biomedical image segmentation based on U-Net.
 ```ruby
 from torch.utils.data.dataset import Dataset
 class SEMDataTrain(Dataset):
-    def __init__(self, image_path, mask_path, in_size=572, out_size=388):
+    def __init__(self):
         """
         Args:
             image_path (str): the path where the image is located
