@@ -75,7 +75,7 @@ class SEMDataTrain(Dataset):
         # Crop the image
         img_height, img_width = img_as_np.shape[0], img_as_np.shape[1]
         y_loc, x_loc = randint(0, img_height-self.out_size), randint(0, img_width-self.out_size)
-        img_as_np = cropping(img_as_np, y=y_loc, x=x_loc)
+        img_as_np = cropping(img_as_np, crop_size=self.out_size, dim1=y_loc, dim2=x_loc)
 
         # Pad the image
         img_as_np = add_padding(img_as_np, in_size=self.in_size,
@@ -158,36 +158,37 @@ class SEMDataTest(Dataset):
         """
         single_image = self.image_arr[index]
         img_as_img = Image.open(single_image)
-
+        img_as_img.show()
         # Convert the image into numpy array
         img_as_numpy = np.asarray(img_as_img)
 
         # Make 4 cropped image (in numpy array form) using values calculated above
         # Cropped images will also have paddings to fit the model.
 
-        cropped_padded = crop_pad_test(img_as_numpy,
-                                       in_size=self.in_size,
-                                       out_size=self.out_size)
+        img_as_numpy = multi_cropping(img_as_numpy,
+                                      crop_size=self.out_size,
+                                      dim1_num=2, dim2_num=2)
+        img_as_numpy = multi_padding(img_as_numpy, in_size=self.in_size,
+                                     out_size=self.out_size, mode="symmetric")
 
         # Empty list that will be filled in with arrays converted to tensor
-        processed_list = list()
+        processed_list = []
 
-        for array in cropped_padded:
-            '''
+        for array in img_as_numpy:
+
             # SANITY CHECK: SEE THE CROPPED & PADDED IMAGES
             array_image = Image.fromarray(array)
             array_image.show()
-            '''
+
             # Normalize the cropped arrays
-            array_normalized = normalize(array, mean=Training_MEAN, std=Training_STDEV)
+            img_as_numpy = normalize(array, mean=Training_MEAN, std=Training_STDEV)
             # Convert normalized array into tensor
-            array_to_tensor = torch.from_numpy(array_normalized).float()
-            processed_list.append(array_to_tensor)
+            processed_list.append(img_as_numpy)
 
-
+        array_to_tensor = torch.Tensor(processed_list).float()
         #  return tensor of 4 cropped images
         #  top left, top right, bottom left, bottom right respectively.
-        return (processed_list[0], processed_list[1], processed_list[2], processed_list[3])
+        return array_to_tensor
 
     def __len__(self):
 
@@ -203,4 +204,4 @@ if __name__ == "__main__":
 
     imag_1 = custom_mnist_from_file_train.__getitem__(0)
     imag_2 = custom_mnist_from_file_test.__getitem__(0)
-    print(imag_2)
+    print(imag_2.size())

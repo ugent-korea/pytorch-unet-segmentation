@@ -142,45 +142,65 @@ def normalize(image, mean, std):
     return image
 
 
-def crop_pad_test(image, in_size=572, out_size=388):
+def multi_cropping(image, crop_size, dim1_num, dim2_num):
     """crop the image and pad it to in_size
+    Args :
+        images : numpy arrays of images
+        crop_size(int) : size of cropped image
+        dim2_num (int) : number of crop in horizontal way
+        dim1_num (int) : number of crop in vertical way
+    Return :
+        cropped_imgs : numpy arrays of stacked images
+    """
+
+    img_height, img_width = image.shape[0], image.shape[1]
+    assert crop_size*dim1_num >= img_width and crop_size * \
+        dim2_num >= img_height, "Whole image cannot be sufficiently expressed"
+    assert dim1_num <= img_width - crop_size + 1 and dim2_num <= img_height - \
+        crop_size + 1, "Too many number of crops"
+
+    cropped_imgs = []
+    dim1_stride = int((img_height - crop_size)/(dim1_num - 1))
+    dim2_stride = int((img_width - crop_size)/(dim2_num - 1))
+    for i in range(dim1_num):
+        for j in range(dim2_num):
+            cropped_imgs.append(cropping(image, crop_size,
+                                         dim1_stride*i, dim2_stride*j))
+    return np.asarray(cropped_imgs)
+
+
+def multi_padding(images, in_size, out_size, mode):
+    """Pad the images to in_size
     Args :
         images : numpy array of images
         in_size(int) : the input_size of model
         out_size(int) : the output_size of model
+        mode(str) : mode of padding
     Return :
-        stacked_img : numpy array of stacked images
+        padded_imgs: numpy arrays of padded images
     """
-    assert out_size*2 >= in_size, "Whole image cannot be expressed with 4 crops"
-    img_height, img_width = image.shape[0], image.shape[1]
-    l_top = image[:out_size, :out_size]
-    r_top = image[:out_size, img_width-out_size:]
-    l_bot = image[img_height-out_size:, :out_size]
-    r_bot = image[img_height-out_size:, img_width-out_size:]
     pad_size = int((in_size - out_size)/2)
-    l_top_padded = np.pad(l_top, pad_size, mode='symmetric')
-    r_top_padded = np.pad(r_top, pad_size, mode='symmetric')
-    l_bot_padded = np.pad(l_bot, pad_size, mode='symmetric')
-    r_bot_padded = np.pad(r_bot, pad_size, mode='symmetric')
-    # print(r_bot_padded.shape, r_top_padded.shape)
-    stacked_img = np.stack((l_top_padded, r_top_padded, l_bot_padded, r_bot_padded))
-    return stacked_img
+    padded_imgs = []
+    for num in range(images.shape[0]):
+        padded_imgs.append(add_padding(images[num], in_size, out_size, mode=mode))
+    return np.asarray(padded_imgs)
 
 
-def cropping(image, y, x):
+def cropping(image, crop_size, dim1, dim2):
     """crop the image and pad it to in_size
     Args :
         images : numpy array of images
-        y(int) : vertical location of crop
-        x(int) : horizontal location of crop
+        crop_size(int) : size of cropped image
+        dim1(int) : vertical location of crop
+        dim2(int) : horizontal location of crop
     Return :
         cropped_img: numpy array of cropped image
     """
-    cropped_img = image[y:y+out_size, x:x+out_size]
+    cropped_img = image[dim1:dim1+crop_size, dim2:dim2+crop_size]
     return cropped_img
 
 
-def add_padding(image, in_size. out_size, mode):
+def add_padding(image, in_size, out_size, mode):
     """Pad the image to in_size
     Args :
         images : numpy array of images
@@ -191,21 +211,43 @@ def add_padding(image, in_size. out_size, mode):
         padded_img: numpy array of padded image
     """
     pad_size = int((in_size - out_size)/2)
-    padded_img = np.pad(cropped_img, pad_size, mode=mode)
+    padded_img = np.pad(image, pad_size, mode=mode)
     return padded_img
+
+
+def division_array(image, dim1_num, dim2_num, img_dim1, img_dim2):
+    crop_size = image.shape[1]
+    div_array = np.zeros([img_dim1, img_dim2])
+    one_array = np.ones([crop_size, crop_size])
+    dim1_stride = int((img_dim1 - crop_size)/(dim1_num - 1))
+    dim2_stride = int((img_dim2 - crop_size)/(dim2_num - 1))
+    for i in range(dim1_num):
+        for j in range(dim2_num):
+            div_array[dim1_stride*i:dim1_stride*i + crop_size,
+                      dim2_stride*j:dim2_stride*j + crop_size] += one_array
+    return div_array
+
+
+def prediction(image, dim1_num, dim2_num, img_dim1, img_dim2):
+    crop_size = image.shape[1]
+    div_array = np.zeros([img_dim1, img_dim2])
+    dim1_stride = int((img_dim1 - crop_size)/(dim1_num - 1))
+    dim2_stride = int((img_dim2 - crop_size)/(dim2_num - 1))
+    for i in range(dim1_num):
+        for j in range(dim2_num):
+            div_array[dim1_stride*i:dim1_stride*i + crop_size,
+                      dim2_stride*j:dim2_stride*j + crop_size] += one_array
+    return div_array
+    return None
 
 
 if __name__ == "__main__":
     from PIL import Image
-    a = Image.open("0.png")
+    a = Image.open("../data/train/images/0.png")
     a.show()
     a = np.array(a)
-    croped = crop_pad_test(a)
-    a_11 = Image.fromarray(croped[0])
-    a_22 = Image.fromarray(croped[1])
-    a_33 = Image.fromarray(croped[2])
-    a_44 = Image.fromarray(croped[3])
+    croped = multi_cropping(a, 388, 2, 2)
+    div_arr = division_array(croped, 2, 2, 512, 512)*60
+    a_11 = Image.fromarray(div_arr)
+
     a_11.show()
-    a_22.show()
-    a_33.show()
-    a_44.show()
