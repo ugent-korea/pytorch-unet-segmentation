@@ -1,0 +1,7 @@
+z_original: original image
+bright_x: brightness increased by x
+elastic_x: different elastic 
+flip_x: flip on x way
+gaus_x: gaussian noise added with mean of 0 and std of x
+uniform_x: uniform noise added with lower bound of -x and upper bound of x
+
