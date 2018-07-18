@@ -166,7 +166,7 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
 		<tr>
 			<td width="19%" align="center"> Brightness </td>
 			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/bright_10"> <br />Intensity 10</td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/bright_20"> <br />Intensity
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/bright_20"> <br />Intensity 20</td>
 			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/bright_30"> <br />Intensity 30</td>
 		</tr>
       		</tr>
@@ -194,9 +194,9 @@ To be added
 
 
 ### Dependency <a name="dependency"></a>
-    * python 3.6
-    * numpy 1.14.5
-    * torch 0.4.0
+    * python >= 3.6
+    * numpy >= 1.14.5
+    * torch >= 0.4.0
     * PIL
     * glob
     
