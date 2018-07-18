@@ -197,8 +197,9 @@ To be added
     * python >= 3.6
     * numpy >= 1.14.5
     * torch >= 0.4.0
-    * PIL
-    * glob
+    * PIL >=
+    * glob >= 
+    * scipy >=
     
 
 # References :
