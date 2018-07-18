@@ -146,6 +146,7 @@ class SEMDataTest(Dataset):
         self.image_arr = glob.glob(str(image_path) + str("/*"))
         self.in_size = in_size
         self.out_size = out_size
+        self.data_len = len(self.mask_arr)
 
     def __getitem__(self, index):
         """Get specific data corresponding to the index
@@ -158,7 +159,7 @@ class SEMDataTest(Dataset):
         """
         single_image = self.image_arr[index]
         img_as_img = Image.open(single_image)
-        img_as_img.show()
+        # img_as_img.show()
         # Convert the image into numpy array
         img_as_numpy = np.asarray(img_as_img)
 
@@ -178,7 +179,7 @@ class SEMDataTest(Dataset):
 
             # SANITY CHECK: SEE THE CROPPED & PADDED IMAGES
             array_image = Image.fromarray(array)
-            array_image.show()
+            # array_image.show()
 
             # Normalize the cropped arrays
             img_as_numpy = normalize(array, mean=Training_MEAN, std=Training_STDEV)
@@ -197,11 +198,11 @@ class SEMDataTest(Dataset):
 
 if __name__ == "__main__":
 
-    custom_mnist_from_file_train = SEMDataTrain(
+    SEM_train = SEMDataTrain(
         '../data/train/images', '../data/train/masks')
-    custom_mnist_from_file_test = SEMDataTest(
+    SEM_test = SEMDataTest(
         '../data/test/images/', '../data/test/masks')
 
-    imag_1 = custom_mnist_from_file_train.__getitem__(0)
-    imag_2 = custom_mnist_from_file_test.__getitem__(0)
+    imag_1 = SEM_train.__getitem__(0)
+    imag_2 = SEM_test.__getitem__(0)
     print(imag_2.size())

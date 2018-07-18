@@ -284,7 +284,7 @@ if __name__ == "__main__":
 
     original = np.array(b)
     b.show()
-    """
+
     original1 = flip(original, 0)
     original1 = Image.fromarray(original1)
     original1.show()
@@ -303,7 +303,7 @@ if __name__ == "__main__":
 
     original2 = np.array(b)
     original3 = np.array(c)
-    """
+
     cropped = multi_cropping(original, 388, 2, 2)
     c_lt = Image.fromarray(cropped[0])
     c_rt = Image.fromarray(cropped[1])

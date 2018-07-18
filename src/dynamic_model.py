@@ -5,7 +5,7 @@ from torch.autograd import Variable
 import numpy as np
 from PIL import Image
 from torch.nn.functional import sigmoid
-from model_modules import *
+from dynamic_model_modules import *
 
 
 class CleanU_Net(nn.Module):
@@ -24,22 +24,23 @@ class CleanU_Net(nn.Module):
     def forward(self, x):
 
         x, conv1 = self.Conv_down1(x)
-        print(x.shape)
+        print("dConv1 => down1", x.shape)
         x, conv2 = self.Conv_down2(x)
-        print(x.shape)
+        print("dConv2 => down2", x.shape)
         x, conv3 = self.Conv_down3(x)
-        print(x.shape)
+        print("dConv3 => down3", x.shape)
         x, conv4 = self.Conv_down4(x)
-        print(x.shape)
+        print("dConv4 => down4", x.shape)
         _, x = self.Conv_down5(x)
-        print(x.shape)
+        print("dConv5", x.shape)
         x = self.Conv_up1(x, conv4)
-        print(x.shape)
+        print("up1 => uConv1", x.shape)
         x = self.Conv_up2(x, conv3)
-        print(x.shape)
+        print("up2 => uConv2", x.shape)
         x = self.Conv_up3(x, conv2)
-        print(x.shape)
+        print("up3 => uConv3", x.shape)
         x = self.Conv_up4(x, conv1)
+
         return x
 
 
