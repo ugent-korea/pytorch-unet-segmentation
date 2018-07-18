@@ -187,7 +187,7 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
     <tr>		<td width="99%" align="center" colspan="5"><strong>Crop</td>
 		</tr>
 		<tr>
-			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/originall"> <br />Original Image </td>
+			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/original"> <br />Original Image </td>
 			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/c_lb"> <br />Crop Left Bottom </td>
 			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/c_lt"> <br />Crop Left Top</td> 
 			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/c_rb"> <br />Crop Right bottom</td>
