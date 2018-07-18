@@ -130,8 +130,7 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
    * Uniform noise
    * Brightness
    * Elastic deformation
-   * Crop
-   * Pad
+
 
 <table border=0 width="99%" >
 	<tbody> 
@@ -182,51 +181,20 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
 </table>       
 
 
+
 <table border=0 width="99%" >
 	<tbody> 
-    <tr>		<td width="99%" align="center" colspan="5"><strong>Image</td>
+    <tr>		<td width="99%" align="center" colspan="5"><strong>Crop</td>
 		</tr>
 		<tr>
-			<td width="10%" align="center"> Original Image </td>
-			<td width="22.5%" align="center" colspan= "1" >
-			<td width="22.5%" align="center" colspan= "1" > <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/original"> </td> 
-			<td width="22.5%" align="center" colspan= "1" ></td> 
+			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/originall"> <br />Original Image </td>
+			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/c_lb"> <br />Crop Left Bottom </td>
+			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/c_lt"> <br />Crop Left Top</td> 
+			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/c_rb"> <br />Crop Right bottom</td>
+			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/c_rt"> <br />Crop Right Top</td> 
 		</tr>
       		</tr>
 		<tr>
-			<td width="19%" align="center"> Flip  </td> 
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/flip_vert"> <br />Vertical  </td> 
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/flip_hori">  <br />Horizontal</td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/flip_both"> <br />Both</td>
-		</tr>
-      		</tr>
-		<tr>
-			<td width="19%" align="center"> Gaussian noise </td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/gaus_10"> <br />standard deviation 10</td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/gaus_20"> <br />standard deviation 20</td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/gaus_30"> <br />standard deviation 30</td>
-   		</tr>
-		<tr>
-			<td width="19%" align="center"> Uniform noise </td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/uniform_10"> <br />Intensity 10 </td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/uniform_20"> <br />Intensity 20</td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/uniform_30"> <br />Intensity 30</td>
-		</tr>
-      		</tr>
-		<tr>
-			<td width="19%" align="center"> Brightness </td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/bright_10"> <br />Intensity 10</td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/bright_20"> <br />Intensity 20</td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/bright_30"> <br />Intensity 30</td>
-		</tr>
-      		</tr>
-		<tr>
-			<td width="19%" align="center"> Elastic deformation </td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/elastic_1"> <br />random deformation 1</td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/elastic_2"> <br />random deformation 2</td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/elastic_3"> <br />random deformation 3</td>
-		</tr>
-		</tr>
 	</tbody>
 </table>         
 
