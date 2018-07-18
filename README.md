@@ -214,9 +214,8 @@ To be added
     * python >= 3.6
     * numpy >= 1.14.5
     * torch >= 0.4.0
-    * PIL >=
-    * glob >= 
-    * scipy >=
+    * PIL >= 5.2.0
+    * scipy >= 1.1.0
     
 
 # References :
