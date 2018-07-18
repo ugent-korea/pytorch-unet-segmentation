@@ -1,7 +1,30 @@
 # pytorch-unet-segmentation
 
 ## Description
-The project involves implementing biomedical image segmentation based on U-Net. 
+This project involves implementing biomedical image segmentation based on U-Net. 
+
+The dataset we used is Transmission Electron Microscopy (ssTEM) data set of the Drosophila first instar larva ventral nerve cord (VNC), which is dowloaded from "ISBI Challenge: Segmentation of of neural structures in EM stacks". 
+
+The dataset contains 30 images of size 512x512 for each train, train-labels and test.
+
+The folder structure of this project is:
+
+'''
+pytorch-unet-segmentation
+   - data
+       - train
+           - images
+           - masks
+       - test
+           - images
+   - src
+       - dataset.py
+       - main.py
+       - augmentation.py
+       - mean_std.py
+'''
+
+
 
 ##### Members : PyeongEun Kim, JuHyung Lee, MiJeong Lee
 
@@ -110,7 +133,7 @@ class SEMDataTrain(Dataset):
         # img_as_img.show()
         img_as_np = np.asarray(img_as_img)
         """
-        Augmentation on image
+        Augmentation
           # flip 
           # Gaussian_noise
           # uniform_noise
@@ -121,20 +144,6 @@ class SEMDataTrain(Dataset):
           # Sanity Check for Cropped image
           # Normalize the image
         """
-        img_as_np = np.expand_dims(img_as_np, axis=0)  # add additional dimension
-        img_as_tensor = torch.from_numpy(img_as_np).float()  # Convert numpy array to tensor
-        
-        """
-        Augmentation on mask
-          # flip same way with image
-          # Elastic distort same way with image
-          # Crop the same part that was cropped on image
-          # Sanity Check
-          # Normalize the mask to 0 and 1
-        """
-        msk_as_np = np.expand_dims(msk_as_np, axis=0)  # add additional dimension
-        msk_as_tensor = torch.from_numpy(msk_as_np).float()  # Convert numpy array to tensor
-
         return (img_as_tensor, msk_as_tensor)
 
     def __len__(self):
@@ -153,16 +162,7 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
    * Uniform noise
    * Brightness
    * Elastic deformation
-
-Preprocess   | Image 1 | Image 2 | Image 3 |
------------- | ------------- | ------------ | ------------- |
-Original Images | Content from cell 2|  | |
-Flip | Content in the second column |  | |
-Gaussian noise | Content from cell 2 |  | |
-Uniform noise | Content in the second column  |  | |
-Brightness | Content from cell 2 |  | |
-Elastic deformation | Content in the second column|  | |
-
+   
    
 ```ruby
 import numpy as np
@@ -299,6 +299,5 @@ To be added
 
 # References :
 
-[1] O. Ronneberger, P. Fischer, and T. Brox. U-Net: Convolutional Networks for Biomedical Image Segmentation, http://arxiv.org/pdf/1505.04597.pdf
-
-[2] P.Y. Simard, D. Steinkraus, J.C. Platt. Best Practices for Convolutional Neural Networks Applied to Visual Document Analysis, http://cognitivemedium.com/assets/rmnist/Simard.pdf
+O. Ronneberger, P. Fischer, and T. Brox. U-Net: Convolutional Networks for Biomedical Image Segmentation, http://arxiv.org/pdf/1505.04597.pdf
+P.Y. Simard, D. Steinkraus, J.C. Platt. Best Practices for Convolutional Neural Networks Applied to Visual Document Analysis, http://cognitivemedium.com/assets/rmnist/Simard.pdf
