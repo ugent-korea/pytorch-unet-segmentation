@@ -154,6 +154,13 @@ if __name__ == "__main__":
 
 ### Preprocessing <a name="preprocessing"></a>
 
+Preprocessing is done on the images for data augmentation. Following preprocessing are accomplished.
+   * Flip
+   * Gaussian noise
+   * Uniform noise
+   * Brightness
+   * Elastic transformation
+   
 ```ruby
 import numpy as np
 from PIL import Image
