@@ -134,7 +134,6 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
    * Pad 
    
 #### Image Augmentation
-
 <table border=0 width="99%" >
 	<tbody> 
     <tr>		<td width="99%" align="center" colspan="4"><strong>Image</td>
