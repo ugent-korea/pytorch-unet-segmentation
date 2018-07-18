@@ -2,12 +2,13 @@ import numpy as np
 from PIL import Image
 import glob
 
-def preprocess_image(image):
+def normalize_image(image):
     """
     Args:
         image : a string of name of image file
     Return:
-        image_asarray : numpy array of the image that went through custom process
+        image_asarray : numpy array of the image
+                        that is normalized by being divided by 255
     """
 
     img_opened = Image.open(image)
@@ -28,7 +29,7 @@ def find_mean(image_path):
     mean_sum = 0
 
     for image in all_images:
-        img_asarray = preprocess_image(image)
+        img_asarray = normalize_image(image)
         individual_mean = np.mean(img_asarray)
         mean_sum += individual_mean
 
@@ -54,7 +55,7 @@ def find_stdev(image_path):
     std_sum = 0
 
     for image in all_images:
-        img_asarray = preprocess_image(image)
+        img_asarray = normalize_image(image)
         individual_stdev = np.std(img_asarray)
         std_sum += individual_stdev
 
