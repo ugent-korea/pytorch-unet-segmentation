@@ -62,17 +62,6 @@ class SEMDataTrain(Dataset):
             length (int): length of the data
         """
         return self.data_len
-        
-if __name__ == "__main__":
-
-    custom_mnist_from_file_train = SEMDataTrain(
-        '../data/train/images', '../data/train/masks')
-    custom_mnist_from_file_test = SEMDataTest(
-        '../data/test/images/', '../data/test/masks')
-
-    imag_1 = custom_mnist_from_file_train.__getitem__(0)
-    imag_2 = custom_mnist_from_file_test.__getitem__(0)
-    print(imag_2.size())
 ```
 This is a dataset class we used. In the dataset, it contains three functions.
   * \__intit\__ : Intialization happens and determines which datasets to import and read. 
@@ -140,16 +129,6 @@ class SEMDataTrain(Dataset):
             length (int): length of the data
         """
         return self.data_len
-if __name__ == "__main__":
-
-    custom_mnist_from_file_train = SEMDataTrain(
-        '../data/train/images', '../data/train/masks')
-    custom_mnist_from_file_test = SEMDataTest(
-        '../data/test/images/', '../data/test/masks')
-
-    imag_1 = custom_mnist_from_file_train.__getitem__(0)
-    imag_2 = custom_mnist_from_file_test.__getitem__(0)
-    print(imag_2.size())
 ```
 
 ### Preprocessing <a name="preprocessing"></a>
@@ -160,6 +139,7 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
    * Uniform noise
    * Brightness
    * Elastic deformation
+   
    
 ```ruby
 import numpy as np
