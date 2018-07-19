@@ -25,7 +25,8 @@ if __name__ == "__main__":
 
     model = CleanU_Net(in_channels=1, out_channels=2)
     criterion = nn.CrossEntropyLoss()
-
+    model = train_CE_SEM(model, epoch=5, img_folder='../data/train/images',
+                         mask_folder='../data/train/masks')
     test = test_SEM(model, criterion, '../data/test/images/', '../data/test/masks', "ih")
     test = Image.fromarray(test)
     test.show()

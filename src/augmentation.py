@@ -264,7 +264,7 @@ def image_concatenate(image, crop_num1, crop_num2, dim1, dim2):
         div_array : numpy arrays of numbers of 1,2,4
     """
     crop_size = image.shape[1]  # size of crop
-    empty_array = np.zeros([dim1, dim2]).astype("int16")  # to make sure no overflow
+    empty_array = np.zeros([dim1, dim2]).astype("float64")  # to make sure no overflow
     dim1_stride = stride_size(dim1, crop_num1, crop_size)  # vertical stride
     dim2_stride = stride_size(dim2, crop_num2, crop_size)  # horizontal stride
     index = 0
