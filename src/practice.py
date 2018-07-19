@@ -7,6 +7,7 @@ import numpy as np
 from PIL import Image
 from torch.nn.functional import sigmoid
 from torch.utils.data.dataset import Dataset
+from torch.nn.functional import softmax
 from modules import *
 
 if __name__ == "__main__":
@@ -20,32 +21,14 @@ if __name__ == "__main__":
                                     num_workers=8, batch_size=1, shuffle=True)
     SEM_train_load = \
         torch.utils.data.DataLoader(dataset=SEM_train,
-                                    num_workers=8, batch_size=2, shuffle=True)
+                                    num_workers=8, batch_size=1, shuffle=True)
 
     model = CleanU_Net(in_channels=1, out_channels=2)
+    criterion = nn.CrossEntropyLoss()
 
-    print("TRAIN DATA")
-    for i, (images, labels) in enumerate(SEM_train_load):
-        images = Variable(images)
-        labels = Variable(labels)
-        print("input size|", images.size())
-        output = model(images)
-        print("output size|", output.shape)
-        break
-
-    print("\n")
-
-    print("TEST DATA")
-    for i, (images) in enumerate(SEM_test_load):
-        print(images)
-        for j in range(images.size()[1]):
-            print(images.size())
-            image = Variable(images[:, j, :, :].unsqueeze(0))
-            print("input size|", image.size())
-            output = model(image)
-            print("output size|", output.shape)
-            break
-        break
+    test = test_SEM(model, criterion, '../data/test/images/', '../data/test/masks', "ih")
+    test = Image.fromarray(test)
+    test.show()
 
     del model
     del output

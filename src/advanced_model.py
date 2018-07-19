@@ -5,11 +5,11 @@ from torch.autograd import Variable
 import numpy as np
 from PIL import Image
 from torch.nn.functional import sigmoid
-from dynamic_model_modules import *
+from advanced_model_modules import *
 
 
 class CleanU_Net(nn.Module):
-    def __init__(self, in_channels):
+    def __init__(self, in_channels, out_channels):
         super(CleanU_Net, self).__init__()
         self.Conv_down1 = Conv_down(in_channels, 32)
         self.Conv_down2 = Conv_down(32, 64)
@@ -20,6 +20,7 @@ class CleanU_Net(nn.Module):
         self.Conv_up2 = Conv_up(256, 128)
         self.Conv_up3 = Conv_up(128, 64)
         self.Conv_up4 = Conv_up(64, 32)
+        self.Conv_out = nn.Conv2d(32, out_channels, 1, padding=0, stride=1)
 
     def forward(self, x):
 
@@ -40,6 +41,7 @@ class CleanU_Net(nn.Module):
         x = self.Conv_up3(x, conv2)
         print("up3 => uConv3|", x.shape)
         x = self.Conv_up4(x, conv1)
+        x = self.Conv_out(x)
 
         return x
 
@@ -47,7 +49,7 @@ class CleanU_Net(nn.Module):
 if __name__ == "__main__":
     # A full forward pass
     im = torch.randn(1, 1, 572, 572)
-    model = CleanU_Net(1)
+    model = CleanU_Net(1, 2)
     x = model(im)
     print(x.shape)
     del model
