@@ -35,7 +35,6 @@ class SEMDataTrain(Dataset):
         """Get specific data corresponding to the index
         Args:
             index (int): index of the data
-
         Returns:
             Tensor: specific data on index which is converted to Tensor
         """
@@ -153,7 +152,6 @@ class SEMDataTest(Dataset):
         Args:
             index : an integer variable that calls (indext)th image in the
                     path
-
         Returns:
             Tensor: 4 cropped data on index which is converted to Tensor
         """
