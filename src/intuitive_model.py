@@ -119,7 +119,7 @@ class CleanU_Net(nn.Module):
         )
 
         # Final output
-        self.conv_final = nn.Conv2d(in_channels=32, out_channels=1,
+        self.conv_final = nn.Conv2d(in_channels=32, out_channels=2,
                                     kernel_size=3, padding=0, stride=1)
 
     def forward(self, x):
@@ -148,7 +148,7 @@ class CleanU_Net(nn.Module):
         conv3_dim = x.shape[2]
         x = self.max3(x)
         print('before conv4', x.shape)
-        
+
         # Down 4
         x = self.conv4_block(x)
         print('after conv5', x.shape)
