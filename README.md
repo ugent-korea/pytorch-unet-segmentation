@@ -242,8 +242,8 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
 
 
 ### Model <a name="model"></a>
-To be added
-
+#### Architecture
+![image](https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/UNet_custom_parameter.png)
 
 ### Loss function <a name="lossfunction"></a>
 To be added
