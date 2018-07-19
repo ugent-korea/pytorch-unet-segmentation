@@ -131,8 +131,9 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
    * Brightness
    * Elastic deformation
    * Crop
-   * Pad
-
+   * Pad 
+   
+#### Image Augmentation
 <table border=0 width="99%" >
 	<tbody> 
     <tr>		<td width="99%" align="center" colspan="4"><strong>Image</td>
@@ -181,9 +182,9 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
 	</tbody>
 </table>       
 
-#### Original Image of Crop and Pad
-
-<img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/original" width="230" height="230">
+#### Crop and Pad
+<p align="center">
+<img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/original" width="230" height="230"> <br />  Original Image
 
 
 <table border=0 width="99%" >
@@ -200,6 +201,19 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
 	</tbody>
 </table>         
 
+<table border=0 width="99%" >
+	<tbody> 
+    <tr>		<td width="99%" align="center" colspan="4"><strong>Pad</td>
+	    </tr>
+		<tr>
+			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/p_lb"> <br />  Left Bottom </td>
+			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/p_lt"> <br /> Left Top</td> 
+			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/p_rb"> <br /> Right bottom</td>
+			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/p_rt"> <br /> Right Top</td> 
+		</tr>
+      		</tr>
+	</tbody>
+</table>         
 
 
 ### Model <a name="model"></a>
