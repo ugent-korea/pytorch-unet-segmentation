@@ -1,7 +1,32 @@
 # pytorch-unet-segmentation
 
 ## Description
-The project involves implementing biomedical image segmentation based on U-Net. 
+
+
+-This project involves implementing biomedical image segmentation based on U-Net. 
+-
+-The dataset we used is Transmission Electron Microscopy (ssTEM) data set of the Drosophila first instar larva ventral nerve cord (VNC), which is dowloaded from "ISBI Challenge: Segmentation of of neural structures in EM stacks". 
+-
+-The dataset contains 30 images (.png) of size 512x512 for each train, train-labels and test.
+-
+-The folder structure of this project is:
+-
+-```
+-pytorch-unet-segmentation
+-   - data
+-       - train
+-           - images
+-           - masks
+-       - test
+-           - images
+-   - src
+-       - dataset.py
+-       - main.py
+-       - augmentation.py
+-       - mean_std.py
+-```
+-
+-Purposes of the python files listed in the folder structure will be explained throughout this readme.
 
 ##### Members : PyeongEun Kim, JuHyung Lee, MiJeong Lee
 
