@@ -10,6 +10,8 @@ from torch.utils.data.dataset import Dataset
 from augmentation import *
 from mean_std import *
 import os
+from advanced_model import *
+from advanced_model_modules import *
 
 Training_MEAN = 0.4911
 Training_STDEV = 0.1658
@@ -180,14 +182,7 @@ class SEMDataTest(Dataset):
             array_image = Image.fromarray(array)
 
             # array_image.show()
-            # Save images in every epoch
-            desired_path = 'result_images/epoch/'
-            # Create the path if it does not exist
-            if not os.path.exists(desired_path):
-                os.makedirs(desired_path)
-            # Save image
-            export_name = 'test' + str(i) + '.png'
-            array_image.save(desired_path + export_name)
+
 
             # Normalize the cropped arrays
             img_as_numpy = normalize(array, mean=Training_MEAN, std=Training_STDEV)
@@ -216,3 +211,21 @@ if __name__ == "__main__":
     imag_1 = SEM_train.__getitem__(0)
     imag_2 = SEM_test.__getitem__(0)
     print(imag_2.size())
+
+    data_path = glob.glob('../data/test/images/*')
+    num_images = len(data_path)
+
+    for i in range(3):
+        for j, images_str in enumerate(data_path):
+
+            single_image = Image.open(images_str)
+
+            # Save images in every epoch
+            desired_path = 'result_images/epoch' + str(i) + '/'
+
+            # Create the path if it does not exist
+            if not os.path.exists(desired_path):
+                os.makedirs(desired_path)
+            # Save image
+            export_name = 'test' + str(j) + '.png'
+            single_image.save(desired_path + export_name)
