@@ -10,7 +10,7 @@ from torch.utils.data.dataset import Dataset  # For custom datasets
 from dataset import *
 from torch.nn.functional import softmax
 import torch.nn as nn
-
+import csv
 
 def train_CE_SEM(model, criterion, epoch, img_folder, mask_folder, num_workers=4, batch_size=1, learning_rate=0.01):
     SEM_train = SEMDataTrain(img_folder, mask_folder, in_size=572, out_size=388)
@@ -20,19 +20,24 @@ def train_CE_SEM(model, criterion, epoch, img_folder, mask_folder, num_workers=4
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
     print("initializing training!")
-    for i in range(epoch):
-        print("epoch:", i)
-        for j, (images, masks) in enumerate(SEM_train_load):
-            print("image:", j)
-            images = Variable(images)
-            masks = Variable(masks)  # .view(-1).contiguous()
-            outputs = model(images)  # .permute(1, 2, 3, 0).view(-1, 2).contiguous()
-            loss = criterion(outputs, masks)
-            print(loss)
-            optimizer.zero_grad()
-            loss.backward()
-            # Update weights
-            optimizer.step()
+    with open('train_loss.csv', 'w') as csvfile:
+        fieldnames = ['epoch', 'image', 'loss']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        for i in range(epoch):
+            print("epoch:", i)
+            for j, (images, masks) in enumerate(SEM_train_load):
+                print("image:", j)
+                images = Variable(images)
+                masks = Variable(masks)  # .view(-1).contiguous()
+                outputs = model(images)  # .permute(1, 2, 3, 0).view(-1, 2).contiguous()
+                loss = criterion(outputs, masks)
+                print(loss)
+                optimizer.zero_grad()
+                loss.backward()
+                # Update weights
+                optimizer.step()
+                writer.writerow({'epoch' : i+1 , 'image' : j+1, 'loss' : float(loss)})
     return model
 
 
