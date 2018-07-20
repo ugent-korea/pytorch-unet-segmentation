@@ -243,6 +243,9 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
 
 ### Model <a name="model"></a>
 #### Architecture
+
+We have same structure as U-Net Model architecture but we made a small modification to make the model smaller.
+
 ![image](https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/UNet_custom_parameter.png)
 
 ### Loss function <a name="lossfunction"></a>

@@ -10,11 +10,12 @@ from torch.utils.data.dataset import Dataset  # For custom datasets
 from dataset import *
 from torch.nn.functional import softmax
 import torch.nn as nn
-
+import csv
 
 def train_CE_SEM(model, criterion, optimizer, epoch, data_train, data_val):
 
     print("initializing training!")
+<<<<<<< HEAD
     for i in range(epoch):
         print("epoch:", i+1)
         for j, (images, masks) in enumerate(data_train):
@@ -49,12 +50,37 @@ def train_CE_SEM(model, criterion, optimizer, epoch, data_train, data_val):
             del masks_v
         print("epoch: {0}/{1}| loss: {2:.4f}".format(i+1, epoch, val_loss/((j+1)*4)))
 
+=======
+    with open('train_loss.csv', 'w') as csvfile:
+        fieldnames = ['epoch', 'image' ,'loss']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        for i in range(epoch):
+            print("epoch:", i)
+            for j, (images, masks) in enumerate(SEM_train_load):
+                print("image:", j)
+                images = Variable(images)
+                masks = Variable(masks)  # .view(-1).contiguous()
+                outputs = model(images)  # .permute(1, 2, 3, 0).view(-1, 2).contiguous()
+                loss = criterion(outputs, masks)
+                print(loss)
+                optimizer.zero_grad()
+                loss.backward()
+                # Update weights
+                optimizer.step()
+                writer.writerow({'epoch' : i+1 , 'image' : j+1, 'loss' : float(loss)})
+>>>>>>> 0a8fd7c85b29ef2fbc784a630e257065d9c6de96
     return model
 
 
 def test_SEM(model, data_test,  folder_to_save):
 
+<<<<<<< HEAD
     for i, (images) in enumerate(data_test):
+=======
+    for i, (images) in enumerate(SEM_test_load):
+        print(i)
+>>>>>>> 0a8fd7c85b29ef2fbc784a630e257065d9c6de96
         print(images)
         stacked_img = torch.Tensor([])
         for j in range(images.size()[1]):
