@@ -13,7 +13,7 @@ if __name__ == "__main__":
     SEM_train = SEMDataTrain(
         '../data/train/images', '../data/train/masks')
     SEM_test = SEMDataTest(
-        '../data/test/images/', '../data/test/masks')
+        '../data/test/images/')
 
     SEM_test_load = \
         torch.utils.data.DataLoader(dataset=SEM_test,

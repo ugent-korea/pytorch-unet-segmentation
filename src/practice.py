@@ -15,22 +15,26 @@ if __name__ == "__main__":
     SEM_train = SEMDataTrain(
         '../data/train/images', '../data/train/masks')
     SEM_test = SEMDataTest(
-        '../data/test/images/', '../data/test/masks')
+        '../data/test/images/')
+    SEM_val = SEMDataVal(
+        '../data/val/images', '../data/val/masks')
 
-    SEM_test_load = \
-        torch.utils.data.DataLoader(dataset=SEM_test,
-                                    num_workers=8, batch_size=1, shuffle=True)
     SEM_train_load = \
         torch.utils.data.DataLoader(dataset=SEM_train,
+                                    num_workers=8, batch_size=1, shuffle=True)
+    SEM_val_load = \
+        torch.utils.data.DataLoader(dataset=SEM_val,
+                                    num_workers=8, batch_size=1, shuffle=True)
+    SEM_test_load = \
+        torch.utils.data.DataLoader(dataset=SEM_test,
                                     num_workers=8, batch_size=1, shuffle=True)
 
     model = CleanU_Net(in_channels=1, out_channels=2)
     criterion = nn.CrossEntropyLoss()
-
-    model = train_CE_SEM(model, criterion, epoch=3, img_folder='../data/train/images',
-                         mask_folder='../data/train/masks')
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
+    model = train_CE_SEM(model, criterion, optimizer, 4, SEM_train_load, SEM_val_load)
 
     model = copy.deepcopy(model)
-    test = test_SEM(model, criterion, '../data/test/images/', '../data/test/masks', "ih")
+    test = test_SEM(model, SEM_test_load, "ih")
     test = Image.fromarray(test)
     test.show()

@@ -132,8 +132,7 @@ class SEMDataTrain(Dataset):
         return self.data_len
 
 
-class SEMDataTest(Dataset):
-
+class SEMDataVal(Dataset):
     def __init__(self, image_path, mask_path, in_size=572, out_size=388):
         '''
         Args:
@@ -181,15 +180,95 @@ class SEMDataTest(Dataset):
 
             # Normalize the cropped arrays
             img_as_numpy = normalize(array, mean=Training_MEAN, std=Training_STDEV)
-            #img_as_numpy = np.expand_dims(img_as_numpy, axis=0)
-            img_as_tensor = torch.from_numpy(img_as_numpy).float()
+            # img_as_numpy = np.expand_dims(img_as_numpy, axis=0)
+            # img_as_tensor = torch.from_numpy(img_as_numpy).float()
             # Convert normalized array into tensor
             processed_list.append(img_as_numpy)
 
-        array_to_tensor = torch.Tensor(processed_list)
+        img_as_tensor = torch.Tensor(processed_list)
         #  return tensor of 4 cropped images
         #  top left, top right, bottom left, bottom right respectively.
-        return array_to_tensor
+
+        """
+        # GET MASK
+        """
+        single_mask_name = self.mask_arr[index]
+        msk_as_img = Image.open(single_mask_name)
+        # msk_as_img.show()
+        msk_as_np = np.asarray(msk_as_img)
+        # Normalize mask to only 0 and 1
+        msk_as_np = msk_as_np/255
+        msk_as_np = multi_cropping(msk_as_np,
+                                   crop_size=self.out_size,
+                                   crop_num1=2, crop_num2=2)
+        # msk_as_np = np.expand_dims(msk_as_np, axis=0)  # add additional dimension
+        msk_as_tensor = torch.from_numpy(msk_as_np).long()  # Convert numpy array to tensor
+
+        return (img_as_tensor, msk_as_tensor)
+
+    def __len__(self):
+
+        return self.data_len
+
+
+class SEMDataTest(Dataset):
+
+    def __init__(self, image_path, in_size=572, out_size=388):
+        '''
+        Args:
+            image_path = path where test images are located
+            mask_path = path where test masks are located
+        '''
+        # paths to all images and masks
+
+        self.image_arr = glob.glob(str(image_path) + str("/*"))
+        self.in_size = in_size
+        self.out_size = out_size
+        self.data_len = len(self.image_arr)
+
+    def __getitem__(self, index):
+        """Get specific data corresponding to the index
+        Args:
+            index : an integer variable that calls (indext)th image in the
+                    path
+        Returns:
+            Tensor: 4 cropped data on index which is converted to Tensor
+        """
+        single_image = self.image_arr[index]
+        img_as_img = Image.open(single_image)
+        # img_as_img.show()
+        # Convert the image into numpy array
+        img_as_numpy = np.asarray(img_as_img)
+
+        # Make 4 cropped image (in numpy array form) using values calculated above
+        # Cropped images will also have paddings to fit the model.
+
+        img_as_numpy = multi_cropping(img_as_numpy,
+                                      crop_size=self.out_size,
+                                      crop_num1=2, crop_num2=2)
+        img_as_numpy = multi_padding(img_as_numpy, in_size=self.in_size,
+                                     out_size=self.out_size, mode="symmetric")
+
+        # Empty list that will be filled in with arrays converted to tensor
+        processed_list = []
+
+        for array in img_as_numpy:
+
+            # SANITY CHECK: SEE THE CROPPED & PADDED IMAGES
+            array_image = Image.fromarray(array)
+            # array_image.show()
+
+            # Normalize the cropped arrays
+            img_as_numpy = normalize(array, mean=Training_MEAN, std=Training_STDEV)
+            # img_as_numpy = np.expand_dims(img_as_numpy, axis=0)
+            # img_as_tensor = torch.from_numpy(img_as_numpy).float()
+            # Convert normalized array into tensor
+            processed_list.append(img_as_numpy)
+
+        img_as_tensor = torch.Tensor(processed_list)
+        #  return tensor of 4 cropped images
+        #  top left, top right, bottom left, bottom right respectively.
+        return img_as_tensor
 
     def __len__(self):
 
