@@ -21,7 +21,7 @@ def train_CE_SEM(model, criterion, epoch, img_folder, mask_folder, num_workers=4
 
     print("initializing training!")
     with open('train_loss.csv', 'w') as csvfile:
-        fieldnames = ['epoch', 'image', 'loss']
+        fieldnames = ['epoch', 'image' ,'loss']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         for i in range(epoch):
@@ -50,6 +50,7 @@ def test_SEM(model, loss_function, img_folder, mask_folder, folder_to_save):
     criterion = loss_function
 
     for i, (images) in enumerate(SEM_test_load):
+        print(i)
         print(images)
         stacked_img = torch.Tensor([])
         for j in range(images.size()[1]):
