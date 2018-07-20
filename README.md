@@ -78,7 +78,6 @@ This is a dataset class we used. In the dataset, it contains three functions.
   * \__len\__ : Counts the number of images. 
 
 
-### Reading images
 Before reading the images, in \__init\__ function with the parameter, image_path, list of image names and image labels are collected with the module called **glob**. Then in \__getitem\__ function, with the module **PIL**, the images in the list of image names are read and converted into numpy array. 
 
 ```ruby
@@ -133,7 +132,7 @@ class SEMDataTrain(Dataset):
           # Crop the same part that was cropped on image
           # Sanity Check
           # Normalize the mask to 0 and 1
-        """
+      
         # add additional dimension
         # Convert numpy array to tensor
 
@@ -159,17 +158,15 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
    * Pad 
    
 #### Image Augmentation
+
+<p align="center">
+<img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/original" width="230" height="230"> <br />  Original Image
+
+
 <table border=0 width="99%" >
 	<tbody> 
     <tr>		<td width="99%" align="center" colspan="4"><strong>Image</td>
 		</tr>
-		<tr>
-			<td width="19%" align="center"> Original Image </td>
-			<td width="27%" align="center" colspan= "1" >
-			<td width="27%" align="center" colspan= "1" > <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/original_image"> </td> 
-			<td width="27%" align="center" colspan= "1" ></td> 
-		</tr>
-      		</tr>
 		<tr>
 			<td width="19%" align="center"> Flip  </td> 
 			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/flip_vert"> <br />Vertical  </td> 
@@ -208,9 +205,6 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
 </table>       
 
 #### Crop and Pad
-<p align="center">
-<img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/original" width="230" height="230"> <br />  Original Image
-
 
 <table border=0 width="99%" >
 	<tbody> 
