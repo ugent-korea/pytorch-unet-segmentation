@@ -5,7 +5,7 @@
 
 This project involves implementing biomedical image segmentation based on U-Net. 
 
-The dataset we used is Transmission Electron Microscopy (ssTEM) data set of the Drosophila first instar larva ventral nerve cord (VNC), which is dowloaded from "ISBI Challenge: Segmentation of of neural structures in EM stacks". 
+The dataset we used is Transmission Electron Microscopy (ssTEM) data set of the Drosophila first instar larva ventral nerve cord (VNC), which is dowloaded from [ISBI Challenge: Segmentation of of neural structures in EM stacks](http://brainiac2.mit.edu/isbi_challenge/home)
 
 The dataset contains 30 images (.png) of size 512x512 for each train, train-labels and test.
 
