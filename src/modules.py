@@ -8,7 +8,8 @@ from torch.autograd import Variable
 from torchvision import transforms
 from torch.utils.data.dataset import Dataset  # For custom datasets
 from dataset import *
-from torch.nn.functional import softmax, cross_entropy
+from torch.nn.functional import softmax
+import torch.nn as nn
 
 
 def train_CE_SEM(model, criterion, epoch, img_folder, mask_folder, num_workers=4, batch_size=1, learning_rate=0.01):
@@ -24,39 +25,15 @@ def train_CE_SEM(model, criterion, epoch, img_folder, mask_folder, num_workers=4
         for j, (images, masks) in enumerate(SEM_train_load):
             print("image:", j)
             images = Variable(images)
-            masks = Variable(masks)
-            outputs = model(images)
-            masks1 = masks-1
-            masks1[masks1 == -1] = 1
-            masks2 = torch.stack((masks, masks1), 1)
+            masks = Variable(masks)  # .view(-1).contiguous()
+            outputs = model(images)  # .permute(1, 2, 3, 0).view(-1, 2).contiguous()
             loss = criterion(outputs, masks)
+            print(loss)
             optimizer.zero_grad()
             loss.backward()
             # Update weights
             optimizer.step()
-    SEM_test = SEMDataTest(img_folder, mask_folder, in_size=572, out_size=388)
-    SEM_test_load = \
-        torch.utils.data.DataLoader(dataset=SEM_test, num_workers=4,
-                                    batch_size=1, shuffle=True)
-
-    stacked_img = torch.Tensor([])
-    for i, (images) in enumerate(SEM_test_load):
-        print(images)
-        for j in range(images.size()[1]):
-            image = Variable(images[:, j, :, :].unsqueeze(0))
-            output = model(image)
-            output = softmax(output, dim=1)
-            output = torch.argmax(output, dim=1).float()
-            print("size", output)
-            stacked_img = torch.cat((stacked_img, output))
-
-        div_arr = division_array(388, 2, 2, 512, 512)
-        img_cont = image_concatenate(stacked_img.data.numpy(), 2, 2, 512, 512)
-        final_img = (img_cont*255/div_arr)
-        print(final_img)
-        final_img = final_img.astype("uint8")
-        break
-    return final_img
+    return model
 
 
 def test_SEM(model, loss_function, img_folder, mask_folder, folder_to_save):
@@ -66,20 +43,22 @@ def test_SEM(model, loss_function, img_folder, mask_folder, folder_to_save):
                                     batch_size=1, shuffle=True)
     print(SEM_test_load)
     criterion = loss_function
-    stacked_img = torch.Tensor([])
+
     for i, (images) in enumerate(SEM_test_load):
         print(images)
+        stacked_img = torch.Tensor([])
         for j in range(images.size()[1]):
             image = Variable(images[:, j, :, :].unsqueeze(0))
             output = model(image)
             print(output)
-            output = softmax(output, dim=1)
+            #output = softmax(output, dim=1)
             print("size", output.size())
             output = torch.argmax(output, dim=1).float()
             print("size", output.size())
             stacked_img = torch.cat((stacked_img, output))
 
         div_arr = division_array(388, 2, 2, 512, 512)
+        print(stacked_img.size())
         img_cont = image_concatenate(polarize(stacked_img.data.numpy()), 2, 2, 512, 512)
         final_img = (img_cont*255/div_arr)
         print(final_img)
