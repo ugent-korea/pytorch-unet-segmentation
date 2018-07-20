@@ -111,7 +111,7 @@ class SEMDataTrain(Dataset):
         """
         # GET IMAGE
         """
-        Augmentation on image
+        #Augmentation on image
           # flip 
           # Gaussian_noise
           # uniform_noise
@@ -126,7 +126,7 @@ class SEMDataTrain(Dataset):
           # Convert numpy array to tensor
         
         """
-        Augmentation on mask
+        #Augmentation on mask
           # flip same way with image
           # Elastic distort same way with image
           # Crop the same part that was cropped on image
