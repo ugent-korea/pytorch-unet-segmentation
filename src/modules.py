@@ -10,6 +10,7 @@ from torch.utils.data.dataset import Dataset  # For custom datasets
 from dataset import *
 from torch.nn.functional import softmax
 import torch.nn as nn
+import os
 
 
 def train_CE_SEM(model, criterion, epoch, img_folder, mask_folder, num_workers=4, batch_size=1, learning_rate=0.01):
@@ -63,6 +64,13 @@ def test_SEM(model, loss_function, img_folder, mask_folder, folder_to_save):
         final_img = (img_cont*255/div_arr)
         print(final_img)
         final_img = final_img.astype("uint8")
+
+        # Save images in every epoch
+        desired_path = folder_to_save + '/' + str(i)
+        # Create the path if it does not exist
+        if not os.path.exists(desired_path):
+            os.makedirs(desired_path)
+
         break
     return final_img
 
