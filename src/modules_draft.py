@@ -70,19 +70,24 @@ def test_SEM(model, loss_function, epoch, img_folder, mask_folder, folder_to_sav
             final_img = (img_cont*255/div_arr)
 
             final_img = final_img.astype("uint8")
-            final_img = Image.fromarray(final_img)
 
-            desired_path = 'result_images/epoch_' + str(single_epoch) + '/'
+            # Save output images after 100 epochs
+            # also, ignore every 2 epoch to see more noticeable changes.
+            if single_epoch % 1 == 0 and single_epoch >= 1:
 
-            # Create the path if it does not exist
-            if not os.path.exists(desired_path):
-                os.makedirs(desired_path)
-            # Save Image
-            export_name = 'test' + str(i) + '.png'
-            final_img.save(desired_path + export_name)
+                final_img = Image.fromarray(final_img)
+                # organize images in every epoch
+                desired_path = 'result_images/epoch_' + str(single_epoch) + '/'
 
+                # Create the path if it does not exist
+                if not os.path.exists(desired_path):
+                    os.makedirs(desired_path)
 
-            break
+                # Save Image!
+                export_name = 'test' + str(i) + '.png'
+                final_img.save(desired_path + export_name)
+            if i == 3:
+                break
     return final_img
 
 

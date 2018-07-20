@@ -32,6 +32,4 @@ if __name__ == "__main__":
                          mask_folder='../data/train/masks')
 
     model = copy.deepcopy(model)
-    test = test_SEM(model, criterion, 3, '../data/test/images', '../data/test/masks', "/result_images/")
-    test = Image.fromarray(test)
-    test.show()
+    test = test_SEM(model, criterion, 5, '../data/test/images', '../data/test/masks', "/result_images/")
