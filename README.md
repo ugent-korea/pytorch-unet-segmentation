@@ -1,5 +1,9 @@
 # pytorch-unet-segmentation
 
+**Members** : PyeongEun Kim, JuHyung Lee, MiJeong Lee
+
+**Supervisor** : Utku Ozbulak
+
 ## Description
 
 
@@ -40,11 +44,9 @@ pytorch-unet-segmentation
        - modules.py
 ```
 
--Purposes of the python files listed in the folder structure will be explained throughout this readme.
+Purposes of the python files listed in the folder structure will be explained throughout this readme.
 
-##### Members : PyeongEun Kim, JuHyung Lee, MiJeong Lee
-
-##### Supervisors : Utku Ozbulak
+## Table of Content
 
 * [Pipeline](#pipeline)
 
@@ -238,7 +240,7 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
 
 Padding process is compulsory after the cropping process as the image has to fit the input size of the U-Net model. 
 
-In terms of the padding method, symmetric padding was done in which the pad is the reflection of the vector mirrored along the edge of the array. We selected the symmetric padding over several other padding options because it reduces the loss the most. 
+In terms of the padding method, **symmetric padding** was done in which the pad is the reflection of the vector mirrored along the edge of the array. We selected the symmetric padding over several other padding options because it reduces the loss the most. 
 
 To help with observation, a ![#ffff00](https://placehold.it/15/ffff00/000000?text=+) 'yellow border' is added around the original image: outside the border indicates symmetric padding whereas inside indicates the original image.
 
