@@ -240,7 +240,7 @@ Padding process is compulsory after the cropping process as the image has to fit
 
 In terms of the padding method, symmetric padding was done in which the pad is the reflection of the vector mirrored along the edge of the array. We selected the symmetric padding over several other padding options because it reduces the loss the most. 
 
-To help with observation, a yellow border is added around the original image: outside the border indicates symmetric padding whereas inside indicates the original image.
+To help with observation, a ![#ffff00](https://placehold.it/15/ffff00/000000?text=+) 'yellow border' is added around the original image: outside the border indicates symmetric padding whereas inside indicates the original image.
 
 <table border=0 width="99%" >
 	<tbody> 
