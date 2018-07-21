@@ -180,7 +180,7 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
 		<tr>
 			<td width="19%" align="center"> Original Image </td>
 			<td width="27%" align="center"> </td>
-			<td width="27%" align="center"> <img src=img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/original"> <br /> </td>
+			<td width="27%" align="center"> <img src=img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/original_image"> <br /> </td>
 			<td width="27%" algin="center"> </td>
 		</tr>
 		</tr>
