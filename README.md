@@ -180,7 +180,7 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
 		<tr>
 			<td width="19%" align="center"> Original Image </td>
 			<td width="27%" align="center"> </td>
-			<td width="27%" align="center"> <img src=img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/original_image"> <br /> </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/original.png"> </td>
 			<td width="27%" algin="center"> </td>
 		</tr>
 		</tr>
@@ -236,7 +236,7 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
 	</tbody>
 </table>         
 
-Regrading the padding process, symmetric padding was done in which the pad is the reflection of the vector mirrored along the edge of the array. Along several padding options, we selected the symmetric padding in order to reduce the loss. 
+Regrading the padding process, symmetric padding was done in which the pad is the reflection of the vector mirrored along the edge of the array. We selected the symmetric padding over several other padding options because it reduces the loss the most. 
 
 To help with observation, a yellow border is added around the original image: outside the border indicates symmetric padding whereas inside indicates the original image.
 
