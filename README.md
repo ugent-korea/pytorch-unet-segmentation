@@ -3,7 +3,11 @@
 ## Description
 
 
-This project involves implementing biomedical image segmentation based on U-Net. 
+This project aims to implement biomedical image segmentation with the use of U-Net model. The below image briefly explains the output we want:
+
+<p align="center">
+<img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/segmentation_image.jpg">
+
 
 The dataset we used is Transmission Electron Microscopy (ssTEM) data set of the Drosophila first instar larva ventral nerve cord (VNC), which is dowloaded from [ISBI Challenge: Segmentation of of neural structures in EM stacks](http://brainiac2.mit.edu/isbi_challenge/home)
 
@@ -20,10 +24,20 @@ pytorch-unet-segmentation
        - test
            - images
    - src
+       - result_images
+           - train
+	       - epoch_1
+	           - train_1.png
+		   - ...
+	       - epoch_2
+	       - ...
+	    - test
+	        - (same structure with that of train)	    
        - dataset.py
        - main.py
        - augmentation.py
        - mean_std.py
+       - modules.py
 ```
 
 -Purposes of the python files listed in the folder structure will be explained throughout this readme.
@@ -159,15 +173,17 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
    
 #### Image Augmentation
 
-<p align="center">
-<img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/original" width="230" height="230"> <br />  Original Image
-
-
 <table border=0 width="99%" >
 	<tbody> 
     <tr>		<td width="99%" align="center" colspan="4"><strong>Image</td>
 		</tr>
 		<tr>
+			<td width="19%" align="center"> Original Image </td>
+			<td width="27%" align="center"> </td>
+			<td width="27%" align="center"> <img src=img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/original"> <br /> </td>
+			<td width="27%" algin="center"> </td>
+		</tr>
+		</tr>
 			<td width="19%" align="center"> Flip  </td> 
 			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/flip_vert"> <br />Vertical  </td> 
 			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/flip_hori">  <br />Horizontal</td>
@@ -220,15 +236,19 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
 	</tbody>
 </table>         
 
+Regrading the padding process, symmetric padding was done in which the pad is the reflection of the vector mirrored along the edge of the array. Along several padding options, we selected the symmetric padding in order to reduce the loss. 
+
+To help with observation, a yellow border is added around the original image: outside the border indicates symmetric padding whereas inside indicates the original image.
+
 <table border=0 width="99%" >
 	<tbody> 
     <tr>		<td width="99%" align="center" colspan="4"><strong>Pad</td>
 	    </tr>
 		<tr>
-			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/p_lb"> <br />  Left Bottom </td>
-			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/p_lt"> <br /> Left Top</td> 
-			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/p_rb"> <br /> Right bottom</td>
-			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/p_rt"> <br /> Right Top</td> 
+			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/p_lb.PNG"> <br />  Left Bottom </td>
+			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/p_lt.PNG"> <br /> Left Top</td> 
+			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/p_rb.PNG"> <br /> Right bottom</td>
+			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/p_rt.PNG"> <br /> Right Top</td> 
 		</tr>
       		</tr>
 	</tbody>
