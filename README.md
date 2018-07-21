@@ -162,7 +162,7 @@ class SEMDataTrain(Dataset):
 
 ### Preprocessing <a name="preprocessing"></a>
 
-Preprocessing is done on the images for data augmentation. Following preprocessing are accomplished.
+Preprocessing is done on the images for data augmentation. Following preprocessing are accomplished:
    * Flip
    * Gaussian noise
    * Uniform noise
@@ -236,7 +236,9 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
 	</tbody>
 </table>         
 
-Regrading the padding process, symmetric padding was done in which the pad is the reflection of the vector mirrored along the edge of the array. We selected the symmetric padding over several other padding options because it reduces the loss the most. 
+Padding process is compulsory after the cropping process as the image has to fit the input size of the U-Net model. 
+
+In terms of the padding method, symmetric padding was done in which the pad is the reflection of the vector mirrored along the edge of the array. We selected the symmetric padding over several other padding options because it reduces the loss the most. 
 
 To help with observation, a yellow border is added around the original image: outside the border indicates symmetric padding whereas inside indicates the original image.
 
