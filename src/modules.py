@@ -50,21 +50,21 @@ def get_loss(model, data_train, criterion):
     return total_loss
 
 
-def ValidationSEM(model, data_val):
+def validation_SEM(model, data_val):
     """Validation and saving predictions
     Args:
-        model:
-        data_val:
+        model: model to be used
+        data_val: validation dataset
     """
     # calculating validation loss
     val_loss = 0
     div_arr = division_array(388, 2, 2, 512, 512)
     for batch, (images_v, masks_v) in enumerate(data_val):
         stacked_img = torch.Tensor([]).cuda()
-        for t in range(images_v.size()[1]):
+        for index in range(images_v.size()[1]):
             with torch.no_grad():
-                image_v = Variable(images_v[:, t, :, :].unsqueeze(0).cuda())
-                mask_v = Variable(masks_v[:, t, :, :].squeeze(1).cuda())
+                image_v = Variable(images_v[:, index, :, :].unsqueeze(0).cuda())
+                mask_v = Variable(masks_v[:, index, :, :].squeeze(1).cuda())
                 output_v = model(image_v)
                 val_loss += criterion(output_v, mask_v)
                 output_v = torch.argmax(output_v, dim=1).float()
@@ -72,7 +72,7 @@ def ValidationSEM(model, data_val):
         SavingImage(stacked_img)
 
 
-def SavingImage(stacked_img, save_folder_name="result_images"):
+def saving_image(stacked_img, save_folder_name="result_images"):
     """save images to save_path
     Args:
         stacked_img (numpy): stacked cropped images

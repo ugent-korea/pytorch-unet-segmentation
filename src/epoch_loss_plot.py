@@ -9,11 +9,7 @@ For members who did not yet install the module "matplotlib",
 
     python3 -mpip install -U matplotlib
 
-In case your system has error: no module tkinter,
-
-    sudo apt install python3-tk
-
-if you have python version >= 3.6,
+installation of tkinter is a prerequisite. If you do not have it,
 
     sudo apt install python3.6-tk
 
@@ -51,7 +47,7 @@ def plotloss(csvfile):
     optimal = plt.axvline(x=minimum, color='r', label='Optimal epoch')
 
     plt.legend()
-
+    plt.xlim(xmin=0)
     plt.xlabel('epochs')
     plt.ylabel('loss')
 
