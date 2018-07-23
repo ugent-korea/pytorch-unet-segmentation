@@ -39,6 +39,8 @@ if __name__ == "__main__":
 
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.SGD(model.parameters(), lr=0.0005, momentum=0.1)
+    # train_CE_SEM(model, criterion, optimizer, epoch, train_data, validation_data, report_frequency)
+    # report frequency = 10 means save models and images every 10 epoch
     model = train_CE_SEM(model, criterion, optimizer, 5000, SEM_train_load, SEM_val_load, 10)
 '''
     model = copy.deepcopy(model)
