@@ -15,47 +15,39 @@ import os
 import time
 
 
-def train_CE_SEM(model, criterion, optimizer, epoch, data_train, data_val, checkpoint=5):
+def train_model(model, data_train, criterion, optimizer):
     """Train the model and report validation error with training error
     Args:
         model: the model to be trained
         criterion: loss function
-        epoch: number of epoch
         data_train (DataLoader): training dataset
-        data_val (DataLoader): validation dataset
-        checkpoint (int): how frequent to save the images and models
     """
-    print("initializing training!")
-    with open('progress_report.csv', 'w') as csvfile:
-        fieldnames = ['epoch', 'train_loss', 'val_loss']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
+    for j, (images, masks) in enumerate(data_train):
+        images = Variable(images.cuda())
+        masks = Variable(masks.cuda())
+        outputs = model(images)
+        loss = criterion(outputs, masks)
+        optimizer.zero_grad()
+        loss.backward()
+        # Update weights
+        optimizer.step()
+    total_loss = get_loss(model, data_train, criterion)
+    return total_loss
 
-        for i in range(epoch):
-            for j, (images, masks) in enumerate(data_train):
-                images = Variable(images.cuda())
-                masks = Variable(masks.cuda())
-                outputs = model(images)
-                loss = criterion(outputs, masks)
-                optimizer.zero_grad()
-                loss.backward()
-                # Update weights
-                optimizer.step()
-            del outputs
-            del images
-            del masks
 
-            # calculating training loss
-            train_loss = 0
-            for dt, (images, masks) in enumerate(data_train):
-                with torch.no_grad():
-                    images = Variable(images.cuda())
-                    masks = Variable(masks.cuda())
-                    outputs = model(images)
-                    train_loss += criterion(outputs, masks)
-                del outputs
-                del images
-                del masks
+def get_loss(model, data_train, criterion):
+    """
+        Calculate loss over train set
+    """
+    total_loss = 0
+    for j, (images, masks) in enumerate(data_train):
+        with torch.no_grad():
+            images = Variable(images.cuda())
+            masks = Variable(masks.cuda())
+            outputs = model(images)
+            loss = criterion(outputs, masks)
+            total_loss = total_loss + loss.cpu().item()
+    return total_loss
 
 
 def ValidationSEM(model, data_val):
