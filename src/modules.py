@@ -16,7 +16,15 @@ import time
 
 
 def train_CE_SEM(model, criterion, optimizer, epoch, data_train, data_val, checkpoint=5):
-
+    """Train the model and report validation error with training error
+    Args:
+        model: the model to be trained
+        criterion: loss function
+        epoch: number of epoch
+        data_train (DataLoader): training dataset
+        data_val (DataLoader): validation dataset
+        checkpoint (int): how frequent to save the images and models
+    """
     print("initializing training!")
     with open('progress_report.csv', 'w') as csvfile:
         fieldnames = ['epoch', 'train_loss', 'val_loss']
@@ -109,7 +117,12 @@ def train_CE_SEM(model, criterion, optimizer, epoch, data_train, data_val, check
 
 
 def test_SEM(model, data_test,  folder_to_save):
-
+    """Test the model with test dataset
+    Args:
+        model: model to be tested
+        data_test (DataLoader): test dataset
+        folder_to_save (str): path that the predictions would be saved
+    """
     for i, (images) in enumerate(data_test):
 
         print(i)
