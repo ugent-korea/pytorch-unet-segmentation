@@ -48,7 +48,7 @@ class SEMDataTrain(Dataset):
 
         # Augmentation
         # flip {0: vertical, 1: horizontal, 2: both, 3: none}
-        flip_num = 3  # randint(0, 3)
+        flip_num = randint(0, 3)
         img_as_np = flip(img_as_np, flip_num)
 
         # Noise Determine {0: Gaussian_noise, 1: uniform_noise
@@ -66,10 +66,9 @@ class SEMDataTrain(Dataset):
         img_as_np = change_brightness(img_as_np, pix_add)
 
         # Elastic distort {0: distort, 1:no distort}
-        distort_det = randint(0, 1)
-        if distort_det == 0:
-            # sigma = 4, alpha = 34
-            img_as_np, seed = add_elastic_transform(img_as_np, alpha=34, sigma=4)
+        sigma = randint(4, 8)
+        # sigma = 4, alpha = 34
+        img_as_np, seed = add_elastic_transform(img_as_np, alpha=34, sigma=sigma)
 
         # Crop the image
         img_height, img_width = img_as_np.shape[0], img_as_np.shape[1]
@@ -103,10 +102,10 @@ class SEMDataTrain(Dataset):
         msk_as_np = flip(msk_as_np, flip_num)
 
         # elastic_transform of mask with respect to image
-        if distort_det == 0:
-            # sigma = 4, alpha = 34, seed = from image transformation
-            msk_as_np, _ = add_elastic_transform(msk_as_np, alpha=34, sigma=4, seed=seed)
-            msk_as_np = approximate_image(msk_as_np)  # images only with 0 and 255
+
+        # sigma = 4, alpha = 34, seed = from image transformation
+        msk_as_np, _ = add_elastic_transform(msk_as_np, alpha=34, sigma=sigma, seed=seed)
+        msk_as_np = approximate_image(msk_as_np)  # images only with 0 and 255
 
         # Crop the mask
         msk_as_np = msk_as_np[y_loc:y_loc+self.out_size, x_loc:x_loc+self.out_size]
