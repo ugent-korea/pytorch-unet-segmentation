@@ -39,9 +39,9 @@ def plotloss(csvfile):
     val_loss = np.asarray(loss_values.iloc[:,2])
 
     # Reduce the volume of data
-    epoch_skip = epoch[::10]
-    tr_loss_skip = tr_loss[::10]
-    val_loss_skip = val_loss[::10]
+    epoch_skip = epoch[::20]
+    tr_loss_skip = tr_loss[::20]
+    val_loss_skip = val_loss[::20]
 
     train_loss = plt.plot(epoch_skip, tr_loss_skip, 'b-', label='Train loss')
     valid_loss = plt.plot(epoch_skip, val_loss_skip, 'g-', label='Validation loss')
