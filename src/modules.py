@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 from torch.autograd import Variable
 from torchvision import transforms
-from torch.utils.data.dataset import Dataset  # For custom datasets
+from torch.utils.data.dataset import Dataset
 from dataset import *
 from torch.nn.functional import softmax
 import torch.nn as nn
@@ -33,13 +33,10 @@ def train_CE_SEM(model, criterion, optimizer, epoch, data_train, data_val, check
 
         for i in range(epoch):
             for j, (images, masks) in enumerate(data_train):
-                # print("image:", j)
                 images = Variable(images.cuda())
                 masks = Variable(masks.cuda())
-                # print(masks.shape)  # .view(-1).contiguous()
-                outputs = model(images)  # .permute(1, 2, 3, 0).view(-1, 2).contiguous()
+                outputs = model(images)
                 loss = criterion(outputs, masks)
-                # print(loss)
                 optimizer.zero_grad()
                 loss.backward()
                 # Update weights
@@ -52,68 +49,55 @@ def train_CE_SEM(model, criterion, optimizer, epoch, data_train, data_val, check
             train_loss = 0
             for dt, (images, masks) in enumerate(data_train):
                 with torch.no_grad():
-                    # print("image:", j)
                     images = Variable(images.cuda())
                     masks = Variable(masks.cuda())
-                    # print(masks.shape)  # .view(-1).contiguous()
-                    outputs = model(images)  # .permute(1, 2, 3, 0).view(-1, 2).contiguous()
+                    outputs = model(images)
                     train_loss += criterion(outputs, masks)
                 del outputs
                 del images
                 del masks
 
-            # calculating validation loss
-            val_loss = 0
-            div_arr = division_array(388, 2, 2, 512, 512)
-            for j, (images_v, masks_v) in enumerate(data_val):
-                stacked_img = torch.Tensor([]).cuda()
-                for t in range(images_v.size()[1]):
-                    with torch.no_grad():
-                        # print("image:", j)
-                        image_v = Variable(images_v[:, t, :, :].unsqueeze(0).cuda())
-                        mask_v = Variable(masks_v[:, t, :, :].squeeze(1).cuda())
-                        # print(mask_v.shape)
-                        output_v = model(image_v)
-                        val_loss += criterion(output_v, mask_v)
-                        if (i+1) % checkpoint == 0:
 
-                            output_v = torch.argmax(output_v, dim=1).float()
-                            stacked_img = torch.cat((stacked_img, output_v))
-                        else:
-                            pass
-                if (i+1) % checkpoint == 0:
+def ValidationSEM(model, data_val):
+    """Validation and saving predictions
+    Args:
+        model:
+        data_val:
+    """
+    # calculating validation loss
+    val_loss = 0
+    div_arr = division_array(388, 2, 2, 512, 512)
+    for batch, (images_v, masks_v) in enumerate(data_val):
+        stacked_img = torch.Tensor([]).cuda()
+        for t in range(images_v.size()[1]):
+            with torch.no_grad():
+                image_v = Variable(images_v[:, t, :, :].unsqueeze(0).cuda())
+                mask_v = Variable(masks_v[:, t, :, :].squeeze(1).cuda())
+                output_v = model(image_v)
+                val_loss += criterion(output_v, mask_v)
+                output_v = torch.argmax(output_v, dim=1).float()
+                stacked_img = torch.cat((stacked_img, output_v))
+        SavingImage(stacked_img)
 
-                    img_cont = image_concatenate(stacked_img.cpu().data.numpy(), 2, 2, 512, 512)
-                    img_cont = (img_cont*255)/div_arr
-                    img_cont = img_cont.astype('uint8')
 
-                    img_cont = Image.fromarray(img_cont)
-                    # organize images in every epoch
-                    desired_path = 'result_images/epoch_' + str(i+1) + '/'
-
-                    # Create the path if it does not exist
-                    if not os.path.exists(desired_path):
-                        os.makedirs(desired_path)
-
-                    # Save Image!
-                    export_name = 'test' + str(j) + '.png'
-                    img_cont.save(desired_path + export_name)
-                    torch.save(model, "saved_models/model_epoch_{0}.pwf".format(i+1))
-
-                else:
-
-                    pass
-                del output_v
-                del images_v
-                del masks_v
-                del image_v
-                del mask_v
-            print("epoch: {0}/{1}|train_loss: {2:.10f}|validation_loss: {3:.10f}".format(i +
-                                                                                         1, epoch, train_loss/(dt+1), val_loss/((j+1)*4)))
-            writer.writerow({"epoch": i+1, "train_loss": float(train_loss/(dt+1)),
-                             "val_loss": float(val_loss/((j+1)*4))})
-
-    return model
+def SavingImage(stacked_img, save_folder_name="result_images"):
+    """save images to save_path
+    Args:
+        stacked_img (numpy): stacked cropped images
+        save_folder_name (str): saving folder name
+    """
+    img_cont = image_concatenate(stacked_img.cpu().data.numpy(), 2, 2, 512, 512)
+    img_cont = polarize((img_cont)/div_arr)*255
+    img_cont = img_cont.astype('uint8')
+    img_cont = Image.fromarray(img_cont)
+    # organize images in every epoch
+    desired_path = save_path + '/epoch_' + str(i+1) + '/'
+    # Create the path if it does not exist
+    if not os.path.exists(desired_path):
+        os.makedirs(desired_path)
+    # Save Image!
+    export_name = 'test' + str(j) + '.png'
+    img_cont.save(desired_path + export_name)
 
 
 def test_SEM(model, data_test,  folder_to_save):
@@ -133,7 +117,6 @@ def test_SEM(model, data_test,  folder_to_save):
             image = Variable(images[:, j, :, :].unsqueeze(0).cuda())
             output = model(image.cuda())
             print(output)
-            #output = softmax(output, dim=1)
             print("size", output.size())
             output = torch.argmax(output, dim=1).float()
             print("size", output.size())
