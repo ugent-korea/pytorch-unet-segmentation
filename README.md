@@ -1,11 +1,19 @@
 # pytorch-unet-segmentation
 
+**Members** : PyeongEun Kim, JuHyung Lee, MiJeong Lee
+
+**Supervisor** : Utku Ozbulak
+
 ## Description
 
 
-This project involves implementing biomedical image segmentation based on U-Net. 
+This project aims to implement biomedical image segmentation with the use of U-Net model. The below image briefly explains the output we want:
 
-The dataset we used is Transmission Electron Microscopy (ssTEM) data set of the Drosophila first instar larva ventral nerve cord (VNC), which is dowloaded from "ISBI Challenge: Segmentation of of neural structures in EM stacks". 
+<p align="center">
+<img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/segmentation_image.jpg">
+
+
+The dataset we used is Transmission Electron Microscopy (ssTEM) data set of the Drosophila first instar larva ventral nerve cord (VNC), which is dowloaded from [ISBI Challenge: Segmentation of of neural structures in EM stacks](http://brainiac2.mit.edu/isbi_challenge/home)
 
 The dataset contains 30 images (.png) of size 512x512 for each train, train-labels and test.
 
@@ -20,17 +28,25 @@ pytorch-unet-segmentation
        - test
            - images
    - src
+       - result_images
+           - train
+	       - epoch_1
+	           - train_1.png
+		   - ...
+	       - epoch_2
+	       - ...
+	    - test
+	        - (same structure with that of train)	    
        - dataset.py
        - main.py
        - augmentation.py
        - mean_std.py
+       - modules.py
 ```
 
--Purposes of the python files listed in the folder structure will be explained throughout this readme.
+Purposes of the python files listed in the folder structure will be explained throughout this readme.
 
-##### Members : PyeongEun Kim, JuHyung Lee, MiJeong Lee
-
-##### Supervisors : Utku Ozbulak
+## Table of Content
 
 * [Pipeline](#pipeline)
 
@@ -78,7 +94,6 @@ This is a dataset class we used. In the dataset, it contains three functions.
   * \__len\__ : Counts the number of images. 
 
 
-### Reading images
 Before reading the images, in \__init\__ function with the parameter, image_path, list of image names and image labels are collected with the module called **glob**. Then in \__getitem\__ function, with the module **PIL**, the images in the list of image names are read and converted into numpy array. 
 
 ```ruby
@@ -112,7 +127,7 @@ class SEMDataTrain(Dataset):
         """
         # GET IMAGE
         """
-        Augmentation on image
+        #Augmentation on image
           # flip 
           # Gaussian_noise
           # uniform_noise
@@ -127,13 +142,13 @@ class SEMDataTrain(Dataset):
           # Convert numpy array to tensor
         
         """
-        Augmentation on mask
+        #Augmentation on mask
           # flip same way with image
           # Elastic distort same way with image
           # Crop the same part that was cropped on image
           # Sanity Check
           # Normalize the mask to 0 and 1
-        """
+      
         # add additional dimension
         # Convert numpy array to tensor
 
@@ -149,7 +164,7 @@ class SEMDataTrain(Dataset):
 
 ### Preprocessing <a name="preprocessing"></a>
 
-Preprocessing is done on the images for data augmentation. Following preprocessing are accomplished.
+Preprocessing is done on the images for data augmentation. Following preprocessing are accomplished:
    * Flip
    * Gaussian noise
    * Uniform noise
@@ -159,18 +174,18 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
    * Pad 
    
 #### Image Augmentation
+
 <table border=0 width="99%" >
 	<tbody> 
     <tr>		<td width="99%" align="center" colspan="4"><strong>Image</td>
 		</tr>
 		<tr>
 			<td width="19%" align="center"> Original Image </td>
-			<td width="27%" align="center" colspan= "1" >
-			<td width="27%" align="center" colspan= "1" > <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/original_image"> </td> 
-			<td width="27%" align="center" colspan= "1" ></td> 
+			<td width="27%" align="center"> </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/original.png"> </td>
+			<td width="27%" algin="center"> </td>
 		</tr>
-      		</tr>
-		<tr>
+		</tr>
 			<td width="19%" align="center"> Flip  </td> 
 			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/flip_vert"> <br />Vertical  </td> 
 			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/flip_hori">  <br />Horizontal</td>
@@ -208,9 +223,6 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
 </table>       
 
 #### Crop and Pad
-<p align="center">
-<img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/original" width="230" height="230"> <br />  Original Image
-
 
 <table border=0 width="99%" >
 	<tbody> 
@@ -226,15 +238,21 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
 	</tbody>
 </table>         
 
+Padding process is compulsory after the cropping process as the image has to fit the input size of the U-Net model. 
+
+In terms of the padding method, **symmetric padding** was done in which the pad is the reflection of the vector mirrored along the edge of the array. We selected the symmetric padding over several other padding options because it reduces the loss the most. 
+
+To help with observation, a ![#ffff00](https://placehold.it/15/ffff00/000000?text=+) 'yellow border' is added around the original image: outside the border indicates symmetric padding whereas inside indicates the original image.
+
 <table border=0 width="99%" >
 	<tbody> 
     <tr>		<td width="99%" align="center" colspan="4"><strong>Pad</td>
 	    </tr>
 		<tr>
-			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/p_lb"> <br />  Left Bottom </td>
-			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/p_lt"> <br /> Left Top</td> 
-			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/p_rb"> <br /> Right bottom</td>
-			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/p_rt"> <br /> Right Top</td> 
+			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/p_lb.PNG"> <br />  Left Bottom </td>
+			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/p_lt.PNG"> <br /> Left Top</td> 
+			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/p_rb.PNG"> <br /> Right bottom</td>
+			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/p_rt.PNG"> <br /> Right Top</td> 
 		</tr>
       		</tr>
 	</tbody>
