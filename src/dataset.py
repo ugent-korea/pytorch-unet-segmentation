@@ -78,12 +78,6 @@ class SEMDataTrain(Dataset):
         # Pad the image
         img_as_np = add_padding(img_as_np, in_size=self.in_size,
                                 out_size=self.out_size, mode="symmetric")
-        """
-        # Sanity Check for Cropped image
-        img = Image.fromarray(img_as_np)
-        img.show()
-        print(flip_num, noise_det, distort_det, pix_add, y_loc, x_loc)
-        """
 
         # Normalize the image
         img_as_np = normalize(img_as_np, mean=Training_MEAN, std=Training_STDEV)
@@ -118,8 +112,10 @@ class SEMDataTrain(Dataset):
 
         # Normalize mask to only 0 and 1
         msk_as_np = msk_as_np/255
+        msk_as_np_reverse = np.abs(msk_as_np - 1)
+        msk_two_channels = np.asarray([msk_as_np, msk_as_np_reverse])
         # msk_as_np = np.expand_dims(msk_as_np, axis=0)  # add additional dimension
-        msk_as_tensor = torch.from_numpy(msk_as_np).long()  # Convert numpy array to tensor
+        msk_as_tensor = torch.from_numpy(msk_two_channels).long()  # Convert numpy array to tensor
 
         return (img_as_tensor, msk_as_tensor)
 
@@ -175,7 +171,6 @@ class SEMDataVal(Dataset):
 
             # SANITY CHECK: SEE THE CROPPED & PADDED IMAGES
             array_image = Image.fromarray(array)
-            # array_image.show()
 
             # Normalize the cropped arrays
             img_as_numpy = normalize(array, mean=Training_MEAN, std=Training_STDEV)
@@ -196,12 +191,16 @@ class SEMDataVal(Dataset):
         # msk_as_img.show()
         msk_as_np = np.asarray(msk_as_img)
         # Normalize mask to only 0 and 1
-        msk_as_np = msk_as_np/255
+
         msk_as_np = multi_cropping(msk_as_np,
                                    crop_size=self.out_size,
                                    crop_num1=2, crop_num2=2)
+
+        msk_as_np = msk_as_np/255
+        msk_as_np_reverse = np.abs(msk_as_np - 1)
+        msk_two_channels = np.asarray([msk_as_np, msk_as_np_reverse])
         # msk_as_np = np.expand_dims(msk_as_np, axis=0)  # add additional dimension
-        msk_as_tensor = torch.from_numpy(msk_as_np).long()  # Convert numpy array to tensor
+        msk_as_tensor = torch.from_numpy(msk_two_channels).long()  # Convert numpy array to tensor
 
         return (img_as_tensor, msk_as_tensor)
 
@@ -233,6 +232,7 @@ class SEMDataTest(Dataset):
         Returns:
             Tensor: 4 cropped data on index which is converted to Tensor
         """
+
         single_image = self.image_arr[index]
         img_as_img = Image.open(single_image)
         # img_as_img.show()
@@ -280,7 +280,8 @@ if __name__ == "__main__":
         '../data/train/images', '../data/train/masks')
     SEM_test = SEMDataTest(
         '../data/test/images/', '../data/test/masks')
+    SEM_val = SEMDataVal('../data/val/images', '../data/val/masks')
 
-    imag_1 = SEM_train.__getitem__(0)
-    imag_2 = SEM_test.__getitem__(0)
-    print(imag_2.size())
+    imag_1, msk = SEM_val.__getitem__(0)
+
+    print(msk)

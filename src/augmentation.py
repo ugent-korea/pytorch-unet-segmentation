@@ -186,7 +186,7 @@ def multi_cropping(image, crop_size, crop_num1, crop_num2):
 def multi_padding(images, in_size, out_size, mode):
     """Pad the images to in_size
     Args :
-        images : numpy array of images
+        images : numpy array of images (CxHxW) 
         in_size(int) : the input_size of model (512)
         out_size(int) : the output_size of model (388)
         mode(str) : mode of padding
