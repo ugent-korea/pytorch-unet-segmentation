@@ -62,7 +62,7 @@ def validate_model(model, criterion, data_val, epoch, make_prediction=True, save
         for index in range(images_v.size()[1]):
             with torch.no_grad():
                 image_v = Variable(images_v[:, index, :, :].unsqueeze(0).cuda())
-                mask_v = Variable(masks_v[:, index, :, :].squeeze(1).cuda())
+                mask_v = Variable(masks_v[:, index, :, :].unsqueeze(0).cuda())
                 # print(image_v.shape, mask_v.shape)
                 output_v = model(image_v)
                 # print('out', output_v.shape)

@@ -44,7 +44,7 @@ if __name__ == "__main__":
     criterion = CELoss()
 
     # Optimizerd
-    optimizer = torch.optim.SGD(model.parameters(), lr=0.0005, momentum=0.1)
+    optimizer = torch.optim.SGD(model.parameters(), lr=0.005, momentum=0.1)
 
     # Parameters
     epoch_start = 0
