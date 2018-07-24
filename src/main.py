@@ -44,11 +44,11 @@ if __name__ == "__main__":
     criterion = CELoss()
 
     # Optimizer
-    optimizer = torch.optim.SGD(model.parameters(), lr=0.0005, momentum=0.9)
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
 
     # Parameters
     epoch_start = 0
-    epoch_end = 100
+    epoch_end = 200
 
     # Train
     for i in range(epoch_start, epoch_end):
@@ -58,7 +58,8 @@ if __name__ == "__main__":
         # Validation
         if i%5 == 0:
             val_loss = validate_model(model, criterion, SEM_val_load, i)
-            val_loss = val_loss / len(SEM_val)
+            val_loss = val_loss / (len(SEM_val)*4)  # Because we get 4 per image
+            print(len(SEM_val))
             print('Val loss:', val_loss)
             # Test
     '''
