@@ -31,11 +31,11 @@ def train_model(model, data_train, criterion, optimizer):
         loss.backward()
         # Update weights
         optimizer.step()
-    total_loss = get_loss(model, data_train, criterion)
+    total_loss = get_loss_train(model, data_train, criterion)
     return total_loss
 
 
-def get_loss(model, data_train, criterion):
+def get_loss_train(model, data_train, criterion):
     """
         Calculate loss over train set
     """
@@ -50,15 +50,12 @@ def get_loss(model, data_train, criterion):
     return total_loss
 
 
-def validation_SEM(model, data_val):
-    """Validation and saving predictions
-    Args:
-        model: model to be used
-        data_val: validation dataset
+def validate_model(model, criterion, data_val, epoch, make_prediction=True, save_folder_name='prediction'):
+    """
+        Validation run
     """
     # calculating validation loss
     val_loss = 0
-    div_arr = division_array(388, 2, 2, 512, 512)
     for batch, (images_v, masks_v) in enumerate(data_val):
         stacked_img = torch.Tensor([]).cuda()
         for index in range(images_v.size()[1]):
@@ -69,26 +66,30 @@ def validation_SEM(model, data_val):
                 val_loss += criterion(output_v, mask_v)
                 output_v = torch.argmax(output_v, dim=1).float()
                 stacked_img = torch.cat((stacked_img, output_v))
-        SavingImage(stacked_img)
+        if make_prediction:
+            im_name = batch  ## TODO: Change this to real image name so we know
+            save_prediction_image(stacked_img, im_name, epoch, save_folder_name)
+    return val_loss
 
 
-def saving_image(stacked_img, save_folder_name="result_images"):
+def save_prediction_image(stacked_img, im_name, epoch, save_folder_name="result_images"):
     """save images to save_path
     Args:
         stacked_img (numpy): stacked cropped images
         save_folder_name (str): saving folder name
     """
+    div_arr = division_array(388, 2, 2, 512, 512)
     img_cont = image_concatenate(stacked_img.cpu().data.numpy(), 2, 2, 512, 512)
     img_cont = polarize((img_cont)/div_arr)*255
     img_cont = img_cont.astype('uint8')
     img_cont = Image.fromarray(img_cont)
     # organize images in every epoch
-    desired_path = save_path + '/epoch_' + str(i+1) + '/'
+    desired_path = '../' +save_folder_name + '/epoch_' + str(epoch) + '/'
     # Create the path if it does not exist
     if not os.path.exists(desired_path):
         os.makedirs(desired_path)
     # Save Image!
-    export_name = 'test' + str(j) + '.png'
+    export_name =  str(im_name) + '.png'
     img_cont.save(desired_path + export_name)
 
 

@@ -40,7 +40,7 @@ if __name__ == "__main__":
     model = torch.nn.DataParallel(model, device_ids=list(
         range(torch.cuda.device_count()))).cuda()
 
-    # Loss function
+    # Lo#ss function
     criterion = CELoss()
 
     # Optimizer
@@ -57,7 +57,9 @@ if __name__ == "__main__":
         print('Epoch', str(i), 'Train loss:', train_loss)
         # Validation
         if i%5 == 0:
-            pass
+            val_loss = validate_model(model, criterion, SEM_val_load, i)
+            val_loss = val_loss / len(SEM_val)
+            print('Val loss:', val_loss)
             # Test
     '''
     model = copy.deepcopy(model)
