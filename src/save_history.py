@@ -17,5 +17,3 @@ def export_history(header,value,folder,file) :
         writer.writerow(value)
 
     file.close()
-
-a = export_history(['epoch','train','validation'],[1,0.6,0.7],'/home/mijeong/Desktop/internship/pytorch-unet-segmentation/src','history.csv')

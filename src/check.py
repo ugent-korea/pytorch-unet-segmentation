@@ -21,7 +21,3 @@ def accuracy_check(destination) :
                 accuracy +=1
         average += accuracy/len(mask.flatten())
     return average/len(list)
-
-
-a = accuracy_check('../data/train/masks/*.png')
-print(a)
