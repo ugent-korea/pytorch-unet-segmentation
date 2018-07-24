@@ -25,7 +25,3 @@ def accuracy_check(mask, prediction) :
             accuracy +=1
 
     return accuracy/len(compare)
-
-
-a = accuracy_check(mask,prediction1)
-print(a)
