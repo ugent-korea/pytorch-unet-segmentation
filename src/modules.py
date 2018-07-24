@@ -26,6 +26,7 @@ def train_model(model, data_train, criterion, optimizer):
         images = Variable(images.cuda())
         masks = Variable(masks.cuda())
         outputs = model(images)
+        # print(masks.shape, outputs.shape)
         loss = criterion(outputs, masks)
         optimizer.zero_grad()
         loss.backward()
@@ -45,7 +46,6 @@ def get_loss_train(model, data_train, criterion):
             images = Variable(images.cuda())
             masks = Variable(masks.cuda())
             outputs = model(images)
-            print('AA', outputs.shape, masks.shape)
             loss = criterion(outputs, masks)
             total_loss = total_loss + loss.cpu().item()
     return total_loss
@@ -63,9 +63,9 @@ def validate_model(model, criterion, data_val, epoch, make_prediction=True, save
             with torch.no_grad():
                 image_v = Variable(images_v[:, index, :, :].unsqueeze(0).cuda())
                 mask_v = Variable(masks_v[:, index, :, :].squeeze(1).cuda())
-                print(image_v.shape, mask_v.shape)
+                # print(image_v.shape, mask_v.shape)
                 output_v = model(image_v)
-                print('out', output_v.shape)
+                # print('out', output_v.shape)
                 val_loss += criterion(output_v, mask_v)
                 output_v = torch.argmax(output_v, dim=1).float()
                 stacked_img = torch.cat((stacked_img, output_v))

@@ -43,8 +43,8 @@ if __name__ == "__main__":
     # Lo#ss function
     criterion = CELoss()
 
-    # Optimizer
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
+    # Optimizerd
+    optimizer = torch.optim.SGD(model.parameters(), lr=0.0005, momentum=0.1)
 
     # Parameters
     epoch_start = 0
