@@ -194,7 +194,7 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
       		</tr>
 		<tr>
 			<td width="19%" align="center"> Gaussian noise </td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/gaus_10"> <br />standard deviation 10</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/gn_10"> <br />standard deviation 10</td>
 			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/gn_50"> <br />standard deviation 50</td>
 			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/gn_100"> <br />standard deviation 100</td>
    		</tr>
