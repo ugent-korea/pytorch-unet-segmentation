@@ -2,7 +2,7 @@
 
 **Members** : PyeongEun Kim, JuHyung Lee, MiJeong Lee
 
-**Supervisor** : Utku Ozbulak
+**Supervisor** : Utku Ozbulak, Wesley De Neve
 
 ## Description
 
