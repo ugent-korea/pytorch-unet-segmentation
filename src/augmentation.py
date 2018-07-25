@@ -295,7 +295,7 @@ if __name__ == "__main__":
     original1 = Image.fromarray(original1)
     original1.show()
     """
-    original1 = add_elastic_transform(original, 50, 4, 1)[0]
+    original1 = add_elastic_transform(original, 10, 4, 1)[0]
     original1 = Image.fromarray(original1)
     original1.show()
-    original1.save("../readme_images/ed_24.png")
+    original1.save("../readme_images/ed_10.png")
