@@ -281,18 +281,16 @@ if __name__ == "__main__":
     from PIL import Image
 
     b = Image.open("../readme_images/original.png")
-
     original = np.array(b)
-    b.show()
-
-    original1 = add_gaussian_noise(original, 0, 50)
+    """
+    original1 = add_gaussian_noise(original, 0, 100)
     original1 = Image.fromarray(original1)
     original1.show()
-    original1.save("../readme_images/gn_50.png")
     """
     original1 = add_uniform_noise(original, -100, 100)
     original1 = Image.fromarray(original1)
     original1.show()
+    """
     original1 = change_brightness(original, 50)
     original1 = Image.fromarray(original1)
     original1.show()
