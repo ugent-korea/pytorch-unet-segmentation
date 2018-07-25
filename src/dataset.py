@@ -279,6 +279,6 @@ if __name__ == "__main__":
         '../data/test/images/', '../data/test/masks')
     SEM_val = SEMDataVal('../data/val/images', '../data/val/masks')
 
-    imag_1, msk = SEM_val.__getitem__(0)
+    imag_1, msk = SEM_train.__getitem__(0)
 
     print(msk)
