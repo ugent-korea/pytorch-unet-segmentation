@@ -1,18 +1,17 @@
 import numpy as np
 from PIL import Image
 import torch
-from torchvision import transforms
-from skimage.segmentation import random_walker
 
-def accuracy_check(mask, prediction) :
+
+def accuracy_check(mask, prediction):
     ims = [mask, prediction]
     np_ims = []
     for item in ims:
         if 'str' in str(type(item)):
             item = np.array(Image.open(item))
-        elif 'PIL' in str(type(item)) :
+        elif 'PIL' in str(type(item)):
             item = np.array(item)
-        elif 'torch' in str(type(item)) :
+        elif 'torch' in str(type(item)):
             item = item.numpy()
         np_ims.append(item)
 
@@ -20,3 +19,10 @@ def accuracy_check(mask, prediction) :
     accuracy = np.sum(compare)
 
     return accuracy/len(np_ims[0].flatten())
+
+
+def accuracy_check_for_batch(masks, predictions, batch_size):
+    total_acc = 0
+    for index in range(batch_size):
+        total_acc += accuracy_check(masks[index], predictions[index])
+    return total_acc/batch_size

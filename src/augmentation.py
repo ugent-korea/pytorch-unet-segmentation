@@ -4,7 +4,7 @@ from scipy.ndimage.filters import gaussian_filter
 from random import randint
 
 
-def add_elastic_transform(image, alpha, sigma, seed=None):
+def add_elastic_transform(image, alpha, sigma, pad_size=30, seed=None):
     """
     Args:
         image : numpy array of image
@@ -14,7 +14,8 @@ def add_elastic_transform(image, alpha, sigma, seed=None):
         Return :
         image : elastically transformed numpy array of image
     """
-
+    image_size = int(image.shape[0])
+    image = np.pad(image, pad_size, mode="symmetric")
     if seed is None:
         seed = randint(1, 100)
         random_state = np.random.RandomState(seed)
@@ -28,7 +29,7 @@ def add_elastic_transform(image, alpha, sigma, seed=None):
 
     x, y = np.meshgrid(np.arange(shape[1]), np.arange(shape[0]))
     indices = np.reshape(y+dy, (-1, 1)), np.reshape(x+dx, (-1, 1))
-    return map_coordinates(image, indices, order=1).reshape(shape), seed
+    return cropping(map_coordinates(image, indices, order=1).reshape(shape), 512, pad_size, pad_size), seed
 
 
 def flip(image, option_value):
@@ -142,6 +143,12 @@ def normalize(image, mean, std):
     return image
 
 
+def normalization(image, max, min):
+    # (image - np.min(image))*(max - min)/(np.max(image)-np.min(image)) + min
+    image_new = (image/255)
+    return image_new
+
+
 def stride_size(image_len, crop_num, crop_size):
     """return stride size
     Args :
@@ -186,7 +193,7 @@ def multi_cropping(image, crop_size, crop_num1, crop_num2):
 def multi_padding(images, in_size, out_size, mode):
     """Pad the images to in_size
     Args :
-        images : numpy array of images (CxHxW) 
+        images : numpy array of images (CxHxW)
         in_size(int) : the input_size of model (512)
         out_size(int) : the output_size of model (388)
         mode(str) : mode of padding
@@ -281,52 +288,9 @@ if __name__ == "__main__":
     from PIL import Image
 
     b = Image.open("../data/train/images/14.png")
+    c = Image.open("../data/train/masks/14.png")
 
     original = np.array(b)
-    b.show()
-
-    original1 = flip(original, 0)
-    original1 = Image.fromarray(original1)
-    original1.show()
-    original1 = add_gaussian_noise(original, 0, 10)
-    original1 = Image.fromarray(original1)
-    original1.show()
-    original1 = add_uniform_noise(original, -10, 10)
-    original1 = Image.fromarray(original1)
-    original1.show()
-    original1 = change_brightness(original, 10)
-    original1 = Image.fromarray(original1)
-    original1.show()
-    original1 = add_elastic_transform(original, 34, 4, 1)[0]
-    original1 = Image.fromarray(original1)
-    original1.show()
-
-    original2 = np.array(b)
-    original3 = np.array(c)
-
-    cropped = multi_cropping(original, 388, 2, 2)
-    c_lt = Image.fromarray(cropped[0])
-    c_rt = Image.fromarray(cropped[1])
-    c_lb = Image.fromarray(cropped[2])
-    c_rb = Image.fromarray(cropped[3])
-
-    c_lt.show()
-    c_rt.show()
-    c_lb.show()
-    c_rb.show()
-    padded = multi_padding(cropped, 572, 388, "symmetric")
-    p_lt = Image.fromarray(padded[0])
-    p_rt = Image.fromarray(padded[1])
-    p_lb = Image.fromarray(padded[2])
-    p_rb = Image.fromarray(padded[3])
-    p_lt.show()
-    p_rt.show()
-    p_lb.show()
-    p_rb.show()
-    div_arr = division_array(388, 2, 2, 512, 512)
-    cont_arr = image_concatenate(cropped, 2, 2, 512, 512)
-    a_11 = Image.fromarray(div_arr*60)
-    a_22 = Image.fromarray(cont_arr/div_arr)
-
-    a_11.show()
-    a_22.show()
+    originall = np.array(c)
+    original_norm = normalization(original, max=1, min=0)
+    print(original_norm)
