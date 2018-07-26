@@ -48,6 +48,8 @@ Purposes of the python files listed in the folder structure will be explained th
 
 ## Table of Content
 
+* [Dependency](#dependency)
+
 * [Pipeline](#pipeline)
 
 * [Preprocessing](#preprocessing)
@@ -58,8 +60,20 @@ Purposes of the python files listed in the folder structure will be explained th
 
 * [Results](#results)
 
-* [Dependency](#dependency)
 
+
+
+### Dependency <a name="dependency"></a>
+
+Following modules are used in the project:
+
+    * python >= 3.6
+    * numpy >= 1.14.5
+    * torch >= 0.4.0
+    * PIL >= 5.2.0
+    * scipy >= 1.1.0
+    * tkinter >= 8.6
+    * matplotlib >= 2.2.2
 
 ## Pipeline <a name="pipeline"></a>
 
@@ -278,14 +292,7 @@ We used a loss function where pixel-wise softmax is combined with cross entropy.
 ### Results <a name="results"></a>
 To be add
 
-### Dependency <a name="dependency"></a>
-    * python >= 3.6
-    * numpy >= 1.14.5
-    * torch >= 0.4.0
-    * PIL >= 5.2.0
-    * scipy >= 1.1.0
-    * tkinter >= 8.6
-    * matplotlib >= 2.2.2
+
    
     
 
