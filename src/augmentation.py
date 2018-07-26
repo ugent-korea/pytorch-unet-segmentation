@@ -287,6 +287,7 @@ def image_concatenate(image, crop_num1, crop_num2, dim1, dim2):
 if __name__ == "__main__":
     from PIL import Image
 
+<<<<<<< HEAD
     b = Image.open("../data/train/images/14.png")
     c = Image.open("../data/train/masks/14.png")
 
@@ -294,3 +295,23 @@ if __name__ == "__main__":
     originall = np.array(c)
     original_norm = normalization(original, max=1, min=0)
     print(original_norm)
+=======
+    b = Image.open("../readme_images/original.png")
+    original = np.array(b)
+    """
+    original1 = add_gaussian_noise(original, 0, 100)
+    original1 = Image.fromarray(original1)
+    original1.show()
+    """
+    original1 = add_uniform_noise(original, -100, 100)
+    original1 = Image.fromarray(original1)
+    original1.show()
+    """
+    original1 = change_brightness(original, 50)
+    original1 = Image.fromarray(original1)
+    original1.show()
+    original1 = add_elastic_transform(original, 10, 4, 1)[0]
+    original1 = Image.fromarray(original1)
+    original1.show()
+    """
+>>>>>>> 281f3e6f260880d1f0e81e5bf1c030cafdf0ac85
