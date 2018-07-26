@@ -55,6 +55,8 @@ Purposes of the python files listed in the folder structure will be explained th
 
 * [Loss function](#lossfunction)
 
+* [Post-processing](#postprocessing)
+
 * [Results](#results)
 
 * [Dependency](#dependency)
@@ -241,6 +243,12 @@ We used a loss function where pixel-wise softmax is combined with cross entropy.
 #### Cross entropy
 ![image](https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/cross%20entropy(1).png)
 
+## Post-processing <a name="postprocessing"></a>
+In attempt of reducing the loss, we did a post-processing on the prediction results. We applied the concept of watershed segmentation in order to point out the certain foreground regions and remove noises in the prediction.
+
+![postprocessing](https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/postprocess.png)
+
+To be more added
 
 ## Results <a name="results"></a>
 
