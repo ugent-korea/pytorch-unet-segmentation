@@ -81,40 +81,6 @@ Following modules are used in the project:
 ### Dataset
 
 ```ruby
-from torch.utils.data.dataset import Dataset
-class SEMDataTrain(Dataset):
-    def __init__(self):
-        """
-        Args:
-            image_path (str): the path where the image is located
-            mask_path (str): the path where the mask is located
-            option (str): decide which dataset to import
-        """
-
-    def __getitem__(self, index):
-        """Get specific data corresponding to the index
-        Args:
-            index (int): index of the data
-
-        Returns:
-            Tensor: specific data on index which is converted to Tensor
-        """
-        return (img_as_tensor, msk_as_tensor)
-
-```
-This is a dataset class we used. In the dataset, it contains three functions.
-  * \__intit\__ : Intialization 
-  * \__getitem\__ : Reads the images and preprocess on the images are accompolished. 
-  * \__len\__ : Counts the number of images. 
-
-
-Before reading the images, in \__init\__ function with the parameter, image_path, list of image names and image labels are collected with the module called **glob**. Then in \__getitem\__ function, with the module **PIL**, the images in the list of image names are read and converted into numpy array. 
-
-```ruby
-import numpy as np
-from PIL import Image
-import glob
-from torch.utils.data.dataset import Dataset
 class SEMDataTrain(Dataset):
 
     def __init__(self, image_path, mask_path, in_size=572, out_size=388):
@@ -124,11 +90,10 @@ class SEMDataTrain(Dataset):
             mask_path (str): the path where the mask is located
             option (str): decide which dataset to import
         """
-        # all file names
-	# lists of image path and list of labels
+        # All file names
+	# Lists of image path and list of labels
         # Calculate len
-        self.data_len = len(self.mask_arr)
-        # calculate mean and stdev
+        # Calculate mean and stdev
 
     def __getitem__(self, index):
         """Get specific data corresponding to the index
@@ -173,12 +138,12 @@ class SEMDataTrain(Dataset):
         Returns:
             length (int): length of the data
         """
-        return self.data_len
+
 ```
 
 ### Preprocessing <a name="preprocessing"></a>
 
-Preprocessing is done on the images for data augmentation. Following preprocessing are accomplished:
+We preprocessed the images for data augmentation. Following preprocessing are :
    * Flip
    * Gaussian noise
    * Uniform noise
@@ -189,17 +154,17 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
    
 #### Image Augmentation
 
+
+<p align="center">
+  <img width="250" height="250" src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/original.png"> <br />Original Image</td>
+</p>
+
+
 <table border=0 width="99%" >
 	<tbody> 
     <tr>		<td width="99%" align="center" colspan="4"><strong>Image</td>
 		</tr>
 		<tr>
-			<td width="19%" align="center"> Original Image </td>
-			<td width="27%" align="center"> </td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/original.png"> </td>
-			<td width="27%" algin="center"> </td>
-		</tr>
-		</tr>
 			<td width="19%" align="center"> Flip  </td> 
 			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/flip_vert"> <br />Vertical  </td> 
 			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/flip_hori">  <br />Horizontal</td>
