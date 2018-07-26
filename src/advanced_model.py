@@ -6,6 +6,7 @@ import numpy as np
 from PIL import Image
 from torch.nn.functional import sigmoid
 
+
 class Double_conv(nn.Module):
 
     '''(conv => ReLU) * 2 => MaxPool2d'''
@@ -87,16 +88,17 @@ def extract_img(size, in_tensor):
 class CleanU_Net(nn.Module):
     def __init__(self, in_channels, out_channels):
         super(CleanU_Net, self).__init__()
-        self.Conv_down1 = Conv_down(in_channels, 32)
-        self.Conv_down2 = Conv_down(32, 64)
-        self.Conv_down3 = Conv_down(64, 128)
-        self.Conv_down4 = Conv_down(128, 256)
-        self.Conv_down5 = Conv_down(256, 512)
-        self.Conv_up1 = Conv_up(512, 256)
-        self.Conv_up2 = Conv_up(256, 128)
-        self.Conv_up3 = Conv_up(128, 64)
-        self.Conv_up4 = Conv_up(64, 32)
-        self.Conv_out = nn.Conv2d(32, out_channels, 1, padding=0, stride=1)
+        self.Conv_down1 = Conv_down(in_channels, 64)
+        self.Conv_down2 = Conv_down(64, 128)
+        self.Conv_down3 = Conv_down(128, 256)
+        self.Conv_down4 = Conv_down(256, 512)
+        self.Conv_down5 = Conv_down(512, 1024)
+        self.Conv_up1 = Conv_up(1024, 512)
+        self.Conv_up2 = Conv_up(512, 256)
+        self.Conv_up3 = Conv_up(256, 128)
+        self.Conv_up4 = Conv_up(128, 64)
+        self.Conv_out = nn.Conv2d(64, out_channels, 1, padding=0, stride=1)
+        #self.Conv_final = nn.Conv2d(out_channels, out_channels, 1, padding=0, stride=1)
 
     def forward(self, x):
 
@@ -118,6 +120,7 @@ class CleanU_Net(nn.Module):
         #print("up3 => uConv3|", x.shape)
         x = self.Conv_up4(x, conv1)
         x = self.Conv_out(x)
+        #x = self.Conv_final(x)
 
         return x
 

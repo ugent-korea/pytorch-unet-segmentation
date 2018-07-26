@@ -66,9 +66,9 @@ class SEMDataTrain(Dataset):
         img_as_np = change_brightness(img_as_np, pix_add)
 
         # Elastic distort {0: distort, 1:no distort}
-        sigma = randint(4, 8)
+        sigma = randint(6, 12)
         # sigma = 4, alpha = 34
-        img_as_np, seed = add_elastic_transform(img_as_np, alpha=34, sigma=sigma)
+        img_as_np, seed = add_elastic_transform(img_as_np, alpha=34, sigma=sigma, pad_size=20)
 
         # Crop the image
         img_height, img_width = img_as_np.shape[0], img_as_np.shape[1]
@@ -80,7 +80,7 @@ class SEMDataTrain(Dataset):
                                 out_size=self.out_size, mode="symmetric")
 
         # Normalize the image
-        img_as_np = normalize(img_as_np, mean=Training_MEAN, std=Training_STDEV)
+        img_as_np = normalization(img_as_np, max=1, min=0)
         img_as_np = np.expand_dims(img_as_np, axis=0)  # add additional dimension
         img_as_tensor = torch.from_numpy(img_as_np).float()  # Convert numpy array to tensor
 
@@ -98,7 +98,8 @@ class SEMDataTrain(Dataset):
         # elastic_transform of mask with respect to image
 
         # sigma = 4, alpha = 34, seed = from image transformation
-        msk_as_np, _ = add_elastic_transform(msk_as_np, alpha=34, sigma=sigma, seed=seed)
+        msk_as_np, _ = add_elastic_transform(
+            msk_as_np, alpha=34, sigma=sigma, seed=seed, pad_size=20)
         msk_as_np = approximate_image(msk_as_np)  # images only with 0 and 255
 
         # Crop the mask
@@ -168,10 +169,10 @@ class SEMDataVal(Dataset):
         for array in img_as_numpy:
 
             # SANITY CHECK: SEE THE CROPPED & PADDED IMAGES
-            array_image = Image.fromarray(array)
+            #array_image = Image.fromarray(array)
 
             # Normalize the cropped arrays
-            img_to_add = normalize(array, mean=Training_MEAN, std=Training_STDEV)
+            img_to_add = normalization(array, max=1, min=0)
             # img_as_numpy = np.expand_dims(img_as_numpy, axis=0)
             # img_as_tensor = torch.from_numpy(img_as_numpy).float()
             # Convert normalized array into tensor
@@ -198,8 +199,8 @@ class SEMDataVal(Dataset):
 
         # msk_as_np = np.expand_dims(msk_as_np, axis=0)  # add additional dimension
         msk_as_tensor = torch.from_numpy(msk_as_np).long()  # Convert numpy array to tensor
-
-        return (img_as_tensor, msk_as_tensor)
+        original_msk = torch.from_numpy(np.asarray(msk_as_img))
+        return (img_as_tensor, msk_as_tensor, original_msk)
 
     def __len__(self):
 

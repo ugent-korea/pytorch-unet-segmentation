@@ -4,7 +4,7 @@ from scipy.ndimage.filters import gaussian_filter
 from random import randint
 
 
-def add_elastic_transform(image, alpha, sigma, seed=None):
+def add_elastic_transform(image, alpha, sigma, pad_size=30, seed=None):
     """
     Args:
         image : numpy array of image
@@ -14,7 +14,8 @@ def add_elastic_transform(image, alpha, sigma, seed=None):
         Return :
         image : elastically transformed numpy array of image
     """
-
+    image_size = int(image.shape[0])
+    image = np.pad(image, pad_size, mode="symmetric")
     if seed is None:
         seed = randint(1, 100)
         random_state = np.random.RandomState(seed)
@@ -28,7 +29,7 @@ def add_elastic_transform(image, alpha, sigma, seed=None):
 
     x, y = np.meshgrid(np.arange(shape[1]), np.arange(shape[0]))
     indices = np.reshape(y+dy, (-1, 1)), np.reshape(x+dx, (-1, 1))
-    return map_coordinates(image, indices, order=1).reshape(shape), seed
+    return cropping(map_coordinates(image, indices, order=1).reshape(shape), 512, pad_size, pad_size), seed
 
 
 def flip(image, option_value):
@@ -140,6 +141,12 @@ def normalize(image, mean, std):
     image = (image - mean) / std
 
     return image
+
+
+def normalization(image, max, min):
+    # (image - np.min(image))*(max - min)/(np.max(image)-np.min(image)) + min
+    image_new = (image/255)
+    return image_new
 
 
 def stride_size(image_len, crop_num, crop_size):
@@ -280,6 +287,15 @@ def image_concatenate(image, crop_num1, crop_num2, dim1, dim2):
 if __name__ == "__main__":
     from PIL import Image
 
+<<<<<<< HEAD
+    b = Image.open("../data/train/images/14.png")
+    c = Image.open("../data/train/masks/14.png")
+
+    original = np.array(b)
+    originall = np.array(c)
+    original_norm = normalization(original, max=1, min=0)
+    print(original_norm)
+=======
     b = Image.open("../readme_images/original.png")
     original = np.array(b)
     """
@@ -298,3 +314,4 @@ if __name__ == "__main__":
     original1 = Image.fromarray(original1)
     original1.show()
     """
+>>>>>>> 281f3e6f260880d1f0e81e5bf1c030cafdf0ac85
