@@ -6,7 +6,6 @@
 
 ## Description
 
-
 This project aims to implement biomedical image segmentation with the use of U-Net model. The below image briefly explains the output we want:
 
 <p align="center">
@@ -48,9 +47,7 @@ Purposes of the python files listed in the folder structure will be explained th
 
 ## Table of Content
 
-* [Dependency](#dependency)
-
-* [Pipeline](#pipeline)
+* [Dataset](#dataset)
 
 * [Preprocessing](#preprocessing)
 
@@ -60,25 +57,13 @@ Purposes of the python files listed in the folder structure will be explained th
 
 * [Results](#results)
 
+* [Dependency](#dependency)
+
+* [Reference](#reference)
 
 
 
-### Dependency <a name="dependency"></a>
-
-Following modules are used in the project:
-
-    * python >= 3.6
-    * numpy >= 1.14.5
-    * torch >= 0.4.0
-    * PIL >= 5.2.0
-    * scipy >= 1.1.0
-    * tkinter >= 8.6
-    * matplotlib >= 2.2.2
-
-## Pipeline <a name="pipeline"></a>
-
-
-### Dataset
+## Dataset <a name="dataset"></a>
 
 ```ruby
 class SEMDataTrain(Dataset):
@@ -141,7 +126,7 @@ class SEMDataTrain(Dataset):
 
 ```
 
-### Preprocessing <a name="preprocessing"></a>
+## Preprocessing <a name="preprocessing"></a>
 
 We preprocessed the images for data augmentation. Following preprocessing are :
    * Flip
@@ -238,14 +223,16 @@ To help with observation, a ![#ffff00](https://placehold.it/15/ffff00/000000?tex
 </table>         
 
 
-### Model <a name="model"></a>
+## Model <a name="model"></a>
+
 #### Architecture
 
 We have same structure as U-Net Model architecture but we made a small modification to make the model smaller.
 
 ![image](https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/UNet_custom_parameter.png)
 
-### Loss function <a name="lossfunction"></a>
+## Loss function <a name="lossfunction"></a>
+
 We used a loss function where pixel-wise softmax is combined with cross entropy.
 
 #### Softmax
@@ -254,14 +241,26 @@ We used a loss function where pixel-wise softmax is combined with cross entropy.
 #### Cross entropy
 ![image](https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/cross%20entropy(1).png)
 
-### Results <a name="results"></a>
+
+## Results <a name="results"></a>
+
 To be add
 
+## Dependency <a name="dependency"></a>
 
+Following modules are used in the project:
+
+    * python >= 3.6
+    * numpy >= 1.14.5
+    * torch >= 0.4.0
+    * PIL >= 5.2.0
+    * scipy >= 1.1.0
+    * tkinter >= 8.6
+    * matplotlib >= 2.2.2
    
     
 
-# References :
+## References <a name="reference"></a> :
 
 [1] O. Ronneberger, P. Fischer, and T. Brox. U-Net: Convolutional Networks for Biomedical Image Segmentation, http://arxiv.org/pdf/1505.04597.pdf
 
