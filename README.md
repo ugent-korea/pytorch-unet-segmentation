@@ -270,9 +270,10 @@ We have same structure as U-Net Model architecture but we made a small modificat
 We used a loss function where pixel-wise softmax is combined with cross entropy.
 
 #### Softmax
-[image](https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/cross%20entropy(1).png)
+![image](https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/cross%20entropy(1).png)
 
-
+#### Cross entropy
+![image](https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/softmax(1).png)
 
 ### Results <a name="results"></a>
 To be add
