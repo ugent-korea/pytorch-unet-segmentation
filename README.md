@@ -307,7 +307,7 @@ To see the result, we created a clean white page of the same size with the input
 
 <table border=0 width="99%" >
 	<tbody> 
-    <tr>		<td width="99%" align="center" colspan="4"><strong>Pad</td>
+    <tr>		<td width="99%" align="center" colspan="4"><strong>Accuracy and Loss Graph</td>
 	    </tr>
 		<tr>
 			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/RMS.png"> <br />  RMS prop(lr=0.0002)</td>
