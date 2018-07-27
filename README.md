@@ -257,12 +257,13 @@ To be more added
     <tr>		<td width="99%" align="center" colspan="2"><strong>Result Graph</td>
 	    </tr>
 		<tr>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/RMS.png"> <br />  RMS Prop </td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/SGD.png"> <br /> SGD</td> 
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/RMS.png"> <br />  RMS Prop(lr=0.0002) </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/SGD.png"> <br /> SGD(lr=0.0005, momemtum=0.99)</td> 
 		</tr>
       		</tr>
 	</tbody>
-</table>         
+</table>
+We used two different optimizers and they are SGD and RMS prop. On the left side, the model is using RMS prop and as the epoch increases, the vlidation loss starts to increase and it started to have a bigger gap with the training loss. Whereas for SGD, throughout most of the epochs, the gap between validation loss and training loss is small, which shows the less overfitting compared to the RMS prop. So, we chose SGD as an optimizer for our model. 
 
 ## Dependency <a name="dependency"></a>
 
