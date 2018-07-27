@@ -144,8 +144,8 @@ def normalize(image, mean, std):
 
 
 def normalization(image, max, min):
-    # (image - np.min(image))*(max - min)/(np.max(image)-np.min(image)) + min
-    image_new = (image/255)
+    #
+    image_new = (image - np.min(image))*(max - min)/(np.max(image)-np.min(image)) + min
     return image_new
 
 
@@ -287,7 +287,6 @@ def image_concatenate(image, crop_num1, crop_num2, dim1, dim2):
 if __name__ == "__main__":
     from PIL import Image
 
-<<<<<<< HEAD
     b = Image.open("../data/train/images/14.png")
     c = Image.open("../data/train/masks/14.png")
 
@@ -295,7 +294,7 @@ if __name__ == "__main__":
     originall = np.array(c)
     original_norm = normalization(original, max=1, min=0)
     print(original_norm)
-=======
+
     b = Image.open("../readme_images/original.png")
     original = np.array(b)
     """
@@ -314,4 +313,3 @@ if __name__ == "__main__":
     original1 = Image.fromarray(original1)
     original1.show()
     """
->>>>>>> 281f3e6f260880d1f0e81e5bf1c030cafdf0ac85
