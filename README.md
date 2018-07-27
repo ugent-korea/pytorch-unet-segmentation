@@ -311,7 +311,7 @@ To see the result, we created a clean white page of the same size with the input
 	    </tr>
 		<tr>
 			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/RMS.png"> <br />  RMS prop(lr=0.0002)</td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/SGD.png"> <br /> SGD(lr=0.005,momentum=0.99)(</td> 
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/SGD.png"> <br /> SGD(lr=0.005,momentum=0.99)</td> 
 		</tr>
       		</tr>
 	</tbody>
