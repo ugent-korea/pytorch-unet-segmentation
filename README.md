@@ -316,7 +316,7 @@ To see the result, we created a clean white page of the same size with the input
       		</tr>
 	</tbody>
 </table>       
-We used two different optimizers and they are SGD and RMS PROP. For the left graph, RMS prop is used and as the epoch increases, the gap between the validation loss and training loss increases. Whereas, in the right graph, SGD is used and even if the epoch increases, the gap between the validation loss and training loss remain small. We chose SGD as our optimizer since it is overfitting less than RMS. 
+We used two different optimizers and they are SGD and RMS PROP. For the left graph, RMS prop is used and as the epoch increases, the gap between the validation loss and training loss increases. Whereas, in the right graph, SGD is used and even if the epoch increases, the gap between the validation loss and training loss remain small. We chose SGD as our optimizer since it overfits less than RMS PROP.
 
 ## Dependency <a name="dependency"></a>
 
