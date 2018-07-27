@@ -340,6 +340,7 @@ We used two different optimizers and they are SGD and RMS PROP. For the left gra
       		</tr>
 	</tbody>
 </table>       
+
 ## Dependency <a name="dependency"></a>
 
 Following modules are used in the project:
