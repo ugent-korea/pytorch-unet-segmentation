@@ -244,26 +244,68 @@ We used a loss function where pixel-wise softmax is combined with cross entropy.
 ![image](https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/cross%20entropy(1).png)
 
 ## Post-processing <a name="postprocessing"></a>
-In attempt of reducing the loss, we did a post-processing on the prediction results. We applied the concept of watershed segmentation in order to point out the certain foreground regions and remove noises in the prediction.
+In attempt of reducing the loss, we did a post-processing on the prediction results. We applied the concept of watershed segmentation in order to point out the certain foreground regions and remove regions in the prediction image which seem to be noises.
 
 ![postprocessing](https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/postprocess.png)
 
-To be more added
+The numbered images in the figure above indicates the stpes we took in the post-processing. To name those steps in slightly more detail:
+
+	* 1. Convertion into grayscale
+	* 2. Conversion into binary image
+	* 3. Morphological transformation: Closing
+	* 4. Determination of the certain background
+	* 5. Calculation of the distance
+	* 6. Determination of the certain foreground
+	* 7. Determination of the unknown region
+	* 8. Application of watershed
+	* 9. Determination of the final result
+
+### Conversion into grayscale 
+
+The first step is there just in case the input image has more than 1 color channel (e.g. RGB image has 3 channels) 
+
+### Conversion into binary image
+
+Convert the gray-scale image into binary image by processing the image with a threshold value: pixels equal to or lower than 127 will be pushed down to 0 and greater will be pushed up to 255. Such process is compulsory as later transformation processes takes in binary images.
+
+### Morphological transformation: Closing.
+
+We used **morphologyEX()** function in cv2 module which removes black noises (background) within white regions (foreground).
+	
+### Determination of the certain background
+
+We used **dilate()** function in cv2 module which emphasizes/increases the white region (foreground). By doing so, we connect detached white regions together - for example, connecting detached cell membranes together - to make ensure the background region.
+
+### Caculation of the distance
+
+This step labels the foreground with a color code: ![#ff0000](https://placehold.it/15/#ff0000/000000?text=+) red color indicates farthest from the background while ![#003bff](https://placehold.it/15/#003bff/000000?text=+) blue color indicates closest to the background.
+
+### Determination of the foreground
+
+Now that we have an idea of how far the foreground is from the background, we apply a threshold value to decide which part could surely be the foreground.
+
+The threshold value is the maximum distance (calculated from the previous step) multiplied by a hyper-parameter that we have to manually tune. The greater the hyper-parameter value, the greater the threshold value, and therefore we will get less area of certain foreground. 
+
+### Determination of the unknown region
+
+From previous steps, we determined sure foreground and background regions. The rest will be classified as *'unknown'* regions.
+
+### Label the foreground: markers
+
+We applied **connectedComponents()** function from the cv2 module on the foreground to label the foreground regions with color to distinguish different foreground objects. We named it as a 'marker'.
+
+### Application of watershed and Determination of the final result
+
+After applying **watershed()** function from cv2 module on the marker, we obtained an array of -1, 1, and many others. 
+
+	* -1 = border region that distinguishes foreground and background
+	*  1 = background region
+
+To see the result, we created a clean white page of the same size with the input image. then we copied all the values from the watershed result to the white page except 1, which means that we excluded the background.
 
 ## Results <a name="results"></a>
 
-<table border=0 width="99%" >
-	<tbody> 
-    <tr>		<td width="99%" align="center" colspan="2"><strong>Result Graph</td>
-	    </tr>
-		<tr>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/RMS.png"> <br />  RMS Prop(lr=0.0002) </td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/SGD.png"> <br /> SGD(lr=0.0005, momemtum=0.99)</td> 
-		</tr>
-      		</tr>
-	</tbody>
-</table>
-We used two different optimizers and they are SGD and RMS prop. On the left side, the model is using RMS prop and as the epoch increases, the vlidation loss starts to increase and it started to have a bigger gap with the training loss. Whereas for SGD, throughout most of the epochs, the gap between validation loss and training loss is small, which shows the less overfitting compared to the RMS prop. So, we chose SGD as an optimizer for our model. 
+To be add
 
 ## Dependency <a name="dependency"></a>
 
