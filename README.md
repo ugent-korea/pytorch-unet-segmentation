@@ -310,13 +310,13 @@ To see the result, we created a clean white page of the same size with the input
     <tr>		<td width="99%" align="center" colspan="4"><strong>Pad</td>
 	    </tr>
 		<tr>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/RMS.png"> <br />  RMS prop</td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/SGD.png"> <br /> SGD</td> 
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/RMS.png"> <br />  RMS prop(lr=0.0002)</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/SGD.png"> <br /> SGD(lr=0.005,momentum=0.99)(</td> 
 		</tr>
       		</tr>
 	</tbody>
 </table>       
-
+We used two different optimizers and they are SGD and RMS PROP. For the left graph, RMS prop is used and as the epoch increases, the gap between the validation loss and training loss increases. Whereas, in the right graph, SGD is used and even if the epoch increases, the gap between the validation loss and training loss remain small. We chose SGD as our optimizer since it is overfitting less than RMS. 
 
 ## Dependency <a name="dependency"></a>
 
