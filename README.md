@@ -6,7 +6,6 @@
 
 ## Description
 
-
 This project aims to implement biomedical image segmentation with the use of U-Net model. The below image briefly explains the output we want:
 
 <p align="center">
@@ -48,7 +47,7 @@ Purposes of the python files listed in the folder structure will be explained th
 
 ## Table of Content
 
-* [Pipeline](#pipeline)
+* [Dataset](#dataset)
 
 * [Preprocessing](#preprocessing)
 
@@ -56,51 +55,19 @@ Purposes of the python files listed in the folder structure will be explained th
 
 * [Loss function](#lossfunction)
 
+* [Post-processing](#postprocessing)
+
 * [Results](#results)
 
 * [Dependency](#dependency)
 
-
-## Pipeline <a name="pipeline"></a>
-
-
-### Dataset
-
-```ruby
-from torch.utils.data.dataset import Dataset
-class SEMDataTrain(Dataset):
-    def __init__(self):
-        """
-        Args:
-            image_path (str): the path where the image is located
-            mask_path (str): the path where the mask is located
-            option (str): decide which dataset to import
-        """
-
-    def __getitem__(self, index):
-        """Get specific data corresponding to the index
-        Args:
-            index (int): index of the data
-
-        Returns:
-            Tensor: specific data on index which is converted to Tensor
-        """
-        return (img_as_tensor, msk_as_tensor)
-
-```
-This is a dataset class we used. In the dataset, it contains three functions.
-  * \__intit\__ : Intialization 
-  * \__getitem\__ : Reads the images and preprocess on the images are accompolished. 
-  * \__len\__ : Counts the number of images. 
+* [Reference](#reference)
 
 
-Before reading the images, in \__init\__ function with the parameter, image_path, list of image names and image labels are collected with the module called **glob**. Then in \__getitem\__ function, with the module **PIL**, the images in the list of image names are read and converted into numpy array. 
+
+## Dataset <a name="dataset"></a>
 
 ```ruby
-import numpy as np
-from PIL import Image
-import glob
-from torch.utils.data.dataset import Dataset
 class SEMDataTrain(Dataset):
 
     def __init__(self, image_path, mask_path, in_size=572, out_size=388):
@@ -110,11 +77,10 @@ class SEMDataTrain(Dataset):
             mask_path (str): the path where the mask is located
             option (str): decide which dataset to import
         """
-        # all file names
-	# lists of image path and list of labels
+        # All file names
+	# Lists of image path and list of labels
         # Calculate len
-        self.data_len = len(self.mask_arr)
-        # calculate mean and stdev
+        # Calculate mean and stdev
 
     def __getitem__(self, index):
         """Get specific data corresponding to the index
@@ -159,12 +125,12 @@ class SEMDataTrain(Dataset):
         Returns:
             length (int): length of the data
         """
-        return self.data_len
+
 ```
 
-### Preprocessing <a name="preprocessing"></a>
+## Preprocessing <a name="preprocessing"></a>
 
-Preprocessing is done on the images for data augmentation. Following preprocessing are accomplished:
+We preprocessed the images for data augmentation. Following preprocessing are :
    * Flip
    * Gaussian noise
    * Uniform noise
@@ -175,17 +141,17 @@ Preprocessing is done on the images for data augmentation. Following preprocessi
    
 #### Image Augmentation
 
+
+<p align="center">
+  <img width="250" height="250" src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/original.png"> <br />Original Image</td>
+</p>
+
+
 <table border=0 width="99%" >
 	<tbody> 
     <tr>		<td width="99%" align="center" colspan="4"><strong>Image</td>
 		</tr>
 		<tr>
-			<td width="19%" align="center"> Original Image </td>
-			<td width="27%" align="center"> </td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/original.png"> </td>
-			<td width="27%" algin="center"> </td>
-		</tr>
-		</tr>
 			<td width="19%" align="center"> Flip  </td> 
 			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/flip_vert"> <br />Vertical  </td> 
 			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/flip_hori">  <br />Horizontal</td>
@@ -259,30 +225,50 @@ To help with observation, a ![#ffff00](https://placehold.it/15/ffff00/000000?tex
 </table>         
 
 
-### Model <a name="model"></a>
+## Model <a name="model"></a>
+
 #### Architecture
 
 We have same structure as U-Net Model architecture but we made a small modification to make the model smaller.
 
 ![image](https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/UNet_custom_parameter.png)
 
-### Loss function <a name="lossfunction"></a>
-To be added
+## Loss function <a name="lossfunction"></a>
 
+We used a loss function where pixel-wise softmax is combined with cross entropy.
 
-### Results <a name="results"></a>
-To be added
+#### Softmax
+![image](https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/softmax(1).png)
 
+#### Cross entropy
+![image](https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/cross%20entropy(1).png)
 
-### Dependency <a name="dependency"></a>
+## Post-processing <a name="postprocessing"></a>
+In attempt of reducing the loss, we did a post-processing on the prediction results. We applied the concept of watershed segmentation in order to point out the certain foreground regions and remove noises in the prediction.
+
+![postprocessing](https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/postprocess.png)
+
+To be more added
+
+## Results <a name="results"></a>
+
+To be add
+
+## Dependency <a name="dependency"></a>
+
+Following modules are used in the project:
+
     * python >= 3.6
     * numpy >= 1.14.5
     * torch >= 0.4.0
     * PIL >= 5.2.0
     * scipy >= 1.1.0
+    * tkinter >= 8.6
+    * matplotlib >= 2.2.2
+   
     
 
-# References :
+## References <a name="reference"></a> :
 
 [1] O. Ronneberger, P. Fischer, and T. Brox. U-Net: Convolutional Networks for Biomedical Image Segmentation, http://arxiv.org/pdf/1505.04597.pdf
 
