@@ -278,7 +278,7 @@ We used **dilate()** function in cv2 module which emphasizes/increases the white
 
 ### Caculation of the distance
 
-This step labels the foreground with a color code: ![#ff0000](https://placehold.it/15/#ff0000/000000?text=+) red color indicates farthest from the background while ![#003bff](https://placehold.it/15/#003bff/000000?text=+) blue color indicates closest to the background.
+This step labels the foreground with a color code: ![#ff0000](https://placehold.it/15/ff0000/000000?text=+) red color indicates farthest from the background while ![#003bff](https://placehold.it/15/003bff/000000?text=+) blue color indicates closest to the background.
 
 ### Determination of the foreground
 
