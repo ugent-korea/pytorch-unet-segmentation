@@ -324,6 +324,13 @@ To see the result, we created a clean white page of the same size with the input
 </table>       
 We used two different optimizers and they are SGD and RMS PROP. For the left graph, RMS prop is used and as the epoch increases, the gap between the validation loss and training loss increases. Whereas, in the right graph, SGD is used and even if the epoch increases, the gap between the validation loss and training loss remain small. We chose SGD as our optimizer since it overfits less than RMS PROP.
 
+Model trained with RMS prop can be downloaded via dropbox:
+https://www.dropbox.com/s/cdwltzhbs3tiiwb/model_epoch_440.pwf?dl=0
+
+Model trained with SGD can be downloaded via dropbox:
+link will be shared later (due to internet connection issue).
+
+
 ### Prediction
 
 <p align="center">
