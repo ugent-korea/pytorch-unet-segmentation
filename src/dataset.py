@@ -4,10 +4,9 @@ import glob
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
-from torchvision import transforms
 from random import randint
 from torch.utils.data.dataset import Dataset
-from augmentation import *
+from pre_processing import *
 from mean_std import *
 
 Training_MEAN = 0.4911
@@ -82,7 +81,7 @@ class SEMDataTrain(Dataset):
         img1.show()
 
         # Normalize the image
-        img_as_np = normalization(img_as_np, max=1, min=0)
+        img_as_np = normalization2(img_as_np, max=1, min=0)
         img_as_np = np.expand_dims(img_as_np, axis=0)  # add additional dimension
         img_as_tensor = torch.from_numpy(img_as_np).float()  # Convert numpy array to tensor
 
@@ -171,9 +170,7 @@ class SEMDataVal(Dataset):
             #array_image = Image.fromarray(array)
 
             # Normalize the cropped arrays
-            img_to_add = normalization(array, max=1, min=0)
-            # img_as_numpy = np.expand_dims(img_as_numpy, axis=0)
-            # img_as_tensor = torch.from_numpy(img_as_numpy).float()
+            img_to_add = normalization2(array, max=1, min=0)
             # Convert normalized array into tensor
             processed_list.append(img_to_add)
 
@@ -221,44 +218,38 @@ class SEMDataTest(Dataset):
         self.data_len = len(self.image_arr)
 
     def __getitem__(self, index):
-        """Get specific data corresponding to the index
+        '''Get specific data corresponding to the index
         Args:
-            index : an integer variable that calls (indext)th image in the
-                    path
+            index: an integer variable that calls(indext)th image in the
+                path
         Returns:
             Tensor: 4 cropped data on index which is converted to Tensor
-        """
+        '''
 
         single_image = self.image_arr[index]
         img_as_img = Image.open(single_image)
         # img_as_img.show()
         # Convert the image into numpy array
-        img_as_numpy = np.asarray(img_as_img)
+        img_as_np = np.asarray(img_as_img)
 
-        # Make 4 cropped image (in numpy array form) using values calculated above
-        # Cropped images will also have paddings to fit the model.
-
-        img_as_numpy = multi_cropping(img_as_numpy,
-                                      crop_size=self.out_size,
-                                      crop_num1=2, crop_num2=2)
-        img_as_numpy = multi_padding(img_as_numpy, in_size=self.in_size,
-                                     out_size=self.out_size, mode="symmetric")
+        pad_size = int((self.in_size - self.out_size)/2)
+        img_as_np = np.pad(img_as_np, pad_size, mode="symmetric")
+        img_as_np = multi_cropping(img_as_np,
+                                   crop_size=self.in_size,
+                                   crop_num1=2, crop_num2=2)
 
         # Empty list that will be filled in with arrays converted to tensor
         processed_list = []
 
-        for array in img_as_numpy:
+        for array in img_as_np:
 
-            # SANITY CHECK: SEE THE CROPPED & PADDED IMAGES
-            array_image = Image.fromarray(array)
-            # array_image.show()
+            # SANITY CHECK: SEE THE PADDED AND CROPPED IMAGES
+            # array_image = Image.fromarray(array)
 
             # Normalize the cropped arrays
-            img_as_numpy = normalize(array, mean=Training_MEAN, std=Training_STDEV)
-            # img_as_numpy = np.expand_dims(img_as_numpy, axis=0)
-            # img_as_tensor = torch.from_numpy(img_as_numpy).float()
+            img_to_add = normalization2(array, max=1, min=0)
             # Convert normalized array into tensor
-            processed_list.append(img_as_numpy)
+            processed_list.append(img_to_add)
 
         img_as_tensor = torch.Tensor(processed_list)
         #  return tensor of 4 cropped images
