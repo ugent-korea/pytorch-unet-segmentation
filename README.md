@@ -252,7 +252,17 @@ To be more added
 
 ## Results <a name="results"></a>
 
-To be add
+<table border=0 width="99%" >
+	<tbody> 
+    <tr>		<td width="99%" align="center" colspan="2"><strong>Result Graph</td>
+	    </tr>
+		<tr>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/RMS.png"> <br />  RMS Prop </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/SGD.png"> <br /> SGD</td> 
+		</tr>
+      		</tr>
+	</tbody>
+</table>         
 
 ## Dependency <a name="dependency"></a>
 
