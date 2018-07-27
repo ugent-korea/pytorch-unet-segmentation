@@ -72,12 +72,14 @@ class SEMDataTrain(Dataset):
 
         # Crop the image
         img_height, img_width = img_as_np.shape[0], img_as_np.shape[1]
+        pad_size = int((self.in_size - self.out_size)/2)
+        img_as_np = np.pad(img_as_np, pad_size, mode="symmetric")
         y_loc, x_loc = randint(0, img_height-self.out_size), randint(0, img_width-self.out_size)
-        img_as_np = cropping(img_as_np, crop_size=self.out_size, dim1=y_loc, dim2=x_loc)
+        img_as_np = cropping(img_as_np, crop_size=self.in_size, dim1=y_loc, dim2=x_loc)
 
-        # Pad the image
-        img_as_np = add_padding(img_as_np, in_size=self.in_size,
-                                out_size=self.out_size, mode="symmetric")
+        # Sanity Check for image
+        img1 = Image.fromarray(img_as_np)
+        img1.show()
 
         # Normalize the image
         img_as_np = normalization(img_as_np, max=1, min=0)
@@ -103,13 +105,11 @@ class SEMDataTrain(Dataset):
         msk_as_np = approximate_image(msk_as_np)  # images only with 0 and 255
 
         # Crop the mask
-        msk_as_np = msk_as_np[y_loc:y_loc+self.out_size, x_loc:x_loc+self.out_size]
+        msk_as_np = cropping(msk_as_np, crop_size=self.out_size, dim1=y_loc, dim2=x_loc)
 
-        """
         # Sanity Check for mask
         img2 = Image.fromarray(msk_as_np)
         img2.show()
-        """
 
         # Normalize mask to only 0 and 1
         msk_as_np = msk_as_np/255
@@ -156,17 +156,16 @@ class SEMDataVal(Dataset):
 
         # Make 4 cropped image (in numpy array form) using values calculated above
         # Cropped images will also have paddings to fit the model.
-
-        img_as_numpy = multi_cropping(img_as_numpy,
-                                      crop_size=self.out_size,
-                                      crop_num1=2, crop_num2=2)
-        img_as_numpy = multi_padding(img_as_numpy, in_size=self.in_size,
-                                     out_size=self.out_size, mode="symmetric")
+        pad_size = int((self.in_size - self.out_size)/2)
+        img_as_np = np.pad(img_as_np, pad_size, mode="symmetric")
+        img_as_np = multi_cropping(img_as_np,
+                                   crop_size=self.in_size,
+                                   crop_num1=2, crop_num2=2)
 
         # Empty list that will be filled in with arrays converted to tensor
         processed_list = []
 
-        for array in img_as_numpy:
+        for array in img_as_np:
 
             # SANITY CHECK: SEE THE CROPPED & PADDED IMAGES
             #array_image = Image.fromarray(array)
@@ -190,7 +189,6 @@ class SEMDataVal(Dataset):
         # msk_as_img.show()
         msk_as_np = np.asarray(msk_as_img)
         # Normalize mask to only 0 and 1
-
         msk_as_np = multi_cropping(msk_as_np,
                                    crop_size=self.out_size,
                                    crop_num1=2, crop_num2=2)
@@ -281,5 +279,3 @@ if __name__ == "__main__":
     SEM_val = SEMDataVal('../data/val/images', '../data/val/masks')
 
     imag_1, msk = SEM_train.__getitem__(0)
-
-    print(msk)
