@@ -316,13 +316,30 @@ To see the result, we created a clean white page of the same size with the input
     <tr>		<td width="99%" align="center" colspan="4"><strong>Accuracy and Loss Graph</td>
 	    </tr>
 		<tr>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/RMS.png"> <br />  RMS prop(lr=0.0002)</td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/SGD.png"> <br /> SGD(lr=0.005,momentum=0.99)</td> 
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/RMS_graph.png"> <br />  RMS prop(lr=0.0002)</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/SGD_graph.png"> <br /> SGD(lr=0.005,momentum=0.99)</td> 
 		</tr>
       		</tr>
 	</tbody>
 </table>       
 We used two different optimizers and they are SGD and RMS PROP. For the left graph, RMS prop is used and as the epoch increases, the gap between the validation loss and training loss increases. Whereas, in the right graph, SGD is used and even if the epoch increases, the gap between the validation loss and training loss remain small. We chose SGD as our optimizer since it overfits less than RMS PROP.
+
+<p align="center">
+  <img width="250" height="250" src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_img.png"> <br /> Input Image</td>
+</p>
+
+<table border=0 width="99%" >
+	<tbody> 
+    <tr>		<td width="99%" align="center" colspan="4"><strong>Results comparsion</td>
+	    </tr>
+		<tr>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_mask.png"> <br />  original image mask</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_RMS.png"> <br /> RMS prop optimizer <br />(Accuracy 93.02 %)</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_SGD.png"> <br /> SGD optimizer <br />(Accuracy 92.48 %)</td> 
+		</tr>
+      		</tr>
+	</tbody>
+</table>       
 
 ## Dependency <a name="dependency"></a>
 
@@ -336,7 +353,6 @@ Following modules are used in the project:
     * tkinter >= 8.6
     * matplotlib >= 2.2.2
    
-    
 
 ## References <a name="reference"></a> :
 
