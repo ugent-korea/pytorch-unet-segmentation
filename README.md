@@ -38,7 +38,13 @@ pytorch-unet-segmentation
 	        - (same structure with that of train)	    
        - dataset.py
        - main.py
-       - augmentation.py
+       - pre_processing.py
+       - post_processing.py
+       - accuracy.py
+       - simple_model.py
+       - advanced_model.py
+       - result_visualization.py
+       - save_history.py
        - mean_std.py
        - modules.py
 ```
