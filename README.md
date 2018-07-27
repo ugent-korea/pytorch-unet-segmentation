@@ -324,6 +324,8 @@ To see the result, we created a clean white page of the same size with the input
 </table>       
 We used two different optimizers and they are SGD and RMS PROP. For the left graph, RMS prop is used and as the epoch increases, the gap between the validation loss and training loss increases. Whereas, in the right graph, SGD is used and even if the epoch increases, the gap between the validation loss and training loss remain small. We chose SGD as our optimizer since it overfits less than RMS PROP.
 
+### Prediction
+
 <p align="center">
   <img width="250" height="250" src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_img.png"> <br /> Input Image</td>
 </p>
