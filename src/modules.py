@@ -1,19 +1,13 @@
-import pandas as pd
 import numpy as np
 from PIL import Image
-import glob
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
-from torchvision import transforms
-from torch.utils.data.dataset import Dataset
 from dataset import *
-from torch.nn.functional import softmax
 import torch.nn as nn
-from operations import accuracy_check_for_batch, accuracy_check
+from accuracy import accuracy_check, accuracy_check_for_batch
 import csv
 import os
-import time
 
 
 def train_model(model, data_train, criterion, optimizer):
@@ -85,6 +79,28 @@ def validate_model(model, data_val, criterion, epoch, make_prediction=True, save
     return total_val_acc/(batch + 1), total_val_loss/((batch + 1)*4)
 
 
+def test_model(model_path, data_test, epoch, save_folder_name='prediction'):
+    """
+        Test run
+    """
+    model = torch.load(model_path)
+    model = torch.nn.DataParallel(model, device_ids=list(
+        range(torch.cuda.device_count()))).cuda()
+    model.eval()
+    for batch, (images_t) in enumerate(data_test):
+        stacked_img = torch.Tensor([]).cuda()
+        for index in range(images_t.size()[1]):
+            with torch.no_grad():
+                image_t = Variable(images_t[:, index, :, :].unsqueeze(0).cuda())
+                # print(image_v.shape, mask_v.shape)
+                output_t = model(image_t)
+                output_t = torch.argmax(output_t, dim=1).float()
+                stacked_img = torch.cat((stacked_img, output_t))
+        im_name = batch  # TODO: Change this to real image name so we know
+        _ = save_prediction_image(stacked_img, im_name, epoch, save_folder_name)
+    print("Finish Prediction!")
+
+
 def save_prediction_image(stacked_img, im_name, epoch, save_folder_name="result_images", save_im=True):
     """save images to save_path
     Args:
@@ -107,16 +123,27 @@ def save_prediction_image(stacked_img, im_name, epoch, save_folder_name="result_
     return img_cont_np
 
 
+def polarize(img):
+    ''' Polarize the value to zero and one
+    Args:
+        img (numpy): numpy array of image to be polarized
+    return:
+        img (numpy): numpy array only with zero and one
+    '''
+    img[img >= 0.5] = 1
+    img[img < 0.5] = 0
+    return img
+
+
+"""
 def test_SEM(model, data_test,  folder_to_save):
-    """Test the model with test dataset
+    '''Test the model with test dataset
     Args:
         model: model to be tested
         data_test (DataLoader): test dataset
         folder_to_save (str): path that the predictions would be saved
-    """
+    '''
     for i, (images) in enumerate(data_test):
-
-        print(i)
 
         print(images)
         stacked_img = torch.Tensor([])
@@ -136,12 +163,7 @@ def test_SEM(model, data_test,  folder_to_save):
         final_img = final_img.astype("uint8")
         break
     return final_img
-
-
-def polarize(img):
-    img[img >= 0.5] = 1
-    img[img < 0.5] = 0
-    return img
+"""
 
 
 if __name__ == '__main__':

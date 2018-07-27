@@ -1,13 +1,8 @@
-#-*-coding:utf-8-*-
-
-import cv2
 import numpy as np
 from matplotlib import pyplot as plt
-from PIL import Image
 
 
 def postprocess(image_path):
-
     ''' postprocessing of the prediction output
     Args
         image_path : path of the image
@@ -20,26 +15,26 @@ def postprocess(image_path):
     img = cv2.imread(image_path)
 
     # In case the input image has 3 channels (RGB), convert to 1 channel (grayscale)
-    gray  =  cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     # Use threshold => Image will have values either 0 or 255 (black or white)
-    ret, bin_image = cv2.threshold(gray,127,255,cv2.THRESH_BINARY_INV+ cv2.THRESH_OTSU)
+    ret, bin_image = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
 
     # Remove Hole or noise through the use of opening, closing in Morphology module
-    kernel = np.ones((1,1),np.uint8)
-    kernel1 = np.ones((3,3), np.uint8)
+    kernel = np.ones((1, 1), np.uint8)
+    kernel1 = np.ones((3, 3), np.uint8)
 
     # remove noise in
-    closing = cv2.morphologyEx(bin_image, cv2.MORPH_CLOSE,kernel,iterations=1)
+    closing = cv2.morphologyEx(bin_image, cv2.MORPH_CLOSE, kernel, iterations=1)
 
     # make clear distinction of the background
     # Incerease/emphasize the white region.
-    sure_bg = cv2.dilate(closing,kernel1,iterations=1)
+    sure_bg = cv2.dilate(closing, kernel1, iterations=1)
 
     # calculate the distance to the closest zero pixel for each pixel of the source.
     # Adjust the threshold value with respect to the maximum distance. Lower threshold, more information.
-    dist_transform = cv2.distanceTransform(closing,cv2.DIST_L2,5)
-    ret, sure_fg = cv2.threshold(dist_transform, 0.2*dist_transform.max(),255,0)
+    dist_transform = cv2.distanceTransform(closing, cv2.DIST_L2, 5)
+    ret, sure_fg = cv2.threshold(dist_transform, 0.2*dist_transform.max(), 255, 0)
     sure_fg = np.uint8(sure_fg)
 
     # Unknown is the region of background with foreground excluded.
@@ -51,7 +46,7 @@ def postprocess(image_path):
     markers_plus1[unknown == 255] = 0
 
     # Appy watershed and label the borders
-    markers_watershed = cv2.watershed(img,markers_plus1)
+    markers_watershed = cv2.watershed(img, markers_plus1)
 
     # See the watershed result in a clear white page.
     img_x, img_y = img_original.shape[0], img_original.shape[1]  # 512x512
@@ -64,8 +59,8 @@ def postprocess(image_path):
     white_color[markers_watershed != 1] = [255, 0, 0]  # RGB version
 
     # Convert to numpy array for later processing
-    white_np = np.asarray(white) # 512x512x3
-    watershed_grayscale = white_np.transpose(2,0,1)[0,:,:]  # convert to 1 channel (grayscale)
+    white_np = np.asarray(white)  # 512x512x3
+    watershed_grayscale = white_np.transpose(2, 0, 1)[0, :, :]  # convert to 1 channel (grayscale)
     img[markers_watershed != 1] = [255, 0, 0]
 
     return watershed_grayscale
@@ -83,6 +78,7 @@ def postprocess(image_path):
 
     plt.show()
     '''
+
 
 if __name__ == '__main__':
     from PIL import Image

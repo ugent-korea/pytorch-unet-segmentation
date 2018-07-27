@@ -2,6 +2,7 @@ import numpy as np
 from PIL import Image
 import glob
 
+
 def normalize_image(image):
     """
     Args:
@@ -16,6 +17,7 @@ def normalize_image(image):
     img_asarray = img_asarray / 255
 
     return img_asarray
+
 
 def find_mean(image_path):
     """
