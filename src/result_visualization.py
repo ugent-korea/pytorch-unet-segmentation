@@ -57,6 +57,7 @@ def plotloss(csvfile):
     # Red line to indicate the optimal epoch (absolute value)
 
     plt.legend()
+    plt.legend(prop={'size': 20})
     plt.xlim(xmin=0)
     plt.xlabel('epochs')
 
@@ -64,5 +65,5 @@ def plotloss(csvfile):
 
 
 if __name__ == '__main__':
-    file = '../history/RMS/history_RMS.csv'
+    file = '../history/SGD/history_SGD4.csv'
     plt.show(plotloss(file))
