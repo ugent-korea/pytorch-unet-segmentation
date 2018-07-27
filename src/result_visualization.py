@@ -43,26 +43,33 @@ def plotloss(csvfile):
     val_loss_skip = val_loss[::20]
     val_acc_skip = val_acc[::20]
 
+    fig, ax1 = plt.subplots()
+    ax2 = ax1.twinx()
+
     # Label loss graph with dash
-    train_loss = plt.plot(epoch_skip, tr_loss_skip, linewidth=2,
+    ax1.set_xlabel('epochs')
+    ax1.set_ylabel('loss')
+    ax2.set_ylabel('accuracy')
+
+    ax1.plot(epoch_skip, tr_loss_skip, linewidth=2,
                           ls='--', color='#0059ba', label='Train loss')
-    valid_loss = plt.plot(epoch_skip, val_loss_skip, linewidth=2, ls='--',
+    ax1.plot(epoch_skip, val_loss_skip, linewidth=2, ls='--',
                           color='#47ba00', label='Validation loss')
     # Label acc graph with regular line
-    train_acc = plt.plot(epoch_skip, tr_acc_skip, linewidth=2,
+    ax2.plot(epoch_skip, tr_acc_skip, linewidth=2,
                          color='#0059ba', label='Train Accuracy')
-    valid_acc = plt.plot(epoch_skip, val_acc_skip, linewidth=2,
+    ax2.plot(epoch_skip, val_acc_skip, linewidth=2,
                          color='#47ba00', label='Validation Accuracy')
 
     # Red line to indicate the optimal epoch (absolute value)
     # can resize the font size of legend by modifying 'size'
-    plt.legend(prop={'size': 30})
+    fig.legend(ncol=4, loc='upper')
     plt.xlim(xmin=0)
     plt.xlabel('epochs')
 
-    return train_loss, valid_loss
+    #return train_loss, valid_loss
 
 
 if __name__ == '__main__':
-    file = '../history/RMS/history_RMS.csv'
+    file = 'history_RMS.csv'
     plt.show(plotloss(file))
