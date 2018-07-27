@@ -334,8 +334,8 @@ We used two different optimizers and they are SGD and RMS PROP. For the left gra
 	    </tr>
 		<tr>
 			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_mask.png"> <br />  original image mask</td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_RMS.png"> <br /> prediction with RMS prop optimizer</td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_SGD.png"> <br /> prediction with SGD optimizer</td> 
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_RMS.png"> <br /> RMS prop optimizer <br />(Accuracy 93.02 %)</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_SGD.png"> <br /> SGD optimizer <br />(Accuracy 92.48 %)</td> 
 		</tr>
       		</tr>
 	</tbody>
@@ -352,7 +352,6 @@ Following modules are used in the project:
     * tkinter >= 8.6
     * matplotlib >= 2.2.2
    
-    
 
 ## References <a name="reference"></a> :
 
