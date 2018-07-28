@@ -326,11 +326,12 @@ We used two different optimizers and they are SGD and RMS PROP. For the left gra
 
 ### Model Downloads
 
-Model trained with RMS prop can be downloaded via dropbox:
+Model trained with RMS prop can be downloaded via **dropbox**:
 https://www.dropbox.com/s/cdwltzhbs3tiiwb/model_epoch_440.pwf?dl=0
 
-Model trained with SGD can be downloaded via dropbox:
-link will be shared later (due to internet connection issue).
+
+Model trained with SGD can be downloaded via **dropbox**:
+https://www.dropbox.com/s/ge9654nhgv1namr/model_epoch_2290.pwf?dl=0
 
 
 ### Prediction
