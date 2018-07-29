@@ -4,9 +4,10 @@ import glob
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
+from torchvision import transforms
 from random import randint
 from torch.utils.data.dataset import Dataset
-from pre_processing import *
+from augmentation import *
 from mean_std import *
 
 Training_MEAN = 0.4911
@@ -71,17 +72,15 @@ class SEMDataTrain(Dataset):
 
         # Crop the image
         img_height, img_width = img_as_np.shape[0], img_as_np.shape[1]
-        pad_size = int((self.in_size - self.out_size)/2)
-        img_as_np = np.pad(img_as_np, pad_size, mode="symmetric")
         y_loc, x_loc = randint(0, img_height-self.out_size), randint(0, img_width-self.out_size)
-        img_as_np = cropping(img_as_np, crop_size=self.in_size, dim1=y_loc, dim2=x_loc)
-        '''
-        # Sanity Check for image
-        img1 = Image.fromarray(img_as_np)
-        img1.show()
-        '''
+        img_as_np = cropping(img_as_np, crop_size=self.out_size, dim1=y_loc, dim2=x_loc)
+
+        # Pad the image
+        img_as_np = add_padding(img_as_np, in_size=self.in_size,
+                                out_size=self.out_size, mode="symmetric")
+
         # Normalize the image
-        img_as_np = normalization2(img_as_np, max=1, min=0)
+        img_as_np = normalization(img_as_np, max=1, min=0)
         img_as_np = np.expand_dims(img_as_np, axis=0)  # add additional dimension
         img_as_tensor = torch.from_numpy(img_as_np).float()  # Convert numpy array to tensor
 
@@ -104,12 +103,13 @@ class SEMDataTrain(Dataset):
         msk_as_np = approximate_image(msk_as_np)  # images only with 0 and 255
 
         # Crop the mask
-        msk_as_np = cropping(msk_as_np, crop_size=self.out_size, dim1=y_loc, dim2=x_loc)
-        '''
+        msk_as_np = msk_as_np[y_loc:y_loc+self.out_size, x_loc:x_loc+self.out_size]
+
+        """
         # Sanity Check for mask
         img2 = Image.fromarray(msk_as_np)
         img2.show()
-        '''
+        """
 
         # Normalize mask to only 0 and 1
         msk_as_np = msk_as_np/255
@@ -152,26 +152,29 @@ class SEMDataVal(Dataset):
         img_as_img = Image.open(single_image)
         # img_as_img.show()
         # Convert the image into numpy array
-        img_as_np = np.asarray(img_as_img)
+        img_as_numpy = np.asarray(img_as_img)
 
         # Make 4 cropped image (in numpy array form) using values calculated above
         # Cropped images will also have paddings to fit the model.
-        pad_size = int((self.in_size - self.out_size)/2)
-        img_as_np = np.pad(img_as_np, pad_size, mode="symmetric")
-        img_as_np = multi_cropping(img_as_np,
-                                   crop_size=self.in_size,
-                                   crop_num1=2, crop_num2=2)
+
+        img_as_numpy = multi_cropping(img_as_numpy,
+                                      crop_size=self.out_size,
+                                      crop_num1=2, crop_num2=2)
+        img_as_numpy = multi_padding(img_as_numpy, in_size=self.in_size,
+                                     out_size=self.out_size, mode="symmetric")
 
         # Empty list that will be filled in with arrays converted to tensor
         processed_list = []
 
-        for array in img_as_np:
+        for array in img_as_numpy:
 
             # SANITY CHECK: SEE THE CROPPED & PADDED IMAGES
             #array_image = Image.fromarray(array)
 
             # Normalize the cropped arrays
-            img_to_add = normalization2(array, max=1, min=0)
+            img_to_add = normalization(array, max=1, min=0)
+            # img_as_numpy = np.expand_dims(img_as_numpy, axis=0)
+            # img_as_tensor = torch.from_numpy(img_as_numpy).float()
             # Convert normalized array into tensor
             processed_list.append(img_to_add)
 
@@ -187,6 +190,7 @@ class SEMDataVal(Dataset):
         # msk_as_img.show()
         msk_as_np = np.asarray(msk_as_img)
         # Normalize mask to only 0 and 1
+
         msk_as_np = multi_cropping(msk_as_np,
                                    crop_size=self.out_size,
                                    crop_num1=2, crop_num2=2)
@@ -219,38 +223,44 @@ class SEMDataTest(Dataset):
         self.data_len = len(self.image_arr)
 
     def __getitem__(self, index):
-        '''Get specific data corresponding to the index
+        """Get specific data corresponding to the index
         Args:
-            index: an integer variable that calls(indext)th image in the
-                path
+            index : an integer variable that calls (indext)th image in the
+                    path
         Returns:
             Tensor: 4 cropped data on index which is converted to Tensor
-        '''
+        """
 
         single_image = self.image_arr[index]
         img_as_img = Image.open(single_image)
         # img_as_img.show()
         # Convert the image into numpy array
-        img_as_np = np.asarray(img_as_img)
+        img_as_numpy = np.asarray(img_as_img)
 
-        pad_size = int((self.in_size - self.out_size)/2)
-        img_as_np = np.pad(img_as_np, pad_size, mode="symmetric")
-        img_as_np = multi_cropping(img_as_np,
-                                   crop_size=self.in_size,
-                                   crop_num1=2, crop_num2=2)
+        # Make 4 cropped image (in numpy array form) using values calculated above
+        # Cropped images will also have paddings to fit the model.
+
+        img_as_numpy = multi_cropping(img_as_numpy,
+                                      crop_size=self.out_size,
+                                      crop_num1=2, crop_num2=2)
+        img_as_numpy = multi_padding(img_as_numpy, in_size=self.in_size,
+                                     out_size=self.out_size, mode="symmetric")
 
         # Empty list that will be filled in with arrays converted to tensor
         processed_list = []
 
-        for array in img_as_np:
+        for array in img_as_numpy:
 
-            # SANITY CHECK: SEE THE PADDED AND CROPPED IMAGES
-            # array_image = Image.fromarray(array)
+            # SANITY CHECK: SEE THE CROPPED & PADDED IMAGES
+            array_image = Image.fromarray(array)
+            # array_image.show()
 
             # Normalize the cropped arrays
-            img_to_add = normalization2(array, max=1, min=0)
+            img_as_numpy = normalize(array, mean=Training_MEAN, std=Training_STDEV)
+            # img_as_numpy = np.expand_dims(img_as_numpy, axis=0)
+            # img_as_tensor = torch.from_numpy(img_as_numpy).float()
             # Convert normalized array into tensor
-            processed_list.append(img_to_add)
+            processed_list.append(img_as_numpy)
 
         img_as_tensor = torch.Tensor(processed_list)
         #  return tensor of 4 cropped images
@@ -271,3 +281,5 @@ if __name__ == "__main__":
     SEM_val = SEMDataVal('../data/val/images', '../data/val/masks')
 
     imag_1, msk = SEM_train.__getitem__(0)
+
+    print(msk)

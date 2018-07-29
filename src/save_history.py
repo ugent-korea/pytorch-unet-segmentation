@@ -26,6 +26,8 @@ def export_history(header, value, folder, file_name):
     # if there is file overwrite
     else:
         file = open(file_name, 'a', newline='')
+        writer = csv.writer(file)
+        writer.writerow(value)
     # close file when it is done with writing
     file.close()
 

@@ -34,7 +34,7 @@ if __name__ == "__main__":
                                     num_workers=3, batch_size=1, shuffle=False)
 
     # Dataloader end
-"""
+
     # Model
     model = CleanU_Net(in_channels=1, out_channels=2)
     #model = CleanU_Net()
@@ -45,7 +45,7 @@ if __name__ == "__main__":
     criterion = nn.CrossEntropyLoss()
 
     # Optimizerd
-    optimizer = torch.optim.SGD(model.module.parameters(), lr=0.005, momentum=0.99)
+    optimizer = torch.optim.RMSprop(model.module.parameters(), lr=0.001)
 
     # Parameters
     epoch_start = 0
@@ -53,12 +53,12 @@ if __name__ == "__main__":
 
     # Saving History to csv
     header = ['epoch', 'train loss', 'train acc', 'val loss', 'val acc']
-    save_file_name = "../history/RMS/history_RMS.csv"
+    save_file_name = "../history/RMS/history_RMS3.csv"
     save_dir = "../history/RMS"
 
     # Saving images and models directories
-    model_save_dir = "../history/RMS/saved_models"
-    image_save_path = "../history/RMS/result_images"
+    model_save_dir = "../history/RMS/saved_models3"
+    image_save_path = "../history/RMS/result_images3"
 
     # Train
     print("Initializing Training!")
@@ -78,10 +78,12 @@ if __name__ == "__main__":
             values = [i+1, train_loss, train_acc, val_loss, val_acc]
             export_history(header, values, save_dir, save_file_name)
 
-            if (i+1) % 10 == 0:  # save model every 10 epoch
+            if (i+1) % 100 == 0:  # save model every 10 epoch
                 save_models(model, model_save_dir, i+1)
+
 """
 # Test
 print("generate test prediction")
 test_model("../history/RMS/saved_models/model_epoch_440.pwf",
            SEM_test_load, 440, "../history/RMS/result_images_test")
+"""
