@@ -309,6 +309,57 @@ After applying **watershed()** function from cv2 module on the marker, we obtain
 
 To see the result, we created a clean white page of the same size with the input image. then we copied all the values from the watershed result to the white page except 1, which means that we excluded the background.
 
+
+## Learning Rate
+
+<table style="width:99%">
+	<tr> 
+		<th>Optimizer</th>
+	    	<th>Learning Rate</th>
+	    	<th>Lowest Loss</th>
+	    	<th>Achieved Epoch</th>
+	</tr>
+	<tr>
+		<th rowspan="3">SGD</th>
+		<td align="center">0.001</td>
+		<td align="center">0.196972</td>
+		<td align="center">1445</td>
+	</tr>
+	<tr>
+		<td align="center">0.005</td>
+		<td align="center">0.205802</td>
+		<td align="center">1815</td>
+	</tr>
+	<tr>
+		<td align="center">0.01</td>
+		<td align="center">0.193328</td>
+		<td align="center">450</td>
+	</tr>
+	<tr>
+		<th rowspan="3">RMS_prop</th>
+		<td align="center">0.0001</td>
+		<td align="center">0.203431</td>
+		<td align="center">185</td>
+	</tr>
+	<tr>
+		<td align="center">0.0002</td>
+		<td align="center">0.193456</td>
+		<td align="center">270</td>
+	</tr>
+	<tr>
+		<td align="center">0.001</td>
+		<td align="center">0.268246</td>
+		<td align="center">1655</td>
+	</tr>
+		
+</table>       
+
+
+We chose the best learning rate that fits the optimizer based on **how fast the model converges to the lowest error**. In case of SGD the lowest learning rate was achieved with learning rate of 0.01 and it was achieved after 450 epoch. Thus, for SGD optimizer learning rate of 0.01 was the optimal choice. In case of RMS_prop, the best loss was achieved with learning rate of 0.0002. Even though the amount of epoch need to achieve lowest loss was higher than optimizer with learning rate of 0.0001, the difference is not significant. Thus, we set 0.0002 as the optimal learning rate for RMS_prop optimizer.
+
+
+
+
 ## Results <a name="results"></a>
 
 <table border=0 width="99%" >
@@ -317,7 +368,7 @@ To see the result, we created a clean white page of the same size with the input
 	    </tr>
 		<tr>
 			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/RMS_graph.png"> <br />  RMS prop(lr=0.0002)</td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/SGD_graph.png"> <br /> SGD(lr=0.005,momentum=0.99)</td> 
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/SGD_graph.png"> <br /> SGD(lr=0.01,momentum=0.99)</td> 
 		</tr>
       		</tr>
 	</tbody>
