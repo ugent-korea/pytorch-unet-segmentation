@@ -311,8 +311,8 @@ After applying **watershed()** function from cv2 module on the marker, we obtain
 
 To see the result, we created a clean white page of the same size with the input image. then we copied all the values from the watershed result to the white page except 1, which means that we excluded the background.
 
-
-## Learning Rate <a name="learningrate"></a>
+<a name="learningrate"></a>
+## Learning Rate 
 
 <table style="width:99%">
 	<tr> 
