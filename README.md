@@ -281,22 +281,30 @@ To see the result, we created a clean white page of the same size with the input
 		<th>Optimizer</th>
 	    	<th>Learning Rate</th>
 	    	<th>Lowest Loss</th>
-	    	<th>Achieved Epoch</th>
+	    	<th>Epoch</th>
+		<th>Highest Accuracy</th>
+	    	<th>Epoch</th>
 	</tr>
 	<tr>
 		<th rowspan="3">SGD</th>
 		<td align="center">0.001</td>
 		<td align="center">0.196972</td>
 		<td align="center">1445</td>
+		<td align="center">0.921032</td>
+		<td align="center">1855</td>
 	</tr>
 	<tr>
 		<td align="center">0.005</td>
 		<td align="center">0.205802</td>
 		<td align="center">1815</td>
+		<td align="center">0.918425</td>
+		<td align="center">1795</td>
 	</tr>
 	<tr>
 		<td align="center">0.01</td>
 		<td align="center">0.193328</td>
+		<td align="center">450</td>
+		<td align="center">0.922908</td>
 		<td align="center">450</td>
 	</tr>
 	<tr>
@@ -304,16 +312,22 @@ To see the result, we created a clean white page of the same size with the input
 		<td align="center">0.0001</td>
 		<td align="center">0.203431</td>
 		<td align="center">185</td>
+		<td align="center">0.924543</td>
+		<td align="center">230</td>
 	</tr>
 	<tr>
 		<td align="center">0.0002</td>
 		<td align="center">0.193456</td>
 		<td align="center">270</td>
+		<td align="center">0.926245</td>
+		<td align="center">500</td>
 	</tr>
 	<tr>
 		<td align="center">0.001</td>
 		<td align="center">0.268246</td>
 		<td align="center">1655</td>
+		<td align="center">0.882229</td>
+		<td align="center">1915</td>
 	</tr>
 		
 </table>       
