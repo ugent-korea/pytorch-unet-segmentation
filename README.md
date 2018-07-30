@@ -16,40 +16,6 @@ The dataset we used is Transmission Electron Microscopy (ssTEM) data set of the 
 
 The dataset contains 30 images (.png) of size 512x512 for each train, train-labels and test.
 
-The folder structure of this project is:
-
-```
-pytorch-unet-segmentation
-   - data
-       - train
-           - images
-           - masks
-       - test
-           - images
-   - src
-       - result_images
-           - train
-	       - epoch_1
-	           - train_1.png
-		   - ...
-	       - epoch_2
-	       - ...
-	    - test
-	        - (same structure with that of train)	    
-       - dataset.py
-       - main.py
-       - pre_processing.py
-       - post_processing.py
-       - accuracy.py
-       - simple_model.py
-       - advanced_model.py
-       - result_visualization.py
-       - save_history.py
-       - mean_std.py
-       - modules.py
-```
-
-Purposes of the python files listed in the folder structure will be explained throughout this readme.
 
 ## Table of Content
 
