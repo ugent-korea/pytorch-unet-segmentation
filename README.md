@@ -415,7 +415,6 @@ Following modules are used in the project:
     * torch >= 0.4.0
     * PIL >= 5.2.0
     * scipy >= 1.1.0
-    * tkinter >= 8.6
     * matplotlib >= 2.2.2
    
 
