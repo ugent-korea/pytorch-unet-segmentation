@@ -100,28 +100,27 @@ class SEMDataTrain(Dataset):
         # GET IMAGE
         """
         #Augmentation on image
-          # flip 
+          # Flip 
           # Gaussian_noise
-          # uniform_noise
+          # Uniform_noise
           # Brightness
           # Elastic distort {0: distort, 1:no distort}
           # Crop the image
           # Pad the image
           # Sanity Check for Cropped image
           # Normalize the image
-        """
-          # add additional dimension
+
+          # Add additional dimension
           # Convert numpy array to tensor
         
-        """
         #Augmentation on mask
-          # flip same way with image
+          # Flip same way with image
           # Elastic distort same way with image
           # Crop the same part that was cropped on image
           # Sanity Check
           # Normalize the mask to 0 and 1
       
-        # add additional dimension
+        # Add additional dimension
         # Convert numpy array to tensor
 
         return (img_as_tensor, msk_as_tensor)
@@ -166,29 +165,29 @@ We preprocessed the images for data augmentation. Following preprocessing are :
       		</tr>
 		<tr>
 			<td width="19%" align="center"> Gaussian noise </td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/gn_10"> <br />standard deviation 10</td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/gn_50"> <br />standard deviation 50</td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/gn_100"> <br />standard deviation 100</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/gn_10"> <br />Standard Deviation: 10</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/gn_50"> <br />Standard Deviation: 50</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/gn_100"> <br />Standard Deviation: 100</td>
    		</tr>
 		<tr>
 			<td width="19%" align="center"> Uniform noise </td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/uniform_10"> <br />Intensity 10 </td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/un_50"> <br />Intensity 50</td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/un_100"> <br />Intensity 100</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/uniform_10"> <br />Intensity: 10 </td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/un_50"> <br />Intensity: 50</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/un_100"> <br />Intensity: 100</td>
 		</tr>
       		</tr>
 		<tr>
 			<td width="19%" align="center"> Brightness </td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/bright_10"> <br />Intensity 10</td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/br_50.png"> <br />Intensity 20</td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/br_100.png"> <br />Intensity 30</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/bright_10"> <br />Intensity: 10</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/br_50.png"> <br />Intensity: 20</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/br_100.png"> <br />Intensity: 30</td>
 		</tr>
       		</tr>
 		<tr>
 			<td width="19%" align="center"> Elastic deformation </td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/ed_10.png"> <br />random deformation 1</td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/ed_34.png"> <br />random deformation 2</td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/ed_50.png"> <br />random deformation 3</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/ed_10.png"> <br />Random Deformation: 1</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/ed_34.png"> <br />Random Deformation: 2</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/ed_50.png"> <br />Random Deformation: 3</td>
 		</tr>
 		</tr>
 	</tbody>
@@ -203,7 +202,7 @@ We preprocessed the images for data augmentation. Following preprocessing are :
 		<tr>
 			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/c_lb"> <br />  Left Bottom </td>
 			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/c_lt"> <br /> Left Top</td> 
-			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/c_rb"> <br /> Right bottom</td>
+			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/c_rb"> <br /> Right Bottom</td>
 			<td width="25%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/c_rt"> <br /> Right Top</td> 
 		</tr>
       		</tr>
@@ -304,8 +303,8 @@ We applied **connectedComponents()** function from the cv2 module on the foregro
 
 After applying **watershed()** function from cv2 module on the marker, we obtained an array of -1, 1, and many others. 
 
-	* -1 = border region that distinguishes foreground and background
-	*  1 = background region
+	* -1 = Border region that distinguishes foreground and background
+	*  1 = Background region
 
 To see the result, we created a clean white page of the same size with the input image. then we copied all the values from the watershed result to the white page except 1, which means that we excluded the background.
 
@@ -381,7 +380,7 @@ Model trained with SGD can be downloaded via **dropbox**:
 https://www.dropbox.com/s/ge9654nhgv1namr/model_epoch_2290.pwf?dl=0
 
 
-### Prediction
+### Example
 
 <p align="center">
   <img width="250" height="250" src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_img.png"> <br /> Input Image</td>
