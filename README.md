@@ -1,8 +1,8 @@
 # pytorch-unet-segmentation
 
-**Members** : PyeongEun Kim, JuHyung Lee, MiJeong Lee
+**Members** : <a href="https://github.com/PyeongKim">PyeongEun Kim</a>, <a href="https://github.com/juhlee">JuHyung Lee</a>, <a href="https://github.com/mijeongl"> MiJeong Lee </a>
 
-**Supervisors** : Utku Ozbulak, Wesley De Neve
+**Supervisors** : <a href="https://github.com/utkuozbulak">Utku Ozbulak</a>, Wesley De Neve
 
 ## Description
 
