@@ -2,7 +2,7 @@
 
 **Members** : PyeongEun Kim, JuHyung Lee, MiJeong Lee
 
-**Supervisor** : Utku Ozbulak, Wesley De Neve
+**Supervisors** : Utku Ozbulak, Wesley De Neve
 
 ## Description
 
@@ -63,13 +63,11 @@ Purposes of the python files listed in the folder structure will be explained th
 
 * [Post-processing](#postprocessing)
 
-* [Learning Rate](#learningrate)
-
 * [Results](#results)
 
 * [Dependency](#dependency)
 
-* [Reference](#reference)
+* [References](#references)
 
 
 
@@ -311,8 +309,7 @@ After applying **watershed()** function from cv2 module on the marker, we obtain
 
 To see the result, we created a clean white page of the same size with the input image. then we copied all the values from the watershed result to the white page except 1, which means that we excluded the background.
 
-<a name="learningrate"></a>
-## Learning Rate 
+## Results <a name="results"></a>
 
 <table style="width:99%">
 	<tr> 
@@ -360,9 +357,6 @@ To see the result, we created a clean white page of the same size with the input
 We chose the best learning rate that fits the optimizer based on **how fast the model converges to the lowest error**. In case of SGD the lowest learning rate was achieved with learning rate of 0.01 and it was achieved after 450 epoch. Thus, for SGD optimizer learning rate of 0.01 was the optimal choice. In case of RMS_prop, the best loss was achieved with learning rate of 0.0002. Even though the amount of epoch need to achieve lowest loss was higher than optimizer with learning rate of 0.0001, the difference is not significant. Thus, we set 0.0002 as the optimal learning rate for RMS_prop optimizer.
 
 
-
-
-## Results <a name="results"></a>
 
 <table border=0 width="99%" >
 	<tbody> 
@@ -418,7 +412,7 @@ Following modules are used in the project:
     * matplotlib >= 2.2.2
    
 
-## References <a name="reference"></a> :
+## References <a name="references"></a> :
 
 [1] O. Ronneberger, P. Fischer, and T. Brox. U-Net: Convolutional Networks for Biomedical Image Segmentation, http://arxiv.org/pdf/1505.04597.pdf
 
