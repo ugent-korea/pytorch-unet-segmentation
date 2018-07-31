@@ -329,6 +329,28 @@ To see the result, we created a clean white page of the same size with the input
 		<td align="center">0.882229</td>
 		<td align="center">1915</td>
 	</tr>
+	<tr>
+		<th rowspan="3">Adam</th>
+		<td align="center">0.0001</td>
+		<td align="center">0.194180</td>
+		<td align="center">140</td>
+		<td align="center">0.924470</td>
+		<td align="center">300</td>
+	</tr>
+	<tr>
+		<td align="center">0.0005</td>
+		<td align="center">0.185212</td>
+		<td align="center">135</td>
+		<td align="center">0.925519</td>
+		<td align="center">135</td>
+	</tr>
+	<tr>
+		<td align="center">0.001</td>
+		<td align="center">0.222277</td>
+		<td align="center">165</td>
+		<td align="center">0.912364</td>
+		<td align="center">180</td>
+	</tr>
 		
 </table>       
 
