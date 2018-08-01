@@ -361,11 +361,12 @@ We chose the best learning rate that fits the optimizer based on **how fast the 
 
 <table border=0 width="99%" >
 	<tbody> 
-    <tr>		<td width="99%" align="center" colspan="4"><strong>Accuracy and Loss Graph</td>
+    <tr>		<td width="99%" align="center" colspan="3"><strong>Accuracy and Loss Graph</td>
 	    </tr>
 		<tr>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/RMS_graph.png"> <br />  RMS prop(lr=0.0002)</td>
 			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/SGD_graph.png"> <br /> SGD(lr=0.01,momentum=0.99)</td> 
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/RMS_graph.png"> <br />  RMS prop(lr=0.0002)</td>
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/Adam_graph.png"> <br /> Adam(lr=0.0005)</td>
 		</tr>
       		</tr>
 	</tbody>
@@ -390,12 +391,13 @@ https://www.dropbox.com/s/ge9654nhgv1namr/model_epoch_2290.pwf?dl=0
 
 <table border=0 width="99%" >
 	<tbody> 
-    <tr>		<td width="99%" align="center" colspan="4"><strong>Results comparsion</td>
+    <tr>		<td width="99%" align="center" colspan="5"><strong>Results comparsion</td>
 	    </tr>
 		<tr>
 			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_mask.png"> <br />  original image mask</td>
 			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_RMS.png"> <br /> RMS prop optimizer <br />(Accuracy 92.48 %)</td>
 			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_SGD.png"> <br /> SGD optimizer <br />(Accuracy 91.52 %)</td> 
+			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_Adam.png"> <br /> Adam optimizer <br />(Accuracy 91.52 %)</td>
 		</tr>
       		</tr>
 	</tbody>
