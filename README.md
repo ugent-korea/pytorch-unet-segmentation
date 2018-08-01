@@ -355,7 +355,8 @@ To see the result, we created a clean white page of the same size with the input
 </table>       
 
 
-We chose the best learning rate that fits the optimizer based on **how fast the model converges to the lowest error**. In case of SGD the lowest learning rate was achieved with learning rate of 0.01 and it was achieved after 450 epoch. Thus, for SGD optimizer learning rate of 0.01 was the optimal choice. In case of RMS_prop, the best loss was achieved with learning rate of 0.0002. Even though the amount of epoch need to achieve lowest loss was higher than optimizer with learning rate of 0.0001, the difference is not significant. Thus, we set 0.0002 as the optimal learning rate for RMS_prop optimizer.
+We chose the best learning rate that fits the optimizer based on **how fast the model converges to the lowest error**. In other word, the learning rate should make model to reach optimal solution in shortest epoch repeated. However, the intersting fact was that the epochs of lowest loss and highest accuracy were not corresponding. This might be due to the nature of loss function (Loss function is log scale, thus an extreme deviation might occur). For example, if the softmax probability of one pixel is 0.001, then the -log(0.001) would be 1000 which is a huge value that contributes to loss.
+For consistency, we chose to focus on accuracy as our criterion of correctness of model. 
 
 
 
@@ -364,23 +365,29 @@ We chose the best learning rate that fits the optimizer based on **how fast the 
     <tr>		<td width="99%" align="center" colspan="3"><strong>Accuracy and Loss Graph</td>
 	    </tr>
 		<tr>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/SGD_graph.png"> <br /> SGD(lr=0.01,momentum=0.99)</td> 
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/RMS_graph.png"> <br />  RMS prop(lr=0.0002)</td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/Adam_graph.png"> <br /> Adam(lr=0.0005)</td>
+			<td width="33%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/SGD_graph.png"> <br /> SGD<br />(lr=0.01,momentum=0.99)</td> 
+			<td width="33%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/RMS_graph.png"> <br />  RMS prop<br />(lr=0.0002)</td>
+			<td width="33%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/Adam_graph.png"> <br /> Adam<br />(lr=0.0005)</td>
 		</tr>
       		</tr>
 	</tbody>
 </table>       
-We used two different optimizers and they are SGD and RMS PROP. For the left graph, RMS prop is used and as the epoch increases, the gap between the validation loss and training loss increases. Whereas, in the right graph, SGD is used and even if the epoch increases, the gap between the validation loss and training loss remain small. We chose SGD as our optimizer since it overfits less than RMS PROP.
+We used two different optimizers (SGD, RMS PROP, and Adam). In case of SGD the momentum is manually set (0.99) whereas in case of other optimizers (RMS Prop and Adam) it is calculated automatically. 
 
 ### Model Downloads
+
+Model trained with SGD can be downloaded via **dropbox**:
+https://www.dropbox.com/s/ge9654nhgv1namr/model_epoch_2290.pwf?dl=0
+
 
 Model trained with RMS prop can be downloaded via **dropbox**:
 https://www.dropbox.com/s/cdwltzhbs3tiiwb/model_epoch_440.pwf?dl=0
 
 
-Model trained with SGD can be downloaded via **dropbox**:
-https://www.dropbox.com/s/ge9654nhgv1namr/model_epoch_2290.pwf?dl=0
+Model trained with Adam can be downloaded via **dropbox**:
+https://www.dropbox.com/s/tpch6u41jrdgswk/model_epoch_100.pwf?dl=0
+
+
 
 
 ### Example
@@ -394,10 +401,10 @@ https://www.dropbox.com/s/ge9654nhgv1namr/model_epoch_2290.pwf?dl=0
     <tr>		<td width="99%" align="center" colspan="5"><strong>Results comparsion</td>
 	    </tr>
 		<tr>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_mask.png"> <br />  original image mask</td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_RMS.png"> <br /> RMS prop optimizer <br />(Accuracy 92.48 %)</td>
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_SGD.png"> <br /> SGD optimizer <br />(Accuracy 91.52 %)</td> 
-			<td width="27%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_Adam.png"> <br /> Adam optimizer <br />(Accuracy 91.52 %)</td>
+			<td width="24%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_mask.png"> <br />  original image mask</td>
+			<td width="24%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_RMS.png"> <br /> RMS prop optimizer <br />(Accuracy 92.48 %)</td>
+			<td width="24%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_SGD.png"> <br /> SGD optimizer <br />(Accuracy 91.52 %)</td> 
+			<td width="24%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_Adam.png"> <br /> Adam optimizer <br />(Accuracy 91.52 %)</td>
 		</tr>
       		</tr>
 	</tbody>
