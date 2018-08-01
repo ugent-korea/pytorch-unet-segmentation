@@ -32,13 +32,13 @@ def plotloss(csvfile):
     val_acc = np.asarray(loss_values.iloc[:, 4])
 
     # Reduce the volume of data
-    epoch_skip = epoch[::20]
-    tr_loss_skip = tr_loss[::20]
-    tr_acc_skip = tr_acc[::20]
-    val_loss_skip = val_loss[::20]
-    val_acc_skip = val_acc[::20]
+    epoch_skip = epoch[::5]
+    tr_loss_skip = tr_loss[::5]
+    tr_acc_skip = tr_acc[::5]
+    val_loss_skip = val_loss[::5]
+    val_acc_skip = val_acc[::5]
 
-    fig, ax1 = plt.subplots()
+    fig, ax1 = plt.subplots(figsize=(8, 6))
     ax2 = ax1.twinx()
 
     # Label and color the axes
@@ -82,13 +82,13 @@ def plotloss(csvfile):
     ax2.set_ylim(ymax=1, ymin=0)
     ax1.set_ylim(ymax=1, ymin=0)
     plt.xlabel('epochs')
-    plt.title("SGD optimizer", weight="bold")
+    plt.title("Adam optimizer", weight="bold")
     plt.grid(True, axis='y')
 
     # return train_loss, valid_loss
 
 
 if __name__ == '__main__':
-    file = '../../history_RMS.csv'
+    file = '../history/csv/Adam.csv'
     #file = '../history/SGD/history_SGD4.csv'
     plt.show(plotloss(file))
