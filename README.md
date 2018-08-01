@@ -404,7 +404,7 @@ https://www.dropbox.com/s/tpch6u41jrdgswk/model_epoch_100.pwf?dl=0
 			<td width="24%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_mask.png"> <br />  original image mask</td>
 			<td width="24%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_RMS.png"> <br /> RMS prop optimizer <br />(Accuracy 92.48 %)</td>
 			<td width="24%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_SGD.png"> <br /> SGD optimizer <br />(Accuracy 91.52 %)</td> 
-			<td width="24%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_Adam.png"> <br /> Adam optimizer <br />(Accuracy 91.52 %)</td>
+			<td width="24%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_Adam.png"> <br /> Adam optimizer <br />(Accuracy 92.55 %)</td>
 		</tr>
       		</tr>
 	</tbody>
