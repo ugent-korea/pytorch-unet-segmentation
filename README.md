@@ -365,10 +365,14 @@ For consistency, we chose to focus on accuracy as our criterion of correctness o
     <tr>		<td width="99%" align="center" colspan="3"><strong>Accuracy and Loss Graph</td>
 	    </tr>
 		<tr>
-			<td width="33%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/SGD_graph.png"> <br /> SGD<br />(lr=0.01,momentum=0.99)</td> 
-			<td width="33%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/RMS_graph.png"> <br />  RMS prop<br />(lr=0.0002)</td>
-			<td width="33%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/Adam_graph.png"> <br /> Adam<br />(lr=0.0005)</td>
+			<td width="33%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/SGD_graph.png"> </td> 
+			<td width="33%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/RMS_graph.png"> </td>
+			<td width="33%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/Adam_graph.png"> </td>
 		</tr>
+		<tr>
+			<td align="center">SGD<br />(lr=0.01,momentum=0.99)</td>
+			<td align="center">RMS prop<br />(lr=0.0002)</td>
+			<td align="center">Adam<br />(lr=0.0005)</td>
       		</tr>
 	</tbody>
 </table>       
@@ -401,11 +405,16 @@ https://www.dropbox.com/s/tpch6u41jrdgswk/model_epoch_100.pwf?dl=0
     <tr>		<td width="99%" align="center" colspan="5"><strong>Results comparsion</td>
 	    </tr>
 		<tr>
-			<td width="24%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_mask.png"> <br />  original image mask</td>
-			<td width="24%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_RMS.png"> <br /> RMS prop optimizer <br />(Accuracy 92.48 %)</td>
-			<td width="24%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_SGD.png"> <br /> SGD optimizer <br />(Accuracy 91.52 %)</td> 
-			<td width="24%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_Adam.png"> <br /> Adam optimizer <br />(Accuracy 92.55 %)</td>
+			<td width="24%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_mask.png"> </td>
+			<td width="24%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_RMS.png"> </td>
+			<td width="24%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_SGD.png"></td> 
+			<td width="24%" align="center"> <img src="https://github.com/ugent-korea/pytorch-unet-segmentation/blob/master/readme_images/validation_Adam.png"> </td>
 		</tr>
+		<tr>
+			<td align="center">original image mask</td>
+			<td align="center">RMS prop optimizer <br />(Accuracy 92.48 %)</td>
+			<td align="center">SGD optimizer <br />(Accuracy 91.52 %)</td>
+			<td align="center">Adam optimizer <br />(Accuracy 92.55 %)</td>
       		</tr>
 	</tbody>
 </table>       
