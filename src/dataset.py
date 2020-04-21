@@ -212,8 +212,13 @@ class SEMDataTest(Dataset):
             mask_path = path where test masks are located
         '''
         # paths to all images and masks
-
-        self.image_arr = glob.glob(str(image_path) + str("/*"))
+        img_list = os.listdir(image_path)
+        img_list.sort(key=lambda x: int(x[:-4]))
+        for i in range(len(img_list)):
+            img_list[i] = image_path + img_list[i]
+        #print(img_list)
+        #self.image_arr = glob.glob(str(image_path) + str("/*"))
+        self.image_arr = img_list
         self.in_size = in_size
         self.out_size = out_size
         self.data_len = len(self.image_arr)
